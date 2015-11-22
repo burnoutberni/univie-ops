@@ -1,0 +1,4 @@
+site_name: "Nichtlineare Optimierung ohne Nebenbedingungen: Mehrdimensionale Verfahren"
+pages:
+- Home: index.md
+theme: readthedocs
