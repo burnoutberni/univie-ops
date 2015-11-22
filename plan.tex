@@ -1,0 +1,136 @@
+%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=4cm,bmargin=4cm,lmargin=4cm,rmargin=4cm}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{blindtext}
+
+\makeatother
+
+\usepackage{babel}
+\begin{document}
+
+\title{OPS\\
+Nichtlineare Optimierung ohne Nebenbedingungen (Mehrdimensionale Verfahren):
+Planung}
+
+
+\author{Team 4\\
+Hayden Bernhard\\
+Freynschlag Felix\\
+Pressler Christoph\\
+Biedermann Sonja\\
+Kharin Stepan}
+
+\maketitle
+
+\section*{Arbeitsteilung (vorläufig)}
+
+
+\paragraph{Theorieausarbeitung}
+\begin{enumerate}
+\item Nelder-Mead-Verfahren: X Y
+\item Abstiegsverfahren: X Z
+\item Gradientenverfahren: Christoph Pressler
+\item Koordinatenabstiegsmethode: Felix Freynschlag
+\end{enumerate}
+
+\paragraph{Implementierung}
+\begin{enumerate}
+\item Nelder-Mead-Verfahren: Sonja Biedermann
+\item Abstiegsverfahren: Sonja Biedermann
+\item Gradientenverfahren: Christoph Pressler
+\end{enumerate}
+
+\paragraph{Homepage}
+\begin{enumerate}
+\item Grafiken: Sonja Biedermann
+\item Gestaltung der Webseite: Bernhard Hayden, Christoph Pressler
+\item Text: Sonja Biedermann
+\item Beispiele: X X
+\end{enumerate}
+
+\section*{Nelder-Mead-Verfahren}
+
+\blindtext
+
+
+\subsection*{Mögliche Quellen}
+\begin{itemize}
+\item \texttt{https://de.wikipedia.org/wiki/Downhill-Simplex-Verfahren}
+\item \texttt{http://www.math.uni-hamburg.de/home/oberle/skripte/}~\\
+\texttt{optimierung/optim04.pdf}
+\item \texttt{http://hgs.iwr.uni-heidelberg.de/expdesign/teaching/ss12/}~\\
+\texttt{optimization/Handout\%20-\%20Die\%20Simplexmethode.pdf}
+\item Vorlesungsskript
+\end{itemize}
+
+\section*{Abstiegsverfahren}
+
+\blindtext
+
+
+\subsection*{Mögliche Quellen}
+\begin{itemize}
+\item \texttt{http://www.math.uni-hamburg.de/home/oberle/skripte/}~\\
+\texttt{optimierung/optim05.pdf}
+\item \texttt{http://www2.math.uni-paderborn.de/fileadmin/Mathematik/}~\\
+\texttt{People/walther/seminar/Vortrag\_Gradientenverfahren.pdf}
+\item \texttt{https://www.tu-ilmenau.de/fileadmin/media/num/neundorf/}~\\
+\texttt{Dokumente/Preprints/abstieg1.pdf}
+\item Vorlesungsskript
+\end{itemize}
+
+\section*{Gradientenverfahren}
+
+Grundsätzlich macht sich das Gradientenverfahren den Fakt zunutze,
+dass der Gradient immer in die Richtung des stärksten Anstiegs zeigt.
+Dementsprechend zeigt natürlich der negative Gradient in die Richtung
+des stärksten Abstiegs. Nun \quotedblbase geht\textquotedblleft{}
+man eine gewisse Zeit in diese Richtung bis man einen neuen Punkt
+hat von dem man abermals den Gradienten ausrechnet. Die unterschiedlichen
+Gradientenverfahren unterscheiden sich nun darin wie weit man in die
+Richtung des negativen Gradienten gehen soll. Im theoretischen Teil
+wird sowohl stärker auf das Gradientenverfahren an sich, als auch
+auf die Unterschiede zwischen den verschiedenen Arten eingegangen
+werden.
+
+
+\subsection*{Mögliche Quellen}
+\begin{itemize}
+\item \texttt{https://de.wikipedia.org/wiki/Gradientenverfahren}
+\item \texttt{http://www.math.uni-hamburg.de/home/oberle/skripte/}~\\
+\texttt{optimierung/optim06.pdf}
+\item \texttt{http://www.iue.tuwien.ac.at/phd/bauer/node63.html}
+\item Vorlesungsskript
+\end{itemize}
+
+\section*{Koordinatenabstiegsmethode}
+
+Bei der Koordinatenabstiegsmethode wird in jedem Schritt eine Koordinate
+$i$ gewählt, nach der optimiert wird. Der Startpunkt ist beliebig
+wählbar und der folgende Vorgang wird mehrmals wiederholt. Bei jedem
+Durchgang werden alle Koordinaten des aktuellen Punktes $x^{k}$ in
+die Funktion eingesetzt, nur die gewählte Koordinate $i$ behält man
+als Variable bei. Die dadurch entstandene eindimensionale Funktion
+wird minimiert und die Koordinate \emph{$i$ }wird mit dem gefundenen
+Wert ersetzt. Dieser Vorgang wird mit allen Koordinaten wiederholt.
+Nun kann man diesen gesamten Vorgang erneut anwenden, bis sich der
+Punkt nicht mehr oder nur kaum verändert; danach wird abgebrochen.
+
+
+\subsection*{Mögliche Quellen}
+\begin{itemize}
+\item \texttt{http://www.qucosa.de/fileadmin/data/qucosa/documents/}~\\
+\texttt{11484/Projektarbeit\_Andr\%C3\%A9\_Clausner.pdf}
+\item Numerische Verfahren zur Nichtlinearen Optimierung aus Algorithmische
+Mathematik \textendash{} Winfried Hochstätter
+\item Vorlesungsskript\end{itemize}
+
+\end{document}
+\grid
