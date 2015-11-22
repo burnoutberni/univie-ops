@@ -1,3 +1,15 @@
+/*******************************************************************
+ * Driver-Programm für den Nelder-Mead Optimierungsalgorithmus.    *
+ * Autor: Sonja Biedermann, a1402891 OPS WS15 7/4                  *
+ *                                                                 *
+ * Führt die Optimierung durch und stellt das Ergebnis einer jeden *
+ * Iteration grafisch dar. Verwendet dazu POSIX-Pipes und Gnuplot. *
+ * Verfügt weiters über ein kleines Info-Feature, dass auf Wunsch  *
+ * des Benutzers Daten (wie etwa die Tiefpunkte der Funktion, die  *
+ * zur Überprüfung der Ergebnisse nützlich sein können) über eine  *
+ * bestimmte unterstützte Funktion anzeigen.                       *
+ *******************************************************************/
+
 #include <iostream>
 #include <unordered_map>
 #include <sstream>
@@ -18,7 +30,6 @@ public:
     pipe& flush() { fflush(handle); return *this; }
     pipe& operator<<(std::string input) {
         fputs(input.c_str(), handle);
-        flush();
         return *this;
     }
 };
@@ -49,11 +60,13 @@ public:
         : pipehandle{ pipe("gnuplot -p 2> /dev/null") }, plot_cmd{ plot_cmd } {}
     gnuplotter& push_settings(std::string settings) {
         pipehandle << settings;
+        pipehandle.flush();
         return *this;
     }
     std::string& plot_command() { return plot_cmd; }
     gnuplotter& replot() {
         pipehandle << plot_cmd;
+        pipehandle.flush();
         return *this;
     }
 };

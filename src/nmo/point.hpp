@@ -8,7 +8,7 @@
  * und einer Methode format(), die den Punkt ausgabefähig in einen   *
  * std::string formattiert.                                          *
  *********************************************************************/
-
+#pragma once
 struct point {
     double x = 0.0;
     double y = 0.0;
