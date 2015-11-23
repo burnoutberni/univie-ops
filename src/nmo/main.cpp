@@ -26,7 +26,8 @@ private:
     FILE* handle;
 public:
     pipe(std::string const& cmd) : handle{ popen(cmd.c_str(), "w") } {}
-    ~pipe() { fflush(handle); fclose(handle); }
+    pipe(pipe&& other) : handle{ std::move(other.handle) } { std::cout << "move"; other.handle = NULL; }
+    ~pipe() { fflush(handle); if(handle) { fclose(handle); } }
     pipe& flush() { fflush(handle); return *this; }
     pipe& operator<<(std::string input) {
         fputs(input.c_str(), handle);
@@ -43,6 +44,7 @@ private:
 public:
     gnuplotter(std::string const& plot_cmd = "")
         : pipehandle{ pipe("gnuplot -p 2> /dev/null") }, plot_cmd{ plot_cmd } {}
+    gnuplotter(pipe&& p) : pipehandle{ std::move(p) } {}
     gnuplotter& push_settings(std::string settings) {
         pipehandle << settings;
         pipehandle.flush();
@@ -168,7 +170,7 @@ int main(int argc, char const** argv) {
         return 1;
     }
 
-    gnuplotter gnu;
+    gnuplotter gnu(pipe("gnuplot -p"));
     gnu.push_settings(settings);
     gnu.push_settings(std::string("set title '") + argv[1] + "'\n");
     std::ostringstream oss;
