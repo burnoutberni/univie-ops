@@ -14,6 +14,7 @@ set yrange [*:*] noreverse nowriteback
 set zrange [*:*] noreverse nowriteback
 set cntrparam levels 30
 set surface
+unset key
 splot [-10.5:10.5] [-10.5:10.5] \
       (x**2 + y - 11)**2 + (x + y**2 - 7)**2 with lines palette notitle nosurface, \
       '-' with lines lc "#000000" notitle
