@@ -25,19 +25,19 @@ struct point {
     }
 
     point operator+(point const& rhs) const {
-        return point(x + rhs.x, y + rhs.y);
+        return {x + rhs.x, y + rhs.y};
     }
 
     point operator-(point const& rhs) const {
-        return point(x - rhs.x, y - rhs.y);
+        return {x - rhs.x, y - rhs.y};
     }
 
     point operator/(double denomiator) const {
-        return point(x / denomiator, y / denomiator);
+        return {x / denomiator, y / denomiator};
     }
 
     point operator*(double factor) const {
-        return point(x * factor, y * factor);
+        return {x * factor, y * factor};
     }
 
     std::string format() const {
