@@ -6,12 +6,11 @@
 \usepackage{babel}
 \usepackage{amsmath}
 \usepackage{graphicx}
-\usepackage[unicode=true]
-{hyperref}
+\usepackage[unicode=true] {hyperref}
+\usepackage{pdfpages}
 \usepackage{breakurl}
 
 \makeatletter
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \usepackage{gnuplottex}
 \usepackage{float}
 \usepackage{pgfplots}
@@ -31,7 +30,6 @@ Stepan Kharin, Christoph Pressler}
 
 \section{Das Nelder-Mead-Verfahren}
 
-
 \subsection{Einführung}
 
 Das Nelder-Mead-Verfahren (auch Downhill-Simplex genannt) verfolgt
@@ -39,7 +37,6 @@ einen geometrischen Ansatz zur iterativen Optimierung: ein Simplex
 bestehend aus $N+1$ Punkten (im Falle $N=2$, dem zweidimensionalen
 Raum, also ein Dreieck) wird fortwährend so transformiert, sodass
 sich der Simplex dem Minimum nähert, um welches er sich dann zusammenzieht.
-
 
 \subsection{Funktionsweise}
 
@@ -130,10 +127,11 @@ Dreiecks als Simplex vorgeführt und erläutert. Für unsere Koeffizienten
 wählen wir die Werte $\alpha=1,\,\gamma=2,\,\rho=\frac{1}{2},\,\sigma=\frac{1}{2}$.
 Unser Dreieck $\triangle BGW$ ist definiert mit $B=(1,\,3),\,G=(4,\,6),\,W=(6,\,2)$.
 
-\begin{center}
-    \includegraphics[scale=0.8]{triangle_bgw}
-    \par\end{center}
-
+\begin{figure}[H]
+    \centering
+    \includegraphics{triangle_bgw}
+    \caption{Unser Ursprungssimplex}
+\end{figure}
 
 \subsubsection{Reflektion}
 
@@ -143,14 +141,14 @@ vermeintlich bessere Richtung.
     R=M+M-W=2M-W=\binom{5}{9}-\binom{6}{2}=\binom{-1}{7}
 \]
 
-
-\begin{center}
-    \includegraphics[scale=0.7]{triangle_reflect}
-    \par\end{center}
+\begin{figure}[H]
+    \centering
+    \includegraphics{triangle_reflect}
+    \caption{Nach der Reflektion}
+\end{figure}
 
 Dies entspricht dem ,,Heruntertaumeln`` des Simplex, welches die
-Optimierung in den ersten Iterationsschritten antreibt.
-
+Optimierung in den ersten Iterationsschritten unter anderem antreibt.
 
 \subsubsection{Expansion}
 
@@ -161,15 +159,15 @@ ist. Wir expandieren also weiter:
     E=M+2(M-W)=\binom{2.5}{4.5}+\binom{-7}{5}=\binom{-4.5}{9.5}
 \]
 
-
-\begin{center}
-    \includegraphics[scale=0.7]{triangle_expand}
-    \par\end{center}
+\begin{figure}[H]
+    \centering
+    \includegraphics{triangle_expand}
+    \caption{Nach der Expansion}
+\end{figure}
 
 Dies entspricht einem \emph{greedy approach }\textendash{} dieser
 Schritt ist nicht notwendig, minimiert aber zusätzlich die Anzahl
 der nötigen Iterationen.
-
 
 \subsubsection{Kontraktion}
 
@@ -181,11 +179,11 @@ so müssen wir die beiden Kontraktionspunkte $C_{1}$, $C_{2}$ berechnen.
     C_{2} & = & M+\frac{W-M}{2}=\binom{2.5}{4.5}+\frac{\binom{6}{2}-\binom{2.5}{4.5}}{2}=\binom{4.25}{1.25}
 \end{eqnarray*}
 
-
-\begin{center}
-    \includegraphics[scale=0.8]{triangle_contract}
-    \par\end{center}
-
+\begin{figure}[H]
+    \centering
+    \includegraphics{triangle_contract}
+    \caption{Nach der Kontraktion}
+\end{figure}
 
 \subsubsection{Komprimierung}
 
@@ -195,14 +193,14 @@ Wir komprimieren die Punkte $G$ und $W$ in Richtung $B$.
     W' & = & B+\frac{W-B}{2}=\binom{1}{3}+\binom{2.5}{-0.5}=\binom{3.5}{2.5}
 \end{eqnarray*}
 
-
-\begin{center}
-    \includegraphics[scale=0.8]{triangle_compress}
-    \par\end{center}
+\begin{figure}[H]
+    \centering
+    \includegraphics{triangle_compress}
+    \caption{Nach der Komprimierung Richtung $B$}
+\end{figure}
 
 Dies entspricht dem Zusammenziehen des Simplex' in den letzten Iterationsschritten
 des Algorithmus'.
-
 
 \subsection{Ein Beispiel: die Himmelblau-Funktion}
 
@@ -234,7 +232,7 @@ Startpunkte wählen wir
 Grundsätzlich ist das Gradientenverfahren ein Optimierungsverfahren,
 welches das Minimum einer mehrdimensionalen Funktion errechnen. Der
 Gradient (${\nabla}f(x,y)$) einer Funktion \(f(x)\) zeigt, aus später
-gezeigten (HIER VERWEIS EINFÜGEN) Gründen, immer in die Richtung des
+gezeigten \footnote{HIER VERWEIS EINFÜGEN} Gründen, immer in die Richtung des
 steilsten Anstiegs, folglich zeigt -${\nabla}f(x,y)$ in die Richtung
 des stärksten Abstiegs. Das Gradientenverfahren macht sich dies zunutze
 und man \textquotedbl{}wandert\textquotedbl{} eine gewisse Dauer in
@@ -244,13 +242,7 @@ anderem auch von der gewählten Methode ab.
 
 \begin{figure}[H]
     \centering
-    \begin{tikzpicture}
-        \begin{axis}
-            \addplot3[surf]
-            {x*y^2}; \addplot3[->] coordinates {(-1.5,-0.5,54)
-            (-2.5,-3.5,-70)};  \addplot3[only marks] coordinates {(-2,-2,-8)};
-        \end{axis}
-    \end{tikzpicture}
+    \includegraphics[width=0.7\textwidth]{figure0}
     \caption[Gradientenvektor Beispiel] {Hier zu sehen ist -$\vec{\nabla}f(-2,-2)$ der Funktion $f(x,y)=x*y^2$}
 \end{figure}
 
@@ -272,7 +264,7 @@ anderem auch von der gewählten Methode ab.
         fixen Werts machen, andererseits auch mit einer Folge (wie z.B $\frac{1}{\sqrt{n}}$)
         oder einer jedes mal neu errechneten Schrittweite. Zu beachten ist,
         dass die ausgewählte Folge auf jeden Fall divergent sein muss, da
-        man sonst bis zu einer maximalen Entfernung \textquotedbl{}wandern\textquotedbl{}
+        man sonst bis zu einer maximalen Entfernung ``wandern''
         kann und die Wahrscheinlichkeit groß ist das Optimum nie zu erreichen.
         Sollte man jedes mal einen fixen Wert verliert man zwar den Aufwand
         für die Berechnung der Schrittweite, jedoch ist die Wahrscheinlichkeit
@@ -291,8 +283,8 @@ anderem auch von der gewählten Methode ab.
         gefunden, wenn nicht wird $\alpha$ mit einem $\beta$, welches ebenfalls
         zwischen null und eins liegt, multipliziert und wieder geprüft ob
         die Ungleichung erfüllt ist. (Hinweis: In der Praxis liefern die Werte
-        $c = 0.01$ und $\beta = 0.9$ häufig gute Ergebnisse. (QUELLE:
-        \href{https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf}{https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf})
+        $c = 0.01$ und $\beta = 0.9$ häufig gute Ergebnisse.
+        \footnote{\href{https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf}{https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf}}
     \item Wenn man einen neuen Punkt gefunden hat wird bei Punkt 3 fortgesetzt.
         Da es oft einen großen Rechenaufwand erfordert das genaue Minimum
         zu finden wird das Verfahren meist beendet wenn der Gradient einen
@@ -304,9 +296,125 @@ anderem auch von der gewählten Methode ab.
 \subsection{Beispiele}
 \subsubsection{Beispiel 1}
 Zu minimierende Funktion: $f(x,y)=y^4+2x^2-3xy+1$, als Abbruchbedingung wählen
-wir $|{\nabla}f(x,y)| \leq 0.3$
+wir $|{\nabla}f(x,y)| \leq 0.3$.
 
-BILD
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figure1}
+    \caption{Beispiel 1. Zusätzlich sind hier die Höhenschichtlinien eingezeichnet.}
+    \label{bsp1}
+\end{figure}
+Wie man in Abbildung~\ref{bsp1} sieht, nähert man sich schrittweise dem
+Minimum an.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figure2}
+    \caption{Die Höhenschichtlinien genauer gezeigt.}
+\end{figure}
+
+\begin{enumerate}
+	\item
+	Startpunkt $P=(1,1)$
+	\item
+	Ableitung: ${\nabla}f(x,y)=
+	\left( \begin{array}{c}
+	4x-3y \\
+	4y^3-3x
+	\end{array} \right)
+	$($\rightarrow$ Der Gradient)
+	\item
+	$-{\nabla}f(1,1) =
+	\left( \begin{array}{c}
+	-4+3 \\
+	-4+3
+	\end{array} \right)
+	=
+	\left( \begin{array}{c}
+	-1 \\
+	-1
+	\end{array} \right)
+	$ ($\rightarrow$ Richtung des stärksten Abstiegs)
+	\item
+	Die Armijo-Bedingung (mit $\alpha = 1$, $c = 0.1$ und $\beta = 0.9$):\\
+	$f( \left( \begin{array}{c} 1 \\ 1 \end{array} \right) + 1 * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)) \leq f(\left( \begin{array}{c} 1 \\ 1 \end{array} \right)) + 0.1 * 1 *  \left( \begin{array}{c} 1 \\ 1 \end{array} \right) * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)$ \\
+	$= 1 \leq 0.8$ \\
+	$\rightarrow \alpha^{[2]} = \alpha^{[1]} * \beta = 0.9$ \\
+
+	$f( \left( \begin{array}{c} 1 \\ 1 \end{array} \right) + 0.9 * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)) \leq f(\left( \begin{array}{c} 1 \\ 1 \end{array} \right)) + 0.1 * 0.9 *  \left( \begin{array}{c} 1 \\ 1 \end{array} \right) * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)$ \\
+	$= 0.99 \leq 0.82$ \\
+	$\rightarrow \alpha^{[3]} = \alpha^{[2]} * \beta = 0.81$ \\
+
+	$f( \left( \begin{array}{c} 1 \\ 1 \end{array} \right) + 0.81 * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)) \leq f(\left( \begin{array}{c} 1 \\ 1 \end{array} \right)) + 0.1 * 0.81 *  \left( \begin{array}{c} 1 \\ 1 \end{array} \right) * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)$ \\
+	$= 0.965 \leq 0.838$ \\
+	$\rightarrow \alpha^{[4]} = \alpha^{[3]} * \beta = 0.729$ \\
+
+	$f( \left( \begin{array}{c} 1 \\ 1 \end{array} \right) + 0.729 * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)) \leq f(\left( \begin{array}{c} 1 \\ 1 \end{array} \right)) + 0.1 * 0.729 *  \left( \begin{array}{c} 1 \\ 1 \end{array} \right) * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)$ \\
+	$= 0.932 \leq 0.854$ \\
+	$\rightarrow \alpha^{[5]} = \alpha^{[4]} * \beta = 0.656$ \\
+
+    $f( \left( \begin{array}{c} 1 \\ 1 \end{array} \right) + 0.656 * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)) \leq f(\left( \begin{array}{c} 1 \\ 1 \end{array} \right)) + 0.1 * 0.656 *  \left( \begin{array}{c} 1 \\ 1 \end{array} \right) * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)$ \\
+    $= 0.896 \leq 0.869$ \\
+    $\rightarrow \alpha^{[6]} = \alpha^{[5]} * \beta = 0,59$ \\
+
+    $f( \left( \begin{array}{c} 1 \\ 1 \end{array} \right) + 0,59 * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)) \leq f(\left( \begin{array}{c} 1 \\ 1 \end{array} \right)) + 0.1 * 0,59 *  \left( \begin{array}{c} 1 \\ 1 \end{array} \right) * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)$ \\
+    $= 0.86 \leq 0.882$ \\
+    Nun haben wir ein passendes $\alpha$ gefunden und können zum nächsten Punkt wandern.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{figure3}
+        \caption[Die Armijo-Bedingung] {Hier sieht man die Funktion $\varphi(\alpha)=(1-\alpha)^4+2*(1-\alpha)^2-3*(1-\alpha)*(1-\alpha)+1)$, sie ist sozusagen ein Durchschnitt durch die bei Beispiel 1 gegebene Funktion. Diese Funktion wird erzeugt, wenn man vom Punkt $P^{[1]}=(1,1)$ in Richtung des Gradienten wandert. Die blaue Gerade zeigt die Armijo-Bedingung bei $c=0.1$, die rote bei $c=1$ bzw. ohne c.}
+    \end{figure}
+
+    \item
+    $P^{[2]} = \left( \begin{array}{c} 1 \\ 1 \end{array} \right) + 0,59 * \left( \begin{array}{c} -1 \\ -1 \end{array} \right) = \left( \begin{array}{c} 0.41 \\ 0.41 \end{array} \right)$
+    \item
+    $-{\nabla}f(0.41,0.41) = \left( \begin{array}{c} -0.41 \\ 0.95 \end{array} \right)$, \\
+	$|{\nabla}f(0.41,0.41)| = \sqrt{0.41^2+0.95^2} = 1.071$
+	\item
+	Die Armijo-Bedingung (mit $\alpha = 1$, $c = 0.1$ und $\beta = 0.5$):\\
+	$f( \left( \begin{array}{c} 0.41 \\ 0.41 \end{array} \right) + 1 * \left( \begin{array}{c} -0.41 \\ 0.95 \end{array} \right)) \leq f(\left( \begin{array}{c} 0.41 \\ 0.41 \end{array} \right)) + 0.1 * 1 *  \left( \begin{array}{c} -0.41 \\ 0.95 \end{array} \right) * \left( \begin{array}{c} 0.41 \\ -0.95 \end{array} \right)$ \\
+	$= 4.421 \leq 0.753$
+	$\rightarrow \alpha^{[2]} = \alpha^{[1]} * \beta = 0.5$ \\
+	$\rightarrow = 1.153 \leq 0.807$
+	$\rightarrow \alpha^{[3]} = \alpha^{[2]} * \beta = 0.25$ \\
+	$\rightarrow = 0.768 \leq 0.833$
+	\item
+	$P^{[3]} = \left( \begin{array}{c} 0.41 \\ 0.41 \end{array} \right) + 0.25 * \left( \begin{array}{c} -0.41 \\ 0.95 \end{array} \right) = \left( \begin{array}{c} 0.308 \\ 0.648 \end{array} \right)$
+	\item
+	$-{\nabla}f(0.308,0.648) = \left( \begin{array}{c} 0.712 \\ -0.164 \end{array} \right)$, \\
+	$|{\nabla}f(0.308,0.648)| = \sqrt{0.712^2+0.164^2} = 0.534$
+	\item
+	Die Armijo-Bedingung (mit $\alpha = 1$, $c = 0.1$ und $\beta = 0.5$):\\
+	$f( \left( \begin{array}{c} 0.308 \\ 0.648 \end{array} \right) + 1 * \left( \begin{array}{c} 0.712 \\ -0.164 \end{array} \right)) \leq f(\left( \begin{array}{c} 0.308 \\ 0.648 \end{array} \right)) + 0.1 * 1 *  \left( \begin{array}{c} 0.712 \\ -0.164 \end{array} \right) * \left( \begin{array}{c} -0.712 \\ 0.164 \end{array} \right)$ \\
+	$= 1.655 \leq 0.714$
+	$\rightarrow \alpha^{[2]} = \alpha^{[1]} * \beta = 0.5$ \\
+	$\rightarrow = 0.857 \leq 0.741$
+	$\rightarrow \alpha^{[3]} = \alpha^{[2]} * \beta = 0.25$ \\
+	$\rightarrow = 0.723 \leq 0.754$
+	\item
+	$P^{[4]} = \left( \begin{array}{c} 0.308 \\ 0.648 \end{array} \right) + 0.25 * \left( \begin{array}{c} 0.712 \\ -0.164 \end{array} \right) = \left( \begin{array}{c} 0.486 \\ 0.607 \end{array} \right)$
+	\item
+	$-{\nabla}f(0.486,0.607) = \left( \begin{array}{c} -0.123 \\ 0.563. \end{array} \right)$, \\
+	$|{\nabla}f(0.486,0.607)| = \sqrt{0.123^2+0.563^2} = 0.332$
+	\item
+	Die Armijo-Bedingung (mit $\alpha = 1$, $c = 0.1$ und $\beta = 0.5$):\\
+	$f( \left( \begin{array}{c} 0.486 \\ 0.607 \end{array} \right) + 1 * \left( \begin{array}{c} -0.123 \\ 0.563 \end{array} \right)) \leq f(\left( \begin{array}{c} 0.486 \\ 0.607 \end{array} \right)) + 0.1 * 1 *  \left( \begin{array}{c} -0.123 \\ 0.563 \end{array} \right) * \left( \begin{array}{c} 0.123 \\ -0.563 \end{array} \right)$ \\
+	$= 1.863 \leq 0.689$
+	$\rightarrow \alpha^{[2]} = \alpha^{[1]} * \beta = 0.5$ \\
+	$\rightarrow = 0.852 \leq 0.707$
+	$\rightarrow \alpha^{[3]} = \alpha^{[2]} * \beta = 0.25$ \\
+	$\rightarrow = 0.706 \leq 0.715$
+	\item
+	$P^{[5]} = \left( \begin{array}{c} 0.486 \\ 0.607 \end{array} \right) + 0.25 * \left( \begin{array}{c} -0.123 \\ 0.563 \end{array} \right) = \left( \begin{array}{c} 0.455 \\ 0.748 \end{array} \right)$
+    \item
+	$-{\nabla}f(0.455,0.748) = \left( \begin{array}{c} 0.424 \\ -0.309. \end{array} \right)$, \\
+	$|{\nabla}f(0.455,0.748)| = \sqrt{0.424^2+0.309^2} = 0.275$ \\
+	Die Abbruchbedingung ist erfüllt und somit ist ein Punkt, welcher nahe genug am Optimum liegt gefunden.
+
+
+\end{enumerate}
 
 \section{Die Koordinatenabstiegsmethode}
 
@@ -322,7 +430,11 @@ Es wird immer in Richtung einer Achse minimiert und die Stelle , an
 der das Minimum ist , als neue Koordinate beibehalten und so gelangt
 man mit einer Anzahl an Iterationen zum Minimum der Funktion.
 
-\includegraphics[width=1\textwidth]{Coordinate_descent}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Coordinate_descent}
+    \caption{Die Koordinatenabstiegsmethode}
+\end{figure}
 
 ~\\
 Wenn zum Beispiel die Funktion $f(x,y)=2x^{2}+2xy+1.5y^{2}$ und der
