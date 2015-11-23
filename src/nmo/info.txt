@@ -24,7 +24,7 @@ used for benchmarking optimization algorithms. It is defined as
 Common values (and also the values we used) for a and b are a = 1
 and b = 100.
 
-Its only minimum is at position
+Its global minimum is at position
           2
     f(a, a ) = 0.0
 

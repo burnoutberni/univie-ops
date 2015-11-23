@@ -1,5 +1,3 @@
-%% LyX 2.1.3 created this file.  For more info, see http://www.lyx.org/.
-%% Do not edit unless you really know what you are doing.
 \documentclass[naustrian]{article}
 \usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
@@ -29,8 +27,7 @@
 Stepan Kharin, Christoph Pressler}
 
 \maketitle
-\tableofcontents{}
-
+\tableofcontents
 
 \section{Das Nelder-Mead-Verfahren}
 
@@ -232,7 +229,6 @@ Startpunkte wählen wir
 
 \section{Das Gradientenverfahren}
 
-
 \subsection{Die Idee und der Zweck des Gradientenverfahren}
 
 Grundsätzlich ist das Gradientenverfahren ein Optimierungsverfahren,
@@ -257,7 +253,6 @@ anderem auch von der gewählten Methode ab.
     \end{tikzpicture}
     \caption[Gradientenvektor Beispiel] {Hier zu sehen ist -$\vec{\nabla}f(-2,-2)$ der Funktion $f(x,y)=x*y^2$}
 \end{figure}
-
 
 \subsection{Der Ablauf des Gradientenverfahrens}
 \begin{enumerate}
@@ -308,6 +303,10 @@ anderem auch von der gewählten Methode ab.
 
 \subsection{Beispiele}
 \subsubsection{Beispiel 1}
+Zu minimierende Funktion: $f(x,y)=y^4+2x^2-3xy+1$, als Abbruchbedingung wählen
+wir $|{\nabla}f(x,y)| \leq 0.3$
+
+BILD
 
 \section{Die Koordinatenabstiegsmethode}
 
@@ -389,7 +388,7 @@ Dieser Vorgang wird wiederholt, bis sich die errechneten Werte nurnoch
 marginal unterscheiden. Danach wird abgebrochen.
 
 
-\subsubsection{Problemfälle}
+\subsection{Problemfälle}
 \begin{quotation}
     Zeigen Sie, dass die Koordinatenabstiegsmethode für die stetige Funktion
 

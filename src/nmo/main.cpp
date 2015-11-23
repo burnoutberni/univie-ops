@@ -35,21 +35,6 @@ public:
 };
 // }}}
 
-std::string read_all_about(std::string const& topic) {
-    std::ifstream file("info.txt");
-    std::string result;
-    std::string buffer;
-    if(topic.empty()) {
-        while(getline(file, buffer)) {
-            result += buffer + '\n';
-        }
-    } else {
-        while(getline(file, buffer) && buffer != topic);
-        while(getline(file, buffer) && buffer != "----") result += buffer + '\n';
-    }
-    return result;
-}
-
 // GNUPLOTTER {{{
 class gnuplotter {
 private:
@@ -72,8 +57,16 @@ public:
 };
 // }}}
 
-int main(int argc, char const** argv) {
+std::string read_all_about(std::string const& topic) {
+    std::ifstream file("info.txt");
+    std::string result;
+    std::string buffer;
+    while(getline(file, buffer) && buffer != topic);
+    while(getline(file, buffer) && buffer != "----") result += buffer + '\n';
+    return result;
+}
 
+int main(int argc, char const** argv) {
     // {{{ GNUPLOT SETTINGS
     char const* settings =
         "set palette rgbformulae 33,13,10\n"
@@ -156,7 +149,7 @@ int main(int argc, char const** argv) {
             std::cerr << "Please specify the function you want to know more about.\n";
             return 1;
         }
-        std::string info = read_all_about(argc < 3 ? "" : argv[2]);
+        std::string info = read_all_about(argv[2]);
         std::cout << info;
         return 0;
     }
