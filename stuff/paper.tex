@@ -9,7 +9,7 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[unicode=true]
- {hyperref}
+{hyperref}
 \usepackage{breakurl}
 
 \makeatletter
@@ -41,7 +41,7 @@ Das Nelder-Mead-Verfahren (auch Downhill-Simplex genannt) verfolgt
 einen geometrischen Ansatz zur iterativen Optimierung: ein Simplex
 bestehend aus $N+1$ Punkten (im Falle $N=2$, dem zweidimensionalen
 Raum, also ein Dreieck) wird fortwährend so transformiert, sodass
-sich der Simplex dem Minimum nähert, um welches er sich dann zusammenzieht. 
+sich der Simplex dem Minimum nähert, um welches er sich dann zusammenzieht.
 
 
 \subsection{Funktionsweise}
@@ -49,9 +49,9 @@ sich der Simplex dem Minimum nähert, um welches er sich dann zusammenzieht.
 Der Algorithmus besteht aus drei Phasen, die in jeder Iteration durchlaufen
 werden:
 \begin{enumerate}
-\item Ordering
-\item Centroid
-\item Transformation
+    \item Ordering
+    \item Centroid
+    \item Transformation
 \end{enumerate}
 
 \paragraph{Ordering}
@@ -70,7 +70,7 @@ ist, $G$ der mit dem zweit geringsten Wert, und so weiter.
 Als nächstes berechnen wir den Mittelpunkt der beiden besseren Punkte
 
 \[
-M=\frac{B+G}{2}
+    M=\frac{B+G}{2}
 \]
 und nehmen diesen als Basis für unsere weiteren Berechnungen.
 
@@ -79,7 +79,7 @@ und nehmen diesen als Basis für unsere weiteren Berechnungen.
 
 Nun reflektieren wir den schlechtesten Punkt $W$ am Mittelpunkt
 \[
-R=M+\alpha(M-W)
+    R=M+\alpha(M-W)
 \]
 und prüfen, ob dieser Punkt $r$ die Relation $f(B)\leq f(R)\leq f(W)$
 erfüllt.
@@ -92,7 +92,7 @@ Wenn nein, prüfen wir, ob der reflektierte Punkt $R$ besser als unser
 bisher bester Punkt ist, also ob $f(R)<f(B)$ gilt. Wenn dem so ist,
 expandieren wir den Punkt $R$ testweise weiter:
 \[
-E=M+\gamma(M-W)
+    E=M+\gamma(M-W)
 \]
 und prüfen wiederum, ob dieser Punkt $E$ besser als unser reflektierte
 Punkt $R$ ist. Wenn ja, akzeptieren wir $E$. Wenn nein, akzeptieren
@@ -103,8 +103,8 @@ Wir müssen nun die zwei möglichen kontrahierten Punkte $C_{1}$, $C_{2}$
 berechnen. Gilt $f(R)<f(W)$, berechnen wir den äußeren kontrahierten
 Punkt $C_{2}$, ansonsten den inneren kontrahierten Punkt $C_{2}.$
 \begin{eqnarray*}
-C_{1} & = & M+\rho(R-M)\\
-C_{2} & = & M+\rho(W-M)
+    C_{1} & = & M+\rho(R-M)\\
+    C_{2} & = & M+\rho(W-M)
 \end{eqnarray*}
 
 
@@ -114,8 +114,8 @@ Ist dem nicht so, müssen wir zum nächsten Schritt, der Komprimierung,
 fortfahren. Bei der Komprimierung werden jediglich die zwei schlechteren
 Punkte $G$ und $W$ in Richtung des besten Punktes $B$ gezogen.
 \begin{eqnarray*}
-G & = & B+\sigma(B-G)\\
-W & = & B+\sigma(B-W)
+    G & = & B+\sigma(B-G)\\
+    W & = & B+\sigma(B-W)
 \end{eqnarray*}
 \rule[0.5ex]{1\columnwidth}{1pt}\\
 
@@ -134,8 +134,8 @@ wählen wir die Werte $\alpha=1,\,\gamma=2,\,\rho=\frac{1}{2},\,\sigma=\frac{1}{2
 Unser Dreieck $\triangle BGW$ ist definiert mit $B=(1,\,3),\,G=(4,\,6),\,W=(6,\,2)$.
 
 \begin{center}
-\includegraphics[scale=0.8]{triangle_bgw}
-\par\end{center}
+    \includegraphics[scale=0.8]{triangle_bgw}
+    \par\end{center}
 
 
 \subsubsection{Reflektion}
@@ -143,13 +143,13 @@ Unser Dreieck $\triangle BGW$ ist definiert mit $B=(1,\,3),\,G=(4,\,6),\,W=(6,\,
 Wir reflektieren den schlechtesten Punkt an dem Mittelpunkt in die
 vermeintlich bessere Richtung.
 \[
-R=M+M-W=2M-W=\binom{5}{9}-\binom{6}{2}=\binom{-1}{7}
+    R=M+M-W=2M-W=\binom{5}{9}-\binom{6}{2}=\binom{-1}{7}
 \]
 
 
 \begin{center}
-\includegraphics[scale=0.7]{triangle_reflect}
-\par\end{center}
+    \includegraphics[scale=0.7]{triangle_reflect}
+    \par\end{center}
 
 Dies entspricht dem ,,Heruntertaumeln`` des Simplex, welches die
 Optimierung in den ersten Iterationsschritten antreibt.
@@ -161,13 +161,13 @@ Nehmen wir an, dass $f(R)$ besser als unser bis jetzt bester Wert
 ist. Wir expandieren also weiter:
 
 \[
-E=M+2(M-W)=\binom{2.5}{4.5}+\binom{-7}{5}=\binom{-4.5}{9.5}
+    E=M+2(M-W)=\binom{2.5}{4.5}+\binom{-7}{5}=\binom{-4.5}{9.5}
 \]
 
 
 \begin{center}
-\includegraphics[scale=0.7]{triangle_expand}
-\par\end{center}
+    \includegraphics[scale=0.7]{triangle_expand}
+    \par\end{center}
 
 Dies entspricht einem \emph{greedy approach }\textendash{} dieser
 Schritt ist nicht notwendig, minimiert aber zusätzlich die Anzahl
@@ -180,28 +180,28 @@ Gehen wir jetzt vom Gegenteil aus \textendash{} Punkt $R$ war also
 kein geeigneter Punkt und Punkt $E$ wurde gar nicht berechnet \textendash{}
 so müssen wir die beiden Kontraktionspunkte $C_{1}$, $C_{2}$ berechnen.
 \begin{eqnarray*}
-C_{1} & = & M+\frac{R-M}{2}=\binom{2.5}{4.5}+\frac{\binom{-1}{7}-\binom{2.5}{4.5}}{2}=\binom{-1.75}{1.25}\\
-C_{2} & = & M+\frac{W-M}{2}=\binom{2.5}{4.5}+\frac{\binom{6}{2}-\binom{2.5}{4.5}}{2}=\binom{4.25}{1.25}
+    C_{1} & = & M+\frac{R-M}{2}=\binom{2.5}{4.5}+\frac{\binom{-1}{7}-\binom{2.5}{4.5}}{2}=\binom{-1.75}{1.25}\\
+    C_{2} & = & M+\frac{W-M}{2}=\binom{2.5}{4.5}+\frac{\binom{6}{2}-\binom{2.5}{4.5}}{2}=\binom{4.25}{1.25}
 \end{eqnarray*}
 
 
 \begin{center}
-\includegraphics[scale=0.8]{triangle_contract}
-\par\end{center}
+    \includegraphics[scale=0.8]{triangle_contract}
+    \par\end{center}
 
 
 \subsubsection{Komprimierung}
 
 Wir komprimieren die Punkte $G$ und $W$ in Richtung $B$.
 \begin{eqnarray*}
-G' & = & B+\frac{G-B}{2}=\binom{1}{3}+\binom{1}{1.5}=\binom{2}{4.5}\\
-W' & = & B+\frac{W-B}{2}=\binom{1}{3}+\binom{2.5}{-0.5}=\binom{3.5}{2.5}
+    G' & = & B+\frac{G-B}{2}=\binom{1}{3}+\binom{1}{1.5}=\binom{2}{4.5}\\
+    W' & = & B+\frac{W-B}{2}=\binom{1}{3}+\binom{2.5}{-0.5}=\binom{3.5}{2.5}
 \end{eqnarray*}
 
 
 \begin{center}
-\includegraphics[scale=0.8]{triangle_compress}
-\par\end{center}
+    \includegraphics[scale=0.8]{triangle_compress}
+    \par\end{center}
 
 Dies entspricht dem Zusammenziehen des Simplex' in den letzten Iterationsschritten
 des Algorithmus'.
@@ -210,22 +210,22 @@ des Algorithmus'.
 \subsection{Ein Beispiel: die Himmelblau-Funktion}
 
 \begin{center}
-\emph{\includegraphics[width=0.7\textwidth]{himmelblau}}
-\par\end{center}
+    \emph{\includegraphics[width=0.7\textwidth]{himmelblau}}
+    \par\end{center}
 
 Die Himmelblau-Funktion hat 4 gleiche lokale Minima. Wir wollen unseren
 Algorithmus auf sie loslassen, um eines davon zu finden. Als zufällige
-Startpunkte wählen wir 
+Startpunkte wählen wir
 \begin{eqnarray*}
-P_{1} & = & (2,\,5)\\
-P_{2} & = & (9,\,2)\\
-P_{3} & = & (-3,\,-8)
+    P_{1} & = & (2,\,5)\\
+    P_{2} & = & (9,\,2)\\
+    P_{3} & = & (-3,\,-8)
 \end{eqnarray*}
 
 
 \begin{center}
-\includegraphics[width=0.7\textwidth]{himmelblau_cont}
-\par\end{center}
+    \includegraphics[width=0.7\textwidth]{himmelblau_cont}
+    \par\end{center}
 
 \emph{fehlend}
 
@@ -244,65 +244,72 @@ des stärksten Abstiegs. Das Gradientenverfahren macht sich dies zunutze
 und man \textquotedbl{}wandert\textquotedbl{} eine gewisse Dauer in
 diese Richtung, wie \textquotedbl{}lange\textquotedbl{} man in die
 errechnete Richtung \textquotedbl{}wandert\textquotedbl{} hängt unter
-anderem auch von der gewählten Methode ab. 
+anderem auch von der gewählten Methode ab.
 
-\begin{figure}[H] \centering \begin{tikzpicture} \begin{axis} \addplot3[surf] {x*y^2}; \addplot3[->] coordinates {(-1.5,-0.5,54) (-2.5,-3.5,-70)};  \addplot3[only marks] coordinates {(-2,-2,-8)}; \end{axis} \end{tikzpicture} \caption[Gradientenvektor Beispiel] {Hier zu sehen ist -$\vec{\nabla}f(-2,-2)$ der Funktion $f(x,y)=x*y^2$} \end{figure}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}
+            \addplot3[surf]
+            {x*y^2}; \addplot3[->] coordinates {(-1.5,-0.5,54)
+            (-2.5,-3.5,-70)};  \addplot3[only marks] coordinates {(-2,-2,-8)};
+        \end{axis}
+    \end{tikzpicture}
+    \caption[Gradientenvektor Beispiel] {Hier zu sehen ist -$\vec{\nabla}f(-2,-2)$ der Funktion $f(x,y)=x*y^2$}
+\end{figure}
 
 
 \subsection{Der Ablauf des Gradientenverfahrens}
 \begin{enumerate}
-\item Es wird ein beliebiger Startpunkt $P=(x,y)$ ausgewählt.
-\item Es wird die Ableitung der Funktion $f(x,y)$, also ${\nabla}f(x)$
-gebildet. Sollte dieser Gradient bereits den Wert null haben sind
-wir bereits fertig und haben ein lokales Minimum. 
-\item Der Punkt $P$ wird in den Gradienten eingesetzt und der negative
-Wert berechnet, also $-{\nabla}f(x_{P},y_{P})$.
-\item Um eine neuen Punkt $P^{[n+1]}$ zu finden stellen wir nun folgende
-Gleichung auf: $P^{[n+1]} = P^{[n]} + \alpha_{[n]} * s^{[n]}$. Nun
-haben wir die Richtung in die optimiert werden muss gefunden ($s^{[n]}$
-($=-{\nabla}f(x_{P},y_{P})$)), jetzt muss noch entschieden werden
-wie weit wir in diese Richtung \textquotedbl{}wandern\textquotedbl{}
-($\alpha^{[n]}$, liegt zwischen $0$ und $1$) (Hinweis: \$n\$ ist
-die aktuelle Iteration). \\\\ Das kann man einerseits mit Hilfe eines
-fixen Werts machen, andererseits auch mit einer Folge (wie z.B $\frac{1}{\sqrt{n}}$)
-oder einer jedes mal neu errechneten Schrittweite. Zu beachten ist,
-dass die ausgewählte Folge auf jeden Fall divergent sein muss, da
-man sonst bis zu einer maximalen Entfernung \textquotedbl{}wandern\textquotedbl{}
-kann und die Wahrscheinlichkeit groß ist das Optimum nie zu erreichen.
-Sollte man jedes mal einen fixen Wert verliert man zwar den Aufwand
-für die Berechnung der Schrittweite, jedoch ist die Wahrscheinlichkeit
-hoch, dass man viele Iterationen benötigt oder in einer endlosen Schleife
-festhängt. \\\\ Es gibt verschieden Arten wie man die Schrittweite
-berechnen kann, im Folgenden werde ich die Schrittweitenbestimmung
-nach Armijo erklären. Dieses Verfahren ist eines der sogenannten \textquotedbl{}line-search\textquotedbl{}
-Verfahren, das von mir gezeigte ist jedoch kein exaktes line-search
-Verfahren sondern lediglich eine einfache Heuristik. \\\\ \textbf{Die Armijo-Bedingung:}
-$\varphi(\alpha) \leq \varphi(0) + c * \alpha^{[n]} * \varphi(0)'$.
-\\\\ Wobei $c$ eine Konstante zwischen null und eins ist und dazu
-dient das die Bedingung nicht zu restriktiv ist, $\varphi(\alpha) = f(P^{[n]} + \alpha^{[n]}s^{[n]})$
-und $\varphi(0)' = {\nabla}f(P^{n}) * s^{[n]}$ 
-\item Für den Anfang wird $\alpha=1$ gewählt und errechnet ob die Armijo-Bedingung
-erfüllt ist - sollte sie erfüllt sein haben wir ein passende $\alpha$
-gefunden, wenn nicht wird $\alpha$ mit einem $\beta$, welches ebenfalls
-zwischen null und eins liegt, multipliziert und wieder geprüft ob
-die Ungleichung erfüllt ist. (Hinweis: In der Praxis liefern die Werte
-$c = 0.01$ und $\beta = 0.9$ häufig gute Ergebnisse. (QUELLE: \href{https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf}{https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf}) 
-\item Wenn man einen neuen Punkt gefunden hat wird bei Punkt 3 fortgesetzt.
-Da es oft einen großen Rechenaufwand erfordert das genaue Minimum
-zu finden wird das Verfahren meist beendet wenn der Gradient einen
-akzeptablen Wert erreicht hat (So kann man als Abbruchbedingung z.B.
-die stärke des Anstiegs in einem Punkt (also den Betrag des Gradienten)
-nehmen). 
+    \item Es wird ein beliebiger Startpunkt $P=(x,y)$ ausgewählt.
+    \item Es wird die Ableitung der Funktion $f(x,y)$, also ${\nabla}f(x)$
+        gebildet. Sollte dieser Gradient bereits den Wert null haben sind
+        wir bereits fertig und haben ein lokales Minimum.
+    \item Der Punkt $P$ wird in den Gradienten eingesetzt und der negative
+        Wert berechnet, also $-{\nabla}f(x_{P},y_{P})$.
+    \item Um eine neuen Punkt $P^{[n+1]}$ zu finden stellen wir nun folgende
+        Gleichung auf: $P^{[n+1]} = P^{[n]} + \alpha_{[n]} * s^{[n]}$. Nun
+        haben wir die Richtung in die optimiert werden muss gefunden ($s^{[n]}$
+        ($=-{\nabla}f(x_{P},y_{P})$)), jetzt muss noch entschieden werden
+        wie weit wir in diese Richtung \textquotedbl{}wandern\textquotedbl{}
+        ($\alpha^{[n]}$, liegt zwischen $0$ und $1$) (Hinweis: \$n\$ ist
+        die aktuelle Iteration). \\\\ Das kann man einerseits mit Hilfe eines
+        fixen Werts machen, andererseits auch mit einer Folge (wie z.B $\frac{1}{\sqrt{n}}$)
+        oder einer jedes mal neu errechneten Schrittweite. Zu beachten ist,
+        dass die ausgewählte Folge auf jeden Fall divergent sein muss, da
+        man sonst bis zu einer maximalen Entfernung \textquotedbl{}wandern\textquotedbl{}
+        kann und die Wahrscheinlichkeit groß ist das Optimum nie zu erreichen.
+        Sollte man jedes mal einen fixen Wert verliert man zwar den Aufwand
+        für die Berechnung der Schrittweite, jedoch ist die Wahrscheinlichkeit
+        hoch, dass man viele Iterationen benötigt oder in einer endlosen Schleife
+        festhängt. \\\\ Es gibt verschieden Arten wie man die Schrittweite
+        berechnen kann, im Folgenden werde ich die Schrittweitenbestimmung
+        nach Armijo erklären. Dieses Verfahren ist eines der sogenannten \textquotedbl{}line-search\textquotedbl{}
+        Verfahren, das von mir gezeigte ist jedoch kein exaktes line-search
+        Verfahren sondern lediglich eine einfache Heuristik. \\\\ \textbf{Die Armijo-Bedingung:}
+        $\varphi(\alpha) \leq \varphi(0) + c * \alpha^{[n]} * \varphi(0)'$.
+        \\\\ Wobei $c$ eine Konstante zwischen null und eins ist und dazu
+        dient das die Bedingung nicht zu restriktiv ist, $\varphi(\alpha) = f(P^{[n]} + \alpha^{[n]}s^{[n]})$
+        und $\varphi(0)' = {\nabla}f(P^{n}) * s^{[n]}$
+    \item Für den Anfang wird $\alpha=1$ gewählt und errechnet ob die Armijo-Bedingung
+        erfüllt ist - sollte sie erfüllt sein haben wir ein passende $\alpha$
+        gefunden, wenn nicht wird $\alpha$ mit einem $\beta$, welches ebenfalls
+        zwischen null und eins liegt, multipliziert und wieder geprüft ob
+        die Ungleichung erfüllt ist. (Hinweis: In der Praxis liefern die Werte
+        $c = 0.01$ und $\beta = 0.9$ häufig gute Ergebnisse. (QUELLE:
+        \href{https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf}{https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf})
+    \item Wenn man einen neuen Punkt gefunden hat wird bei Punkt 3 fortgesetzt.
+        Da es oft einen großen Rechenaufwand erfordert das genaue Minimum
+        zu finden wird das Verfahren meist beendet wenn der Gradient einen
+        akzeptablen Wert erreicht hat (So kann man als Abbruchbedingung z.B.
+        die stärke des Anstiegs in einem Punkt (also den Betrag des Gradienten)
+        nehmen).
 \end{enumerate}
 
 \subsection{Beispiele}
-
-
 \subsubsection{Beispiel 1}
 
-
 \section{Die Koordinatenabstiegsmethode}
-
 
 \subsection{Einführung}
 
@@ -324,8 +331,8 @@ Startpunkt $P=(1,\,1)$ gegeben ist, so muss man, wenn entlang der
 $x$-Achse minimiert werden soll folgendes eingesetzt werden:
 
 \begin{eqnarray*}
-x & = & 1+1d\\
-y & = & 1+0d
+    x & = & 1+1d\\
+    y & = & 1+0d
 \end{eqnarray*}
 
 
@@ -333,8 +340,8 @@ Soll entlang der $y$-Achse optimiert werden, so muss folgendes eingesetzt
 werden:
 
 \begin{eqnarray*}
-x & = & 1+0d\\
-y & = & 1+1d
+    x & = & 1+0d\\
+    y & = & 1+1d
 \end{eqnarray*}
 
 
@@ -346,17 +353,16 @@ und wählen den Startpunkt $P_{0}=(1,\,1)$. Wir minimieren zuerst
 entlang der $x$-Achse und setzen ein
 
 \begin{eqnarray*}
-f(d) & = & 2(1+d)^{2}+2(1+d)+1.5\\
- & = & 2d^{2}+6d+5.5
+    f(d) & = & 2(1+d)^{2}+2(1+d)+1.5\\
+    & = & 2d^{2}+6d+5.5
 \end{eqnarray*}
-
 
 Diese soeben erhaltene Funktion müssen wir nun noch minimieren.
 
 \begin{eqnarray*}
-f'(d) & = & 4d+6\\
-4d+6 & = & 0\\
-d & = & \frac{3}{2}
+    f'(d) & = & 4d+6\\
+    4d+6 & = & 0\\
+    d & = & \frac{3}{2}
 \end{eqnarray*}
 
 
@@ -365,15 +371,15 @@ die alte $y$-Koordinate erhalten wir den neuen Punkt $P_{1}=(-\frac{1}{2},\,1)$.
 Nun minimieren wir nach $y$, wir setzen also ein:
 
 \begin{eqnarray*}
-x & = & -\frac{1}{2}+0d\\
-y & = & 1+1d
+    x & = & -\frac{1}{2}+0d\\
+    y & = & 1+1d
 \end{eqnarray*}
 
 
 und erhalten
 
 \[
-f(d)=1.5d^{2}-d+6
+    f(d)=1.5d^{2}-d+6
 \]
 
 
@@ -385,27 +391,27 @@ marginal unterscheiden. Danach wird abgebrochen.
 
 \subsubsection{Problemfälle}
 \begin{quotation}
-Zeigen Sie, dass die Koordinatenabstiegsmethode für die stetige Funktion
+    Zeigen Sie, dass die Koordinatenabstiegsmethode für die stetige Funktion
 
-\[
-f(x,\,y)=\begin{cases}
-(x+y-5)^{2}+(x-y-2)^{2} & falls\,x\le y\\
-(x+y-5)^{2}+(x-y+2)^{2} & sonst
-\end{cases}
-\]
-beginnend beim Startpunkt $(0,\,0)$ nicht funktioniert.
+    \[
+        f(x,\,y)=\begin{cases}
+            (x+y-5)^{2}+(x-y-2)^{2} & falls\,x\le y\\
+            (x+y-5)^{2}+(x-y+2)^{2} & sonst
+        \end{cases}
+    \]
+    beginnend beim Startpunkt $(0,\,0)$ nicht funktioniert.
 \end{quotation}
 Wir setzen ein:
 
 \begin{eqnarray*}
-x & = & d\\
-y & = & 0
+    x & = & d\\
+    y & = & 0
 \end{eqnarray*}
 und erhalten die Funktion
 
 \begin{eqnarray*}
-f(d) & = & (d-5)^{2}+(d-2)^{2}\\
- & = & 2d^{2}-14d+29
+    f(d) & = & (d-5)^{2}+(d-2)^{2}\\
+    & = & 2d^{2}-14d+29
 \end{eqnarray*}
 welche ein Minimum an der Stelle $d=\frac{7}{2}$. Dies fortgesetzt
 für $y$ erhalten wir den neuen Punkt $P=(\frac{7}{2},\,\frac{7}{2})$.
