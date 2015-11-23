@@ -26,7 +26,7 @@ private:
     FILE* handle;
 public:
     pipe(std::string const& cmd) : handle{ popen(cmd.c_str(), "w") } {}
-    pipe(pipe&& other) : handle{ std::move(other.handle) } { std::cout << "move"; other.handle = NULL; }
+    pipe(pipe&& other) : handle{ std::move(other.handle) } { other.handle = NULL; }
     ~pipe() { fflush(handle); if(handle) { fclose(handle); } }
     pipe& flush() { fflush(handle); return *this; }
     pipe& operator<<(std::string input) {
@@ -170,7 +170,7 @@ int main(int argc, char const** argv) {
         return 1;
     }
 
-    gnuplotter gnu(pipe("gnuplot -p"));
+    gnuplotter gnu(pipe("gnuplot -p 2> /dev/null"));
     gnu.push_settings(settings);
     gnu.push_settings(std::string("set title '") + argv[1] + "'\n");
     std::ostringstream oss;
