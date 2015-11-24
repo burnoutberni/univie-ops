@@ -139,7 +139,6 @@ int main(int argc, char const** argv) {
     };
     // }}}
 
-
     if(argc < 2) {
         std::cerr << "No function specified.\n"
                   << "Try one of these:\n"
@@ -214,7 +213,7 @@ int main(int argc, char const** argv) {
             std::cin.get();
             if(std::cin.eof()) { return 0; }
         } else {
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            std::this_thread::sleep_for(std::chrono::seconds(0.5));
         }
     }
 }

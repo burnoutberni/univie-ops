@@ -90,9 +90,9 @@ private:
     }
 public:
     nelder_mead_optimizer(Funktion& f, double eps, point const& p1, point const& p2, point const& p3)
-        : f{ f }, b{ p1 }, g{ p2 }, w{ p3 }, eps{ eps } { sort_points_by_fvalue(); }
+        : f( f ), b{ p1 }, g{ p2 }, w{ p3 }, eps{ eps } { sort_points_by_fvalue(); }
     nelder_mead_optimizer(Funktion& f, point p1, point p2, point p3)
-        : f{ f }, b{ p1 }, g{ p2 }, w{ p3 } {}
+        : f( f ), b{ p1 }, g{ p2 }, w{ p3 } {}
 
     double& alpha() { return alpha_; }
     double& gamma() { return gamma_; }
