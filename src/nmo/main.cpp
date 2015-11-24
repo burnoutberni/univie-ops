@@ -179,7 +179,7 @@ int main(int argc, char const** argv) {
         << "'-' with lines lc rgb 'red' notitle\n";
     std::string base_cmd = oss.str();
 
-    nelder_mead_optimizer nmo(*user_choice, 0.000005, {-1, -5}, {8, 8}, {3, -8});
+    nelder_mead_optimizer nmo(*user_choice, 0.005, {-1, -5}, {8, 8}, {3, -8});
     int n = 0;
     while(!nmo.done()) {
         std::cout << "#" << n++ << '\n';
