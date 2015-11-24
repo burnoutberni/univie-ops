@@ -16,6 +16,8 @@
 #include <string>
 #include <cmath>
 #include <fstream>
+#include <thread>
+#include <chrono>
 
 #include "Funktion.h"
 #include "nelder_mead_optimizer.hpp"
@@ -96,6 +98,10 @@ int main(int argc, char const** argv) {
     } example2;
 
     struct : Funktion {
+        double value(double x, double y) { return 3*x*x + y + y*y; }
+    } example3;
+
+    struct : Funktion {
         double value(double x, double y) { return (x*x + y - 11)*(x*x + y - 11) + (x + y*y - 7)*(x + y*y -7); }
     } himmelblau;
 
@@ -123,6 +129,7 @@ int main(int argc, char const** argv) {
     std::unordered_map<std::string, std::pair<std::string, Funktion*>> plot_functions = {
         {"example1", std::make_pair("3*x**2 + y**2 - 3*x*y - 3*x", &example1)},
         {"example2", std::make_pair("y**4 + 2*x**2 - 3*x*y + 1", &example2)},
+        {"example3", std::make_pair("3*x**2 + y + y**2", &example3)},
         {"himmelblau", std::make_pair("(x**2 + y - 11)**2 + (x + y**2 - 7)**2", &himmelblau)},
         {"banana", std::make_pair("100*(y - x**2)**2 + (x - 1)**2", &banana)},
         {"matyas", std::make_pair("0.26*(x**2 + y**2) - 0.48*x*y", &matyas)},
@@ -131,6 +138,7 @@ int main(int argc, char const** argv) {
         {"camel", std::make_pair("2*x**2 - 1.05*x**4 + (x**6)/6 + x*y + y**2", &camel)}
     };
     // }}}
+
 
     if(argc < 2) {
         std::cerr << "No function specified.\n"
@@ -142,7 +150,8 @@ int main(int argc, char const** argv) {
                   << "\tbooth – minimizes Booth's function\n"
                   << "\tbeale – minimizes Beale's function\n"
                   << "\texample1 – minimizes the function 3*x**2 + y**2 - 3*x*y - 3*x\n"
-                  << "\texample2 – minimizes the function y**4 + 2*x**2 - 3*x*y + 1\n";
+                  << "\texample2 – minimizes the function y**4 + 2*x**2 - 3*x*y + 1\n"
+                  << "\texample3 – minimizes the function 3*x**2 + y + y**2\n";
         return 1;
     }
 
@@ -155,6 +164,8 @@ int main(int argc, char const** argv) {
         std::cout << info;
         return 0;
     }
+
+    bool manual = (argc > 2 && std::string("manual").compare(argv[2]) == 0);
 
     std::cout << "\tN E L D E R - M E A D\n"
               << "\tDEMOTOOL\n"
@@ -179,7 +190,7 @@ int main(int argc, char const** argv) {
         << "'-' with lines lc rgb 'red' notitle\n";
     std::string base_cmd = oss.str();
 
-    nelder_mead_optimizer nmo(*user_choice, 0.005, {-1, -5}, {8, 8}, {3, -8});
+    nelder_mead_optimizer nmo(*user_choice, 0.0000005, {-1, -5}, {8, 8}, {3, -8});
     int n = 0;
     while(!nmo.done()) {
         std::cout << "#" << n++ << '\n';
@@ -199,8 +210,12 @@ int main(int argc, char const** argv) {
         gnu.plot_command() = oss.str();
         gnu.replot();
         nmo.step();
-        std::cin.get();
-        if(std::cin.eof()) { return 0; }
+        if(manual) {
+            std::cin.get();
+            if(std::cin.eof()) { return 0; }
+        } else {
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+        }
     }
 }
 /* vim: set ts=4 sw=4 tw=0 et :*/
