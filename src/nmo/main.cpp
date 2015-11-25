@@ -213,7 +213,7 @@ int main(int argc, char const** argv) {
             std::cin.get();
             if(std::cin.eof()) { return 0; }
         } else {
-            std::this_thread::sleep_for(std::chrono::seconds(0.5));
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
     }
 }
