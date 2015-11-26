@@ -173,9 +173,9 @@ int main(int argc, char const** argv) {
               << "\t***********************************\n\n";
 
     Funktion* user_choice;
-    try {
+    if(plot_functions.count(argv[1])) {
         user_choice = plot_functions.at(argv[1]).second;
-    } catch(std::out_of_range const& ex) {
+    } else {
         std::cerr << "No such function. (\"" << argv[1] << "\")\n";
         return 1;
     }
