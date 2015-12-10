@@ -1,6 +1,7 @@
 \documentclass[naustrian]{article}
 \usepackage[T1]{fontenc}
-\usepackage[latin9]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage{cite}
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \usepackage[ngerman]{babel}
@@ -10,14 +11,8 @@
 \usepackage{graphicx}
 \usepackage[unicode=true] {hyperref}
 \usepackage{pdfpages}
-\usepackage{breakurl}
-
-\makeatletter
-\usepackage{gnuplottex}
 \usepackage{float}
-\usepackage{pgfplots}
-
-\makeatother
+\usepackage{url}
 
 \begin{document}
 
@@ -31,17 +26,18 @@ Stepan Kharin, Christoph Pressler}
 
 \section{Das Nelder-Mead-Verfahren}
 
-\subsection{Einführung}
+\subsection{EinfÃ¼hrung}
 
 Das Nelder-Mead-Verfahren (auch Downhill-Simplex genannt) verfolgt
 einen geometrischen Ansatz zur iterativen Optimierung: ein Simplex
 bestehend aus $N+1$ Punkten (im Falle $N=2$, dem zweidimensionalen
-Raum, also ein Dreieck) wird fortwährend so transformiert, sodass
-sich der Simplex dem Minimum nähert, um welches er sich dann zusammenzieht.
+Raum, also ein Dreieck) wird fortwÃ¤hrend so transformiert, sodass
+sich der Simplex dem Minimum nÃ¤hert, um welches er sich dann zusammenzieht.\cite{nelder-mead-enwiki}
 
 \subsection{Funktionsweise}
 
-Der Algorithmus besteht aus drei Phasen, die in jeder Iteration durchlaufen
+Der Algorithmus besteht im wesenstlichen aus drei
+Phasen\cite{nelder-mead-scholarpedia}, die in jeder Iteration durchlaufen
 werden:
 \begin{enumerate}
     \item Ordering
@@ -52,22 +48,22 @@ werden:
 \paragraph{Ordering}
 
 Zu Beginn besitzen wir $N+1$ Punkte, die anhand irgendwelche Kriterien
-(durchaus auch zufällig) gewählt wurden. Diese müssen wir nun anhand
-ihrer Güte ordnen, also sortieren. Im Falle des zweidimensionalen
+(durchaus auch zufÃ¤llig) gewÃ¤hlt wurden. Diese mÃ¼ssen wir nun anhand
+ihrer GÃ¼te ordnen, also sortieren. Im Falle des zweidimensionalen
 Raumes erhalten wir also die drei mnemonisch benannten Punkte \textbf{$B$
-}(\emph{best}), $G$ (\emph{good}) und $W$ (\emph{worst}). $B$ ist
+}(\emph{best}), $G$ (\emph{good}) und $W$ (\emph{worst}).\cite{nelder-mead-unknown} $B$ ist
 im Falle eine Minimierung der Punkt, dessen Funktionswert am geringsten
 ist, $G$ der mit dem zweit geringsten Wert, und so weiter.
 
 
 \paragraph{Centroid}
 
-Als nächstes berechnen wir den Mittelpunkt der beiden besseren Punkte
+Als nÃ¤chstes berechnen wir den Mittelpunkt der beiden besseren Punkte
 
 \[
     M=\frac{B+G}{2}
 \]
-und nehmen diesen als Basis für unsere weiteren Berechnungen.
+und nehmen diesen als Basis fÃ¼r unsere weiteren Berechnungen.
 
 
 \paragraph{Transformation}
@@ -76,36 +72,37 @@ Nun reflektieren wir den schlechtesten Punkt $W$ am Mittelpunkt
 \[
     R=M+\alpha(M-W)
 \]
-und prüfen, ob dieser Punkt $R$ die Relation $f(B)\leq f(R)\leq f(W)$
-erfüllt.
+und prÃ¼fen, ob dieser Punkt $R$ die Relation $f(B)\leq f(R)\leq f(W)$
+erfÃ¼llt.
 
 Wenn ja, ersetzen wir den schlechtesten Punkt mit $R$ und brechen
 die jetzige Iteration ab. Diesen Vorgang nennt man auch das ,,Akzeptieren``
 eines Punktes.
 
-Wenn nein, prüfen wir, ob der reflektierte Punkt $R$ besser als unser
+Wenn nein, prÃ¼fen wir, ob der reflektierte Punkt $R$ besser als unser
 bisher bester Punkt ist, also ob $f(R)<f(B)$ gilt. Wenn dem so ist,
 expandieren wir den Punkt $R$ testweise weiter:
 \[
     E=M+\gamma(M-W)
 \]
-und prüfen wiederum, ob dieser Punkt $E$ besser als unser reflektierte
+und prÃ¼fen wiederum, ob dieser Punkt $E$ besser als unser reflektierte
 Punkt $R$ ist. Wenn ja, akzeptieren wir $E$. Wenn nein, akzeptieren
 wir $R$.
 
-Gilt $f(R)\geq f(G)$, so ist der reflektierte Punkt kein guter Kandidat.
-Wir müssen nun die zwei möglichen kontrahierten Punkte $C_{1}$, $C_{2}$
-berechnen. Gilt $f(R)<f(W)$, berechnen wir den äußeren kontrahierten
-Punkt $C_{1}$, ansonsten den inneren kontrahierten Punkt $C_{2}.$
+Gilt $f(R)\geq f(G)$, so ist der reflektierte Punkt kein guter Kandidat.  Wir
+mÃ¼ssen nun die zwei mÃ¶glichen kontrahierten
+Punkte\cite{nelder-mead-scholarpedia} $C_{1}$, $C_{2}$
+berechnen.\cite{nelder-mead-unknown} Gilt $f(R)<f(W)$, berechnen wir den
+Ã¤uÃŸeren kontrahierten Punkt $C_{1}$, ansonsten den inneren kontrahierten Punkt
+$C_{2}.$
 \begin{eqnarray*}
     C_{1} & = & M+\rho(R-M)\\
     C_{2} & = & M+\rho(W-M)
 \end{eqnarray*}
 
-
 Sind die berechneten kontrahierten Punkte besser als die zur Berechnung
 verwendeten Punkte ($R$ und $W$ respektive), so werden diese akzeptiert.
-Ist dem nicht so, müssen wir zum nächsten Schritt, der Komprimierung,
+Ist dem nicht so, mÃ¼ssen wir zum nÃ¤chsten Schritt, der Komprimierung,
 fortfahren. Bei der Komprimierung werden jediglich die zwei schlechteren
 Punkte $G$ und $W$ in Richtung des besten Punktes $B$ gezogen.
 \begin{eqnarray*}
@@ -114,16 +111,16 @@ Punkte $G$ und $W$ in Richtung des besten Punktes $B$ gezogen.
 \end{eqnarray*}
 \rule[0.5ex]{1\columnwidth}{1pt}\\
 
-Diese Schritte werden fortgeführt, bis eine Abbruchbedingung eintritt,
+Diese Schritte werden fortgefÃ¼hrt, bis eine Abbruchbedingung eintritt,
 wie etwa dass der Unterschied zwischen dem besten Funktionswert $f(B)$
 und dem schlechtesten Funktionswert $f(W)$ oder der Umfang des Simplex' ein gegebenes $\varepsilon$
 unterschreitet.
 
-\subsection{Erläuterung der einzelnen Transformationsschritte}
+\subsection{ErlÃ¤uterung der einzelnen Transformationsschritte}
 
 Folgend werden die einzelnen Transformationsschritte anhand eines
-Dreiecks als Simplex vorgeführt und erläutert. Für unsere Koeffizienten
-wählen wir die Werte $\alpha=1,\,\gamma=2,\,\rho=\frac{1}{2},\,\sigma=\frac{1}{2}$.
+Dreiecks als Simplex vorgefÃ¼hrt und erlÃ¤utert. FÃ¼r unsere Koeffizienten
+wÃ¤hlen wir die Werte $\alpha=1,\,\gamma=2,\,\rho=\frac{1}{2},\,\sigma=\frac{1}{2}$.
 Unser Dreieck $\triangle BGW$ ist definiert mit $B=(1,\,3),\,G=(4,\,6),\,W=(6,\,2)$.
 
 \begin{figure}[H]
@@ -165,16 +162,16 @@ ist. Wir expandieren also weiter:
 \end{figure}
 
 Dies entspricht einem {\emph{greedy approach} -- dieser
-Schritt ist nicht notwendig per se, minimiert aber zusätzlich die Anzahl
-der nötigen Iterationen. In schwer zu optimierenden Funktionen, wie etwa
+Schritt ist nicht notwendig per se, minimiert aber zusÃ¤tzlich die Anzahl
+der nÃ¶tigen Iterationen. In schwer zu optimierenden Funktionen, wie etwa
 Rosenbrock's Bananenfunktion, kann der Expansionsfaktor $\gamma$ dazu genutzt werden,
-den Simplex in flachem Gelände schneller wandern zu lassen.
+den Simplex in flachem GelÃ¤nde schneller wandern zu lassen.
 
 \subsubsection{Kontraktion}
 
 Gehen wir jetzt vom Gegenteil aus \textendash{} Punkt $R$ war also
 kein geeigneter Punkt und Punkt $E$ wurde gar nicht berechnet \textendash{}
-so müssen wir die beiden Kontraktionspunkte $C_{1}$, $C_{2}$ berechnen.
+so mÃ¼ssen wir die beiden Kontraktionspunkte $C_{1}$, $C_{2}$ berechnen.
 \begin{eqnarray*}
     C_{1} & = & M+\frac{R-M}{2}=\binom{2.5}{4.5}+\frac{\binom{-1}{7}-\binom{2.5}{4.5}}{2}=\binom{-1.75}{1.25}\\
     C_{2} & = & M+\frac{W-M}{2}=\binom{2.5}{4.5}+\frac{\binom{6}{2}-\binom{2.5}{4.5}}{2}=\binom{4.25}{1.25}
@@ -212,7 +209,7 @@ des Algorithmus'.
     \caption{Die Himmelblau Funktion auf logarithmischer $z$-Skala}
 \end{figure}
 
-Um unseren Algorithmus exemplarisch vorzuführen, wollen wir die Himmeblau-
+Um unseren Algorithmus exemplarisch vorzufÃ¼hren, wollen wir die Himmeblau-
 Funktion minimieren. Dazu verwenden wir die beiliegende {\tt C++}-Implementierung, um
 die hier aufgelisteten Graphiken zu generieren.
 
@@ -232,15 +229,15 @@ und hat 4 gleiche lokale Minima an den Stellen
 \end{eqnarray*}
 
 Wir wollen unseren Algorithmus auf sie loslassen, um eines davon zu finden. Als
-Abbruchbedingung wählen wir
+Abbruchbedingung wÃ¤hlen wir
 
 \[
     \Delta f_{W,B} \leq 0.1,
 \]
 
 also dass der Unterschied des besten und schlechtesten Funktionswert kleiner
-gleich $0.1$ ist. Wir wählen diesen so groß, weil wir aus Platzgründen lieber
-schnell konvergieren als ein möglichst genaues Resultat wollen.
+gleich $0.1$ ist. Wir wÃ¤hlen diesen so groÃŸ, weil wir aus PlatzgrÃ¼nden lieber
+schnell konvergieren als ein mÃ¶glichst genaues Resultat wollen.
 
 Unsere Startpunkte sind folgende:
 \begin{eqnarray*}
@@ -250,12 +247,12 @@ Unsere Startpunkte sind folgende:
 \end{eqnarray*}
 
 Wie bereits besprochen, sind die Startpunkte relativ egal und wurden auch hier
-recht zufällig gewählt. Die einzige Einschränkung des Startsimplex ist, dass es
-sich hierbei auch um einen tatsächlichen Simplex handeln muss (ein
-degenerierter Simplex wäre nutzlos). Weiters ist ein großer Simplex
-wünschenswert, da gegebenenfalls zu Beginn einer Optimierung große Schritte in
-Richtung Minimum gemacht werden müssen, um schnell konvergieren zu können. Ein
-kleiner Simplex benötigt weit mehr Zeit um zu konvergieren -- dieses Problem
+recht zufÃ¤llig gewÃ¤hlt. Die einzige EinschrÃ¤nkung des Startsimplex ist, dass es
+sich hierbei auch um einen tatsÃ¤chlichen Simplex handeln muss (ein
+degenerierter Simplex wÃ¤re nutzlos). Weiters ist ein groÃŸer Simplex
+wÃ¼nschenswert, da gegebenenfalls zu Beginn einer Optimierung groÃŸe Schritte in
+Richtung Minimum gemacht werden mÃ¼ssen, um schnell konvergieren zu kÃ¶nnen. Ein
+kleiner Simplex benÃ¶tigt weit mehr Zeit um zu konvergieren -- dieses Problem
 kann man beispielsweise bei Rosenbrock's Banenenfunktion beobachten, die in der
 beiliegenden Implementierung ebenfalls vorhanden ist.
 
@@ -280,7 +277,7 @@ $B$, $G$, und $W$. Wir fahren fort und berechnen den Mittelpunkt
     M = \frac{B + G}{2} = \binom{1}{-6.5}
 \]
 
-Als nächstes berechnen wir den reflektierten Punkt
+Als nÃ¤chstes berechnen wir den reflektierten Punkt
 
 \[
     R = 2M - W = \binom{-6}{-21}
@@ -316,7 +313,7 @@ Nun berechnen wir den neuen Mittelpunkt und reflektierten Punkt
     R = 2M - W = \binom{0.5}{3.75}
 \end{eqnarray*}
 
-Nun berechnen wir $f(R) = 106.19141$ und sehen, dass dies Relation $f(B) \leq f(R) \leq f(W)$ erfüllt ist. Wir akzeptieren also
+Nun berechnen wir $f(R) = 106.19141$ und sehen, dass dies Relation $f(B) \leq f(R) \leq f(W)$ erfÃ¼llt ist. Wir akzeptieren also
 den reflektierten Punkt und ordnen unsere Werte neu.
 
 \begin{eqnarray*}
@@ -335,7 +332,7 @@ Wir berechnen den neuen Mittelpunkt $M = \binom{2.5}{2.25}$ und den neuen
 reflektierten Punkt $R = \binom{6}{9.5}$. $f(R) = 9155.815$, wir erreichen also
 keine Verbesserung. Wir berechnen wiederum den inneren kontrahierten Punkt
 $C_{2} = \binom{0.75}{-1.375}$ und sehen, dass $f(C_{2}) = 158.53931$, also
-eine Verbesserung gegenüber $f(W) = 514$. Wir akzeptieren also $C_{2}$ und
+eine Verbesserung gegenÃ¼ber $f(W) = 514$. Wir akzeptieren also $C_{2}$ und
 ordnen unsere Punkte neu.
 
 \begin{eqnarray*}
@@ -350,7 +347,7 @@ ordnen unsere Punkte neu.
     \caption{Nach dem dritten Transformationsschritt}
 \end{figure}
 
-Die beiden besten Punkte haben sich nicht geändert, also bleibt auch der
+Die beiden besten Punkte haben sich nicht geÃ¤ndert, also bleibt auch der
 Mittelpunkt gleich. Wir berechnen den reflektierten Punkt als $R =
 \binom{4.25}{5.875}$. Da $f(R) = 1176.43384$ haben wir keine Verbesserung
 erreicht und sind sogar schlechter als der schlechteste Punkt unseres Simplex',
@@ -378,19 +375,50 @@ auf die Implementierung und die {\tt .gif}-Datei auf der Projektwebseite ausgela
 
 \subsection{Analyse}
 
+Die formale mathematische Analyse des Nelder-Mead-Algorithmus' ist nicht mÃ¶glich.
+Es kann nicht eindeutig bewiesen werden, dass der Algorithmus beim Bearbeiten einer gegebenen
+Funktion $f_x$ konvergiert. Die Annahme, dass der Simplex konvergiert, beruht auf zwei
+Gegebenheiten:
+
+\begin{trivlist}
+\item Der Simplex degeneriert nicht wÃ¤hrend der Laufzeit.
+\item Irgendeine Art eines Abstiegskriteriums wird verwendet.
+\end{trivlist}
+
+Beides ist \emph{nicht} gegeben -- der Simplex kann und wird in einigen FÃ¤llen
+beinahme degenerieren, sofern die Landschaft der Funktion dies
+zulÃ¤sst.
+\footnote{Man betrachte Rosenbrock's Bananenfunktion, in deren Tal der Simplex
+    rapide schrumpft und sich somit nur mehr sehr langsam bewegen
+kann.} Weiters ist das Abstiegskriterion mehr zufÃ¤llig -- es ist nicht mathematisch
+fundiert wie etwa die Verwendung des negativen Gradienten, der mathematisch beweisbar
+immer in die Richtung des steilsten Abstiegs zeigt. \cite{nelder-mead-scholarpedia}
+
+Nichtsdestotrotz ist der Nelder-Mead-Algorithmus ein guter ableitungsfreier
+Optimierungsalgorithmus, der zumeist zuverlÃ¤ssig korrekte Resultate liefert.
+TatsÃ¤chlich gibt es aber eine ganze Familie von Funktionen, fÃ¼r die das Nelder-Mead-Verfahren
+immer zu einem Punkt konvergiert, der nicht das Minimum ist\cite{nelder-mead-convergence}.
+
+In vielen naturwissenschaftlichen Bereichen sind Funktionswerte fehlerbehaftet und damit
+genaue LÃ¶sungen unnÃ¶tig. In diesen FÃ¤llen ist der Nelder-Mead-Algorithmus von groÃŸem
+Vorteil, da er schnell Ergebnisse liefert die oft bereits ,,gut genug'' sind.
+Dazu kommt selbstverstÃ¤ndlich die Tatsache, dass der vorliegende Algorithmus anschaulich
+und relativ leicht verstÃ¤ndlich ist, und viele natÃ¼rlich mehr inkliniert sind, Methoden
+zu verwenden, die sie auch verstehen.
+
 \section{Das Gradientenverfahren}
 
 \subsection{Die Idee und der Zweck des Gradientenverfahren}
 
-Grundsätzlich ist das Gradientenverfahren ein Optimierungsverfahren, welches
+GrundsÃ¤tzlich ist das Gradientenverfahren ein Optimierungsverfahren, welches
 das Minimum einer mehrdimensionalen Funktion errechnen. Der Gradient
-(${\nabla}f(x,y)$) einer Funktion \(f(x)\) zeigt, aus später gezeigten
-\footnote{HIER VERWEIS EINFÜGEN} Gründen, immer in die Richtung des steilsten
-Anstiegs, folglich zeigt -${\nabla}f(x,y)$ in die Richtung des stärksten
+(${\nabla}f(x,y)$) einer Funktion \(f(x)\) zeigt, aus spÃ¤ter gezeigten
+\footnote{HIER VERWEIS EINFÃœGEN} GrÃ¼nden, immer in die Richtung des steilsten
+Anstiegs, folglich zeigt -${\nabla}f(x,y)$ in die Richtung des stÃ¤rksten
 Abstiegs. Das Gradientenverfahren macht sich dies zunutze und man ``wandert''
 eine gewisse Dauer in diese Richtung, wie \textquotedbl{}lange\textquotedbl{}
-man in die errechnete Richtung \textquotedbl{}wandert\textquotedbl{} hängt
-unter anderem auch von der gewählten Methode ab.
+man in die errechnete Richtung \textquotedbl{}wandert\textquotedbl{} hÃ¤ngt
+unter anderem auch von der gewÃ¤hlten Methode ab.
 
 \begin{figure}[H]
     \centering
@@ -400,7 +428,7 @@ unter anderem auch von der gewählten Methode ab.
 
 \subsection{Der Ablauf des Gradientenverfahrens}
 \begin{enumerate}
-    \item Es wird ein beliebiger Startpunkt $P=(x,y)$ ausgewählt.
+    \item Es wird ein beliebiger Startpunkt $P=(x,y)$ ausgewÃ¤hlt.
     \item Es wird die Ableitung der Funktion $f(x,y)$, also ${\nabla}f(x)$
         gebildet. Sollte dieser Gradient bereits den Wert null haben sind
         wir bereits fertig und haben ein lokales Minimum.
@@ -415,54 +443,54 @@ unter anderem auch von der gewählten Methode ab.
         die aktuelle Iteration). \\\\ Das kann man einerseits mit Hilfe eines
         fixen Werts machen, andererseits auch mit einer Folge (wie z.B $\frac{1}{\sqrt{n}}$)
         oder einer jedes mal neu errechneten Schrittweite. Zu beachten ist,
-        dass die ausgewählte Folge auf jeden Fall divergent sein muss, da
+        dass die ausgewÃ¤hlte Folge auf jeden Fall divergent sein muss, da
         man sonst bis zu einer maximalen Entfernung ``wandern''
-        kann und die Wahrscheinlichkeit groß ist das Optimum nie zu erreichen.
+        kann und die Wahrscheinlichkeit groÃŸ ist das Optimum nie zu erreichen.
         Sollte man jedes mal einen fixen Wert verliert man zwar den Aufwand
-        für die Berechnung der Schrittweite, jedoch ist die Wahrscheinlichkeit
-        hoch, dass man viele Iterationen benötigt oder in einer endlosen Schleife
-        festhängt. \\\\ Es gibt verschieden Arten wie man die Schrittweite
+        fÃ¼r die Berechnung der Schrittweite, jedoch ist die Wahrscheinlichkeit
+        hoch, dass man viele Iterationen benÃ¶tigt oder in einer endlosen Schleife
+        festhÃ¤ngt. \\\\ Es gibt verschieden Arten wie man die Schrittweite
         berechnen kann, im Folgenden werde ich die Schrittweitenbestimmung
-        nach Armijo erklären. Dieses Verfahren ist eines der sogenannten \textquotedbl{}line-search\textquotedbl{}
+        nach Armijo erklÃ¤ren. Dieses Verfahren ist eines der sogenannten \textquotedbl{}line-search\textquotedbl{}
         Verfahren, das von mir gezeigte ist jedoch kein exaktes line-search
         Verfahren sondern lediglich eine einfache Heuristik. \\\\ \textbf{Die Armijo-Bedingung:}
         $\varphi(\alpha) \leq \varphi(0) + c * \alpha^{[n]} * \varphi(0)'$.
         \\\\ Wobei $c$ eine Konstante zwischen null und eins ist und dazu
         dient das die Bedingung nicht zu restriktiv ist, $\varphi(\alpha) = f(P^{[n]} + \alpha^{[n]}s^{[n]})$
         und $\varphi(0)' = {\nabla}f(P^{n}) * s^{[n]}$
-    \item Für den Anfang wird $\alpha=1$ gewählt und errechnet ob die Armijo-Bedingung
-        erfüllt ist - sollte sie erfüllt sein haben wir ein passende $\alpha$
+    \item FÃ¼r den Anfang wird $\alpha=1$ gewÃ¤hlt und errechnet ob die Armijo-Bedingung
+        erfÃ¼llt ist - sollte sie erfÃ¼llt sein haben wir ein passende $\alpha$
         gefunden, wenn nicht wird $\alpha$ mit einem $\beta$, welches ebenfalls
-        zwischen null und eins liegt, multipliziert und wieder geprüft ob
-        die Ungleichung erfüllt ist. (Hinweis: In der Praxis liefern die Werte
-        $c = 0.01$ und $\beta = 0.9$ häufig gute Ergebnisse.
+        zwischen null und eins liegt, multipliziert und wieder geprÃ¼ft ob
+        die Ungleichung erfÃ¼llt ist. (Hinweis: In der Praxis liefern die Werte
+        $c = 0.01$ und $\beta = 0.9$ hÃ¤ufig gute Ergebnisse.
         \footnote{\href{https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf}{https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf}}
     \item Wenn man einen neuen Punkt gefunden hat wird bei Punkt 3 fortgesetzt.
-        Da es oft einen großen Rechenaufwand erfordert das genaue Minimum
+        Da es oft einen groÃŸen Rechenaufwand erfordert das genaue Minimum
         zu finden wird das Verfahren meist beendet wenn der Gradient einen
         akzeptablen Wert erreicht hat (So kann man als Abbruchbedingung z.B.
-        die stärke des Anstiegs in einem Punkt (also den Betrag des Gradienten)
+        die stÃ¤rke des Anstiegs in einem Punkt (also den Betrag des Gradienten)
         nehmen).
 \end{enumerate}
 
 \subsection{Beispiele}
 \subsubsection{Beispiel 1}
-Zu minimierende Funktion: $f(x,y)=y^4+2x^2-3xy+1$, als Abbruchbedingung wählen
+Zu minimierende Funktion: $f(x,y)=y^4+2x^2-3xy+1$, als Abbruchbedingung wÃ¤hlen
 wir $|{\nabla}f(x,y)| \leq 0.3$.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{grad/figure1}
-    \caption{Beispiel 1. Zusätzlich sind hier die Höhenschichtlinien eingezeichnet.}
+    \caption{Beispiel 1. ZusÃ¤tzlich sind hier die HÃ¶henschichtlinien eingezeichnet.}
     \label{bsp1}
 \end{figure}
-Wie man in Abbildung~\ref{bsp1} sieht, nähert man sich schrittweise dem
+Wie man in Abbildung~\ref{bsp1} sieht, nÃ¤hert man sich schrittweise dem
 Minimum an.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{grad/figure2}
-    \caption{Die Höhenschichtlinien genauer gezeigt.}
+    \caption{Die HÃ¶henschichtlinien genauer gezeigt.}
 \end{figure}
 
 \begin{enumerate}
@@ -486,7 +514,7 @@ Minimum an.
 	-1 \\
 	-1
 	\end{array} \right)
-	$ ($\rightarrow$ Richtung des stärksten Abstiegs)
+	$ ($\rightarrow$ Richtung des stÃ¤rksten Abstiegs)
 	\item
 	Die Armijo-Bedingung (mit $\alpha = 1$, $c = 0.1$ und $\beta = 0.9$):\\
 	$f( \left( \begin{array}{c} 1 \\ 1 \end{array} \right) + 1 * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)) \leq f(\left( \begin{array}{c} 1 \\ 1 \end{array} \right)) + 0.1 * 1 *  \left( \begin{array}{c} 1 \\ 1 \end{array} \right) * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)$ \\
@@ -511,7 +539,7 @@ Minimum an.
 
     $f( \left( \begin{array}{c} 1 \\ 1 \end{array} \right) + 0,59 * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)) \leq f(\left( \begin{array}{c} 1 \\ 1 \end{array} \right)) + 0.1 * 0,59 *  \left( \begin{array}{c} 1 \\ 1 \end{array} \right) * \left( \begin{array}{c} -1 \\ -1 \end{array} \right)$ \\
     $= 0.86 \leq 0.882$ \\
-    Nun haben wir ein passendes $\alpha$ gefunden und können zum nächsten Punkt wandern.
+    Nun haben wir ein passendes $\alpha$ gefunden und kÃ¶nnen zum nÃ¤chsten Punkt wandern.
 
     \begin{figure}[H]
         \centering
@@ -563,7 +591,7 @@ Minimum an.
     \item
 	$-{\nabla}f(0.455,0.748) = \left( \begin{array}{c} 0.424 \\ -0.309. \end{array} \right)$, \\
 	$|{\nabla}f(0.455,0.748)| = \sqrt{0.424^2+0.309^2} = 0.275$ \\
-	Die Abbruchbedingung ist erfüllt und somit ist ein Punkt, welcher nahe genug am Optimum liegt gefunden.
+	Die Abbruchbedingung ist erfÃ¼llt und somit ist ein Punkt, welcher nahe genug am Optimum liegt gefunden.
 
 
 \end{enumerate}
@@ -571,13 +599,13 @@ Minimum an.
 
 \section{Die Koordinatenabstiegsmethode}
 
-\subsection{Einführung}
+\subsection{EinfÃ¼hrung}
 
 Bei der Koordinatenabstiegsmethode wird bei jedem Schritt eine Koordinate
-i gewählt, nach der man optimiert. Es wird bei einem beliebigen Startpunkt
+i gewÃ¤hlt, nach der man optimiert. Es wird bei einem beliebigen Startpunkt
 begonnen und in jedem Iterationsschritt setzt man alle Koordinaten
 des aktuellen Punktes in die Funktion ein , nur die Koordinate , nach
-der man minimieren will , behält man als Variable bei.
+der man minimieren will , behÃ¤lt man als Variable bei.
 
 Es wird immer in Richtung einer Achse minimiert und die Stelle , an
 der das Minimum ist , als neue Koordinate beibehalten und so gelangt
@@ -612,8 +640,8 @@ werden:
 
 \subsection{Beispiel}
 
-Wir möchten die Funktion $f(x,y)=2x^{2}+2xy+1.5y^{2}$ optimieren
-und wählen den Startpunkt $P_{0}=(1,\,1)$. Wir minimieren zuerst
+Wir mÃ¶chten die Funktion $f(x,y)=2x^{2}+2xy+1.5y^{2}$ optimieren
+und wÃ¤hlen den Startpunkt $P_{0}=(1,\,1)$. Wir minimieren zuerst
 entlang der $x$-Achse und setzen ein
 
 \begin{eqnarray*}
@@ -621,7 +649,7 @@ entlang der $x$-Achse und setzen ein
     & = & 2d^{2}+6d+5.5
 \end{eqnarray*}
 
-Diese soeben erhaltene Funktion müssen wir nun noch minimieren.
+Diese soeben erhaltene Funktion mÃ¼ssen wir nun noch minimieren.
 
 \begin{eqnarray*}
     f'(d) & = & 4d+6\\
@@ -630,7 +658,7 @@ Diese soeben erhaltene Funktion müssen wir nun noch minimieren.
 \end{eqnarray*}
 
 
-Setzen wir dies in die Gleichung für die $x$-Koordinate ein und verwenden
+Setzen wir dies in die Gleichung fÃ¼r die $x$-Koordinate ein und verwenden
 die alte $y$-Koordinate erhalten wir den neuen Punkt $P_{1}=(-\frac{1}{2},\,1)$.
 Nun minimieren wir nach $y$, wir setzen also ein:
 
@@ -646,16 +674,15 @@ und erhalten
     f(d)=1.5d^{2}-d+6
 \]
 
-
 Dies minimieren wir wiederum und erhalten die neue $y$-Koordinate
 $\frac{1}{3}$. Damit haben wir den neuen Punkt $(-\frac{1}{2},\:\frac{1}{3}$).
 Dieser Vorgang wird wiederholt, bis sich die errechneten Werte nurnoch
 marginal unterscheiden. Danach wird abgebrochen.
 
 
-\subsection{Problemfälle}
+\subsection{ProblemfÃ¤lle}
 \begin{quotation}
-    \noindent Zeigen Sie, dass die Koordinatenabstiegsmethode für die stetige Funktion
+    \noindent Zeigen Sie, dass die Koordinatenabstiegsmethode fÃ¼r die stetige Funktion
     \[
         f(x,\,y)=
         \begin{cases}
@@ -678,9 +705,12 @@ und erhalten die Funktion
     & = & 2d^{2}-14d+29
 \end{eqnarray*}
 welche ein Minimum an der Stelle $d=\frac{7}{2}$ hat. Dies fortgesetzt
-für $y$ erhalten wir den neuen Punkt $P=(\frac{7}{2},\,\frac{7}{2})$.
-Bei weiteren Iterationen merken wir, dass $d$ immer 0 beträgt \textendash{}
+fÃ¼r $y$ erhalten wir den neuen Punkt $P=(\frac{7}{2},\,\frac{7}{2})$.
+Bei weiteren Iterationen merken wir, dass $d$ immer 0 betrÃ¤gt \textendash{}
 was bedeutet, dass sich der Punkt nicht weiterbewegt. Wir sitzen auf
-einem lokalen Minimum fest. Führen wir das mit dem anderen Zweig der
+einem lokalen Minimum fest. FÃ¼hren wir das mit dem anderen Zweig der
 Funktion ebenfalls durch, so sehen wir das gleiche Problem.
+
+\bibliography{ops}
+\bibliographystyle{unsrt}
 \end{document}
