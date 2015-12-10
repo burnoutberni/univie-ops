@@ -57,11 +57,15 @@ private:
 
     void do_step() {
         point m = (b + g) / 2; // Mittelpunkt der besten beiden Punkte
+        std::cerr << "middle point: " << m.format() << '\n';
+
         point r = m + alpha_ * (m - w); // Reflektiere schlechtesten Punkt
+        std::cerr << "reflected point: " << r.format() << '\n';
 
         if(f(r.x, r.y) <= f(w.x, w.y)) {
             if(f(r.x, r.y) < f(b.x, b.y)) {
                 point e = m + gamma_ * (m - w); // r ist bester Punkt bis jetzt. Expandiere weiter
+                std::cerr << "expanded point: " << e.format() << '\n';
                 w = min(e, r);
                 return;
             }
@@ -72,12 +76,14 @@ private:
         point c;
         if(f(r.x, r.y) < f(w.x, w.y)) { // Outside
             c = m + rho_ * (r - m);
+            std::cerr << "outer contracted point: " << c.format() << '\n';
             if(f(c.x, c.y) <= f(r.x, r.y)) {
                 w = c;
                 return;
             }
         } else { // Inside
             c = m + rho_ * (w - m);
+            std::cerr << "inner contracted point: " << c.format() << '\n';
             if(f(c.x, c.y < f(w.x, w.y))) {
                 w = c;
                 return;

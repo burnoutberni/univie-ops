@@ -3,7 +3,9 @@
 \usepackage[latin9]{inputenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
-\usepackage{babel}
+\usepackage[ngerman]{babel}
+\usepackage{microtype}
+\usepackage[parfill]{parskip}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[unicode=true] {hyperref}
@@ -74,7 +76,7 @@ Nun reflektieren wir den schlechtesten Punkt $W$ am Mittelpunkt
 \[
     R=M+\alpha(M-W)
 \]
-und prüfen, ob dieser Punkt $r$ die Relation $f(B)\leq f(R)\leq f(W)$
+und prüfen, ob dieser Punkt $R$ die Relation $f(B)\leq f(R)\leq f(W)$
 erfüllt.
 
 Wenn ja, ersetzen wir den schlechtesten Punkt mit $R$ und brechen
@@ -112,12 +114,10 @@ Punkte $G$ und $W$ in Richtung des besten Punktes $B$ gezogen.
 \end{eqnarray*}
 \rule[0.5ex]{1\columnwidth}{1pt}\\
 
-
 Diese Schritte werden fortgeführt, bis eine Abbruchbedingung eintritt,
 wie etwa dass der Unterschied zwischen dem besten Funktionswert $f(B)$
-und dem schlechtesten Funktionswert $f(W)$ ein gegebenes $\varepsilon$
-unterschreitet, oder der Umfang des Simplex einen gegebenen Wert unterschreitet.
-
+und dem schlechtesten Funktionswert $f(W)$ oder der Umfang des Simplex' ein gegebenes $\varepsilon$
+unterschreitet.
 
 \subsection{Erläuterung der einzelnen Transformationsschritte}
 
@@ -164,9 +164,11 @@ ist. Wir expandieren also weiter:
     \caption{Nach der Expansion}
 \end{figure}
 
-Dies entspricht einem \emph{greedy approach }\textendash{} dieser
-Schritt ist nicht notwendig, minimiert aber zusätzlich die Anzahl
-der nötigen Iterationen.
+Dies entspricht einem {\emph{greedy approach} -- dieser
+Schritt ist nicht notwendig per se, minimiert aber zusätzlich die Anzahl
+der nötigen Iterationen. In schwer zu optimierenden Funktionen, wie etwa
+Rosenbrock's Bananenfunktion, kann der Expansionsfaktor $\gamma$ dazu genutzt werden,
+den Simplex in flachem Gelände schneller wandern zu lassen.
 
 \subsubsection{Kontraktion}
 
@@ -201,6 +203,7 @@ Wir komprimieren die Punkte $G$ und $W$ in Richtung $B$.
 Dies entspricht dem Zusammenziehen des Simplex' in den letzten Iterationsschritten
 des Algorithmus'.
 
+
 \subsection{Ein Beispiel: die Himmelblau-Funktion}
 
 \begin{figure}[H]
@@ -209,38 +212,185 @@ des Algorithmus'.
     \caption{Die Himmelblau Funktion auf logarithmischer $z$-Skala}
 \end{figure}
 
-Die Himmelblau-Funktion hat 4 gleiche lokale Minima. Wir wollen unseren
-Algorithmus auf sie loslassen, um eines davon zu finden. Als zufällige
-Startpunkte wählen wir
+Um unseren Algorithmus exemplarisch vorzuführen, wollen wir die Himmeblau-
+Funktion minimieren. Dazu verwenden wir die beiliegende {\tt C++}-Implementierung, um
+die hier aufgelisteten Graphiken zu generieren.
+
+Die Himmelblau-Funktion ist definiert als
+
+\[
+    f(x,y) = (x^2 + y - 11)^2 + (x + y^2 - 7)^2
+\]
+
+und hat 4 gleiche lokale Minima an den Stellen
+
 \begin{eqnarray*}
-    P_{1} & = & (2,\,5)\\
-    P_{2} & = & (9,\,2)\\
-    P_{3} & = & (-3,\,-8)
+    f(3.2, 2.0) & = & 0.0\\
+    f(-2.805118, 3.131312) & = & 0.0\\
+    f(-3.779310, -3.283186) & = & 0.0\\
+    f(3.584428, -1.848126) & = & 0.0\\
+\end{eqnarray*}
+
+Wir wollen unseren Algorithmus auf sie loslassen, um eines davon zu finden. Als
+Abbruchbedingung wählen wir
+
+\[
+    \Delta f_{W,B} \leq 0.1,
+\]
+
+also dass der Unterschied des besten und schlechtesten Funktionswert kleiner
+gleich $0.1$ ist. Wir wählen diesen so groß, weil wir aus Platzgründen lieber
+schnell konvergieren als ein möglichst genaues Resultat wollen.
+
+Unsere Startpunkte sind folgende:
+\begin{eqnarray*}
+    P_{1} & = & (-1,\,-5)\\
+    P_{2} & = & (3,\,-8)\\
+    P_{3} & = & (8,\,8)
+\end{eqnarray*}
+
+Wie bereits besprochen, sind die Startpunkte relativ egal und wurden auch hier
+recht zufällig gewählt. Die einzige Einschränkung des Startsimplex ist, dass es
+sich hierbei auch um einen tatsächlichen Simplex handeln muss (ein
+degenerierter Simplex wäre nutzlos). Weiters ist ein großer Simplex
+wünschenswert, da gegebenenfalls zu Beginn einer Optimierung große Schritte in
+Richtung Minimum gemacht werden müssen, um schnell konvergieren zu können. Ein
+kleiner Simplex benötigt weit mehr Zeit um zu konvergieren -- dieses Problem
+kann man beispielsweise bei Rosenbrock's Banenenfunktion beobachten, die in der
+beiliegenden Implementierung ebenfalls vorhanden ist.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{nelder_mead/1}
+    \caption{Unser Anfangssimplex aufgetragen auf einen Contourplot der Himmelblau-Funktion.}
+\end{figure}
+
+Der erste Schritt ist das Ordnen der Punkte nach ihrem Funktionswert. Wir berechnen:
+
+\begin{eqnarray*}
+    f(P_{1}) & = & 512\\
+    f(P_{2}) & = & 3700\\
+    f(P_{3}) & = & 7964
+\end{eqnarray*}
+
+Netterweise sind unsere Punkte also schon geordnet und $P_{1}$, $P_{2}$ und $P_{3}$ entsprechen jeweils
+$B$, $G$, und $W$. Wir fahren fort und berechnen den Mittelpunkt
+
+\[
+    M = \frac{B + G}{2} = \binom{1}{-6.5}
+\]
+
+Als nächstes berechnen wir den reflektierten Punkt
+
+\[
+    R = 2M - W = \binom{-6}{-21}
+\]
+
+Berechnen wir nun $f(R) = 183200$, sehen wir, dass der reflektierte Punkt keine gute Idee ist. Da $R$
+bei weitem schlechter als unser schlechteste Punkt $W$ ist, berechnen wir den inneren kontrahierten Punkt
+
+\[
+    C_{2} = M + \frac{W - M}{2} = \binom{4.5}{0.75}
+\]
+
+Berechnen wir nun $f(C_{2}) = 103.75391$, sehen wir, dass
+wir einen guten Fortschritt gemacht haben. Wir ersetzen
+$W$ und ordnen unsere Punkte neu.
+
+\begin{eqnarray*}
+    B & = & (4.5, \, 0.75)\\
+    G & = & (-1,\,-5)\\
+    W & = & (3,\,-8)
 \end{eqnarray*}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{nelder_mead/himmelblau_cont}
-    \caption{Unser Anfangssimplex aufgetragen auf einen Contourplot der Himmelblau-Funktion.}
+    \includegraphics[width=0.7\textwidth]{nelder_mead/2}
+    \caption{Unser Simplex nach dem ersten Transformationsschritt}
 \end{figure}
 
-\emph{fehlend}
+Nun berechnen wir den neuen Mittelpunkt und reflektierten Punkt
 
+\begin{eqnarray*}
+    M = \frac{B + G}{2} = \binom{1.75}{-2.125}\\
+    R = 2M - W = \binom{0.5}{3.75}
+\end{eqnarray*}
+
+Nun berechnen wir $f(R) = 106.19141$ und sehen, dass dies Relation $f(B) \leq f(R) \leq f(W)$ erfüllt ist. Wir akzeptieren also
+den reflektierten Punkt und ordnen unsere Werte neu.
+
+\begin{eqnarray*}
+    B & = & (4.5, \, 0.75)\\
+    G & = & (0.5,\,3.75)\\
+    W & = & (-1,\,-5)
+\end{eqnarray*}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{nelder_mead/3}
+    \caption{Unser Simplex nach dem zweiten Transformationsschritt}
+\end{figure}
+
+Wir berechnen den neuen Mittelpunkt $M = \binom{2.5}{2.25}$ und den neuen
+reflektierten Punkt $R = \binom{6}{9.5}$. $f(R) = 9155.815$, wir erreichen also
+keine Verbesserung. Wir berechnen wiederum den inneren kontrahierten Punkt
+$C_{2} = \binom{0.75}{-1.375}$ und sehen, dass $f(C_{2}) = 158.53931$, also
+eine Verbesserung gegenüber $f(W) = 514$. Wir akzeptieren also $C_{2}$ und
+ordnen unsere Punkte neu.
+
+\begin{eqnarray*}
+    B & = & (4.5, \, 0.75)\\
+    G & = & (0.5,\,3.75)\\
+    W & = & (0.75,\,-1.375)
+\end{eqnarray*}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{nelder_mead/4}
+    \caption{Nach dem dritten Transformationsschritt}
+\end{figure}
+
+Die beiden besten Punkte haben sich nicht geändert, also bleibt auch der
+Mittelpunkt gleich. Wir berechnen den reflektierten Punkt als $R =
+\binom{4.25}{5.875}$. Da $f(R) = 1176.43384$ haben wir keine Verbesserung
+erreicht und sind sogar schlechter als der schlechteste Punkt unseres Simplex',
+demnach berechnen wir wiederum den inneren kontrahierten Punkt $C_{2} =
+\binom{1.625}{0.4375}$. Der Funktionswert an der Stelle $C_{2}$ ist $89.62574$
+und damit besser als $B$. Wir akzeptieren diesen Punkt daher und ordnen unsere
+Punkte neu.
+
+\begin{eqnarray*}
+    B & = & (1.625,\,0.4375)\\
+    G & = & (4.5, \, 0.75)\\
+    W & = & (0.5,\,3.75)
+\end{eqnarray*}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{nelder_mead/5}
+    \caption{Nach dem vierten Transformationsschritt}
+\end{figure}
+
+Es ist mittlerweile klar, dass wir im Punkt $\binom{3}{2}$ konvergieren werden.
+Das beliegende {\tt C++}-Programm konvergierte mit den angegebenen Parametern
+in 23 Iterationsschritten. Die weiteren Schritte werden hier mit dem Verweis
+auf die Implementierung und die {\tt .gif}-Datei auf der Projektwebseite ausgelassen.
+
+\subsection{Analyse}
 
 \section{Das Gradientenverfahren}
 
 \subsection{Die Idee und der Zweck des Gradientenverfahren}
 
-Grundsätzlich ist das Gradientenverfahren ein Optimierungsverfahren,
-welches das Minimum einer mehrdimensionalen Funktion errechnen. Der
-Gradient (${\nabla}f(x,y)$) einer Funktion \(f(x)\) zeigt, aus später
-gezeigten \footnote{HIER VERWEIS EINFÜGEN} Gründen, immer in die Richtung des
-steilsten Anstiegs, folglich zeigt -${\nabla}f(x,y)$ in die Richtung
-des stärksten Abstiegs. Das Gradientenverfahren macht sich dies zunutze
-und man \textquotedbl{}wandert\textquotedbl{} eine gewisse Dauer in
-diese Richtung, wie \textquotedbl{}lange\textquotedbl{} man in die
-errechnete Richtung \textquotedbl{}wandert\textquotedbl{} hängt unter
-anderem auch von der gewählten Methode ab.
+Grundsätzlich ist das Gradientenverfahren ein Optimierungsverfahren, welches
+das Minimum einer mehrdimensionalen Funktion errechnen. Der Gradient
+(${\nabla}f(x,y)$) einer Funktion \(f(x)\) zeigt, aus später gezeigten
+\footnote{HIER VERWEIS EINFÜGEN} Gründen, immer in die Richtung des steilsten
+Anstiegs, folglich zeigt -${\nabla}f(x,y)$ in die Richtung des stärksten
+Abstiegs. Das Gradientenverfahren macht sich dies zunutze und man ``wandert''
+eine gewisse Dauer in diese Richtung, wie \textquotedbl{}lange\textquotedbl{}
+man in die errechnete Richtung \textquotedbl{}wandert\textquotedbl{} hängt
+unter anderem auch von der gewählten Methode ab.
 
 \begin{figure}[H]
     \centering
@@ -417,6 +567,7 @@ Minimum an.
 
 
 \end{enumerate}
+
 
 \section{Die Koordinatenabstiegsmethode}
 
