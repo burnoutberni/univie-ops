@@ -20,9 +20,16 @@
 #include <iostream>
 #include <tuple>
 #include <sstream>
+#include <exception>
 
 #include "Funktion.h"
 #include "point.hpp"
+
+struct invalid_value: public std::exception {
+    char const* err = "invalid value";
+    invalid_value(char const* e) : err{ e } {}
+    char const* what() const noexcept { return err; }
+};
 
 class nelder_mead_optimizer {
 private:
@@ -30,12 +37,12 @@ private:
     point b; // best
     point g; // good
     point w; // worst
-    double eps = 0.0001;
+    double eps;
 
-    double alpha_ = 1;    // Alpha: Reflexionsfaktor
-    double gamma_ = 2;    // Gamma: Expansionsfaktor
-    double rho_   = 0.5;  // Rho: Kontrahierungsfaktor
-    double sigma_ = 0.5;  // Komprimierungsfaktor
+    double alpha_;    // Alpha: Reflexionsfaktor, default: 1
+    double gamma_;    // Gamma: Expansionsfaktor, default: 2
+    double beta_;  // Rho: Kontrahierungsfaktor, default: .5
+    double delta_;  // Komprimierungsfaktor, default: .5
 
     bool is_done = false;
 
@@ -57,33 +64,27 @@ private:
 
     void do_step() {
         point m = (b + g) / 2; // Mittelpunkt der besten beiden Punkte
-        std::cerr << "middle point: " << m.format() << '\n';
-
         point r = m + alpha_ * (m - w); // Reflektiere schlechtesten Punkt
-        std::cerr << "reflected point: " << r.format() << '\n';
 
         if(f(r.x, r.y) <= f(w.x, w.y)) {
             if(f(r.x, r.y) < f(b.x, b.y)) {
                 point e = m + gamma_ * (m - w); // r ist bester Punkt bis jetzt. Expandiere weiter
-                std::cerr << "expanded point: " << e.format() << '\n';
-                w = min(e, r);
+                w = min(e, r); // Ersetze schlechtesten Punkt durch den besseren der beiden
                 return;
             }
-            w = r; // Ersetze schlechtesten Punkt durch den besseren der beiden
+            w = r;
             return;
         }
 
         point c;
         if(f(r.x, r.y) < f(w.x, w.y)) { // Outside
-            c = m + rho_ * (r - m);
-            std::cerr << "outer contracted point: " << c.format() << '\n';
+            c = m + beta_ * (r - m);
             if(f(c.x, c.y) <= f(r.x, r.y)) {
                 w = c;
                 return;
             }
         } else { // Inside
-            c = m + rho_ * (w - m);
-            std::cerr << "inner contracted point: " << c.format() << '\n';
+            c = m + beta_ * (w - m);
             if(f(c.x, c.y < f(w.x, w.y))) {
                 w = c;
                 return;
@@ -91,19 +92,55 @@ private:
         }
 
         // Komprimiere die zwei schlechtesten Punkte in Richtung b – Simplex zieht sich zusammen
-        g = b + sigma_ * (g - b);
-        w = b + sigma_ * (w - b);
+        g = b + delta_ * (g - b);
+        w = b + delta_ * (w - b);
     }
-public:
-    nelder_mead_optimizer(Funktion& f, double eps, point const& p1, point const& p2, point const& p3)
-        : f( f ), b{ p1 }, g{ p2 }, w{ p3 }, eps{ eps } { sort_points_by_fvalue(); }
-    nelder_mead_optimizer(Funktion& f, point p1, point p2, point p3)
-        : f( f ), b{ p1 }, g{ p2 }, w{ p3 } {}
 
-    double& alpha() { return alpha_; }
-    double& gamma() { return gamma_; }
-    double& rho() { return rho_; }
-    double& sigma() { return sigma_; }
+public:
+    nelder_mead_optimizer(Funktion& f, point const& p1, point const& p2, point const& p3, double eps = 0.00001,
+            double alpha = 1, double gamma = 2, double beta = .5, double delta = .5)
+        : f( f ), b{ p1 }, g{ p2 }, w{ p3 }, eps{ eps } {
+            sort_points_by_fvalue();
+            set_alpha(alpha);
+            set_gamma(gamma);
+            set_beta(beta);
+            set_delta(delta);
+        }
+
+    double alpha() const { return alpha_; }
+    double gamma() const { return gamma_; }
+    double beta() const { return beta_; }
+    double delta() const { return delta_; }
+
+    void set_alpha(double alpha) {
+        if(alpha <= 0) {
+            throw invalid_value("alpha value violates constraint alpha > 0");
+        }
+        alpha_ = alpha;
+    }
+
+    void set_gamma(double gamma) {
+        if(gamma <= 1) {
+            throw invalid_value("gamma value violates constraint gamma > 1");
+        } else if(gamma < alpha_) {
+            throw invalid_value("gamma value violates constraint gamma > alpha");
+        }
+        gamma_ = gamma;
+    }
+
+    void set_beta(double beta) {
+        if(!(0 < beta && beta < 1)) {
+            throw invalid_value("beta value violates constraint 0 < beta < 1");
+        }
+        beta_ = beta;
+    }
+
+    void set_delta(double delta) {
+        if(!(0 < delta && delta < 1)) {
+            throw invalid_value("delta value violates constraint 0 < delta < 1");
+        }
+        delta_ = delta;
+    }
 
     std::tuple<point, point, point> retrieve_current_simplex() {
         return std::make_tuple(b, g, w);
@@ -116,7 +153,7 @@ public:
         do_step();
         sort_points_by_fvalue();
 
-        /* Konvergenzkriterium: Differenz zwischen bestem und schlechtetesten Punkt
+        /* Konvergenzkriterium: Differenz zwischen bestem und schlechtetestem Punkt
          * erreicht oder unterschreitet Epsilon. */
         if(std::abs(f(b.x, b.y) - f(w.x, w.y)) <= eps) { is_done = true; }
     }

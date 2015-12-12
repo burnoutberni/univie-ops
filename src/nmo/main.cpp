@@ -88,6 +88,7 @@ int main(int argc, char const** argv) {
         "set cntrparam levels 50\n"
         "set surface\n";
     // }}}
+
     // FUNCTION STRUCTS {{{
     struct : Funktion {
         double value(double x, double y) { return 3*x*x + y*y - 3*x*y - 3*x; }
@@ -125,6 +126,7 @@ int main(int argc, char const** argv) {
         double value(double x, double y) { return 2*x*x - 1.05*x*x*x*x + (x*x*x*x*x*x)/6 + x*y + y*y; }
     } camel;
     // }}}
+
     // HASHMAP {{{
     std::unordered_map<std::string, std::pair<std::string, Funktion*>> plot_functions = {
         {"example1", std::make_pair("3*x**2 + y**2 - 3*x*y - 3*x", &example1)},
@@ -174,7 +176,7 @@ int main(int argc, char const** argv) {
 
     Funktion* user_choice;
     if(plot_functions.count(argv[1])) {
-        user_choice = plot_functions.at(argv[1]).second;
+        user_choice = plot_functions[argv[1]].second;
     } else {
         std::cerr << "No such function. (\"" << argv[1] << "\")\n";
         return 1;
@@ -189,7 +191,7 @@ int main(int argc, char const** argv) {
         << "'-' with lines lc rgb 'red' notitle\n";
     std::string base_cmd = oss.str();
 
-    nelder_mead_optimizer nmo(*user_choice, 0.1, {-1, -5}, {8, 8}, {3, -8});
+    nelder_mead_optimizer nmo(*user_choice, {-1, -5}, {8, 8}, {3, -8}, 0.000001);
     int n = 0;
     while(!nmo.done()) {
         std::cout << "#" << n++ << '\n';
