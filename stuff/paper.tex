@@ -1,7 +1,6 @@
 \documentclass[naustrian]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{cite}
 \usepackage{geometry}
 \geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
 \usepackage[ngerman]{babel}
@@ -9,10 +8,14 @@
 \usepackage[parfill]{parskip}
 \usepackage{amsmath}
 \usepackage{graphicx}
-\usepackage[unicode=true] {hyperref}
-\usepackage{pdfpages}
+\usepackage{hyperref}
+\usepackage{nameref}
 \usepackage{float}
-\usepackage{url}
+
+\usepackage[backend=bibtex, style=ieee, block=none]{biblatex}
+\addbibresource{ops}
+
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1}~\nameref*{#1}}}
 
 \begin{document}
 
@@ -23,7 +26,6 @@ Stepan Kharin, Christoph Pressler}
 
 \maketitle
 \tableofcontents
-\listoffigures
 
 \section{Das Nelder-Mead-Verfahren}
 
@@ -33,12 +35,12 @@ Das Nelder-Mead-Verfahren (auch Downhill-Simplex genannt) verfolgt
 einen geometrischen Ansatz zur iterativen Optimierung: ein Simplex
 bestehend aus $N+1$ Punkten (im Falle $N=2$, dem zweidimensionalen
 Raum, also ein Dreieck) wird fortwährend so transformiert, sodass
-sich der Simplex dem Minimum nähert, um welches er sich dann zusammenzieht.\cite{nelder-mead-enwiki}
+sich der Simplex dem Minimum nähert, um welches er sich dann zusammenzieht.~\cite{nelder-mead-enwiki}
 
-\subsection{Funktionsweise}
+\subsection{Funktionsweise}\label{funktionsweise}
 
 Der Algorithmus besteht im wesenstlichen aus drei
-Phasen\cite{nelder-mead-scholarpedia}, die in jeder Iteration durchlaufen
+Phasen~\cite{nelder-mead-scholarpedia}, die in jeder Iteration durchlaufen
 werden:
 \begin{enumerate}
     \item Ordering
@@ -46,13 +48,29 @@ werden:
     \item Transformation
 \end{enumerate}
 
+Das Verhalten des Algorithmus' kann mittels den Parametern $\alpha$, $\beta$, $\gamma$
+und $\delta$ beeinflusst werden, wobei $\alpha$ den Reflektionsfaktor, $\gamma$ den
+Expansionsfaktor, $\beta$ den Kontraktionsfaktor und $\delta$ den Komprimierungsfaktor
+bezeichnet. Eine typische Belegung wäre
+
+\begin{eqnarray*}
+    \alpha & = & 1\\
+    \gamma & = & 2\\
+    \beta & = & 0.5\\
+    \delta & = & 0.5
+\end{eqnarray*}
+
+\dots es sind aber auch andere, beliebige Belegungen möglich, solange
+folgende Invarianten gelten: $0 < \alpha$, $0 < \beta < 1$, $1 < \gamma$ und $\alpha < \gamma$
+sowie $0 < \delta < 1$.~\cite{nelder-mead-scholarpedia}
+
 \paragraph{Ordering}
 
 Zu Beginn besitzen wir $N+1$ Punkte, die anhand irgendwelche Kriterien
 (durchaus auch zufällig) gewählt wurden. Diese müssen wir nun anhand
 ihrer Güte ordnen, also sortieren. Im Falle des zweidimensionalen
 Raumes erhalten wir also die drei mnemonisch benannten Punkte \textbf{$B$
-}(\emph{best}), $G$ (\emph{good}) und $W$ (\emph{worst}).\cite{nelder-mead-unknown} $B$ ist
+}(\emph{best}), $G$ (\emph{good}) und $W$ (\emph{worst}).~\cite{nelder-mead-unknown} $B$ ist
 im Falle eine Minimierung der Punkt, dessen Funktionswert am geringsten
 ist, $G$ der mit dem zweit geringsten Wert, und so weiter.
 
@@ -92,41 +110,52 @@ wir $R$.
 
 Gilt $f(R)\geq f(G)$, so ist der reflektierte Punkt kein guter Kandidat.  Wir
 müssen nun die zwei möglichen kontrahierten
-Punkte\cite{nelder-mead-scholarpedia} $C_{1}$, $C_{2}$
-berechnen.\cite{nelder-mead-unknown} Gilt $f(R)<f(W)$, berechnen wir den
+Punkte $C_{1}$, $C_{2}$
+berechnen.~\cite{nelder-mead-scholarpedia}\cite{nelder-mead-unknown} Gilt $f(R)<f(W)$, berechnen wir den
 äußeren kontrahierten Punkt $C_{1}$, ansonsten den inneren kontrahierten Punkt
 $C_{2}.$
 \begin{eqnarray*}
-    C_{1} & = & M+\rho(R-M)\\
-    C_{2} & = & M+\rho(W-M)
+    C_{1} & = & M+\beta(R-M)\\
+    C_{2} & = & M+\beta(W-M)
 \end{eqnarray*}
 
 Sind die berechneten kontrahierten Punkte besser als die zur Berechnung
-verwendeten Punkte ($R$ und $W$ respektive), so werden diese akzeptiert.
-Ist dem nicht so, müssen wir zum nächsten Schritt, der Komprimierung,
-fortfahren. Bei der Komprimierung werden jediglich die zwei schlechteren
-Punkte $G$ und $W$ in Richtung des besten Punktes $B$ gezogen.
-\begin{eqnarray*}
-    G & = & B+\sigma(B-G)\\
-    W & = & B+\sigma(B-W)
-\end{eqnarray*}
-\rule[0.5ex]{1\columnwidth}{1pt}\\
+verwendeten Punkte ($R$ und $W$ respektive), so werden diese akzeptiert.  Ist
+dem nicht so, müssen wir zum nächsten Schritt, der Komprimierung, fortfahren.
+Bei der Komprimierung werden jediglich die zwei schlechteren Punkte $G$ und $W$
+in Richtung des besten Punktes $B$ gezogen. \cite{nelder-mead-scholarpedia}
+Dieser Schritt wird bei den meisten Funktionen nie feuern -- die Kontraktion
+liefert zumeist einen Punkt, der akzeptiert werden kann. In seltenen Fällen,
+nämlich wenn sich der Simplex über ein Tal spannt und sich ein Punkt des
+Simplex viel weiter vom Tal entfernt befindet als die anderen zwei besseren,
+ist dieser Schritt aber durchaus notwendig.
+Bei der Reflektion würde sich der reflektierte Punkt weiter vom Tal weg bewegen
+statt in das Tal hinein. Die Komprimierung wirkt dem entgegen und zieht alle
+Punkte in Richung des besten Punktes, der in diesem Falle dem Tal am nächsten
+wäre. Ohne Komprimierung würde der Simplex in diesem Fall möglicherweise in
+einem falschen Punkt konvergieren.
 
-Diese Schritte werden fortgeführt, bis eine Abbruchbedingung eintritt,
-wie etwa dass der Unterschied zwischen dem besten Funktionswert $f(B)$
-und dem schlechtesten Funktionswert $f(W)$ oder der Umfang des Simplex' ein gegebenes $\varepsilon$
-unterschreitet.
+\begin{eqnarray*}
+    G & = & B+\delta(B-G)\\
+    W & = & B+\delta(B-W)
+\end{eqnarray*}
+\rule[0.5ex]{1\columnwidth}{0.5pt}\\
+
+Diese Schritte werden fortgeführt, bis eine Abbruchbedingung eintritt, wie etwa
+dass der Unterschied zwischen dem besten Funktionswert $f(B)$ und dem
+schlechtesten Funktionswert $f(W)$ oder der Umfang des Simplex' ein gegebenes
+$\varepsilon$ unterschreitet.
 
 \subsection{Erläuterung der einzelnen Transformationsschritte}
 
 Folgend werden die einzelnen Transformationsschritte anhand eines
 Dreiecks als Simplex vorgeführt und erläutert. Für unsere Koeffizienten
-wählen wir die Werte $\alpha=1,\,\gamma=2,\,\rho=\frac{1}{2},\,\sigma=\frac{1}{2}$.
+wählen wir die Werte $\alpha=1,\,\gamma=2,\,\beta=\frac{1}{2},\,\delta=\frac{1}{2}$.
 Unser Dreieck $\triangle BGW$ ist definiert mit $B=(1,\,3),\,G=(4,\,6),\,W=(6,\,2)$.
 
 \begin{figure}[H]
     \centering
-    \includegraphics{nelder_mead/triangle_bgw}
+    \includegraphics[width=0.65\textwidth]{nelder_mead/triangle_bgw}
     \caption{Unser Ursprungssimplex}
 \end{figure}
 
@@ -140,7 +169,7 @@ vermeintlich bessere Richtung.
 
 \begin{figure}[H]
     \centering
-    \includegraphics{nelder_mead/triangle_reflect}
+    \includegraphics[width=.65\textwidth]{nelder_mead/triangle_reflect}
     \caption{Nach der Reflektion}
 \end{figure}
 
@@ -158,7 +187,7 @@ ist. Wir expandieren also weiter:
 
 \begin{figure}[H]
     \centering
-    \includegraphics{nelder_mead/triangle_expand}
+    \includegraphics[width=.65\textwidth]{nelder_mead/triangle_expand}
     \caption{Nach der Expansion}
 \end{figure}
 
@@ -170,8 +199,8 @@ den Simplex in flachem Gelände schneller wandern zu lassen.
 
 \subsubsection{Kontraktion}
 
-Gehen wir jetzt vom Gegenteil aus \textendash{} Punkt $R$ war also
-kein geeigneter Punkt und Punkt $E$ wurde gar nicht berechnet \textendash{}
+Gehen wir jetzt vom Gegenteil aus -- Punkt $R$ war also
+kein geeigneter Punkt und Punkt $E$ wurde gar nicht berechnet --
 so müssen wir die beiden Kontraktionspunkte $C_{1}$, $C_{2}$ berechnen.
 \begin{eqnarray*}
     C_{1} & = & M+\frac{R-M}{2}=\binom{2.5}{4.5}+\frac{\binom{-1}{7}-\binom{2.5}{4.5}}{2}=\binom{-1.75}{1.25}\\
@@ -180,7 +209,7 @@ so müssen wir die beiden Kontraktionspunkte $C_{1}$, $C_{2}$ berechnen.
 
 \begin{figure}[H]
     \centering
-    \includegraphics{nelder_mead/triangle_contract}
+    \includegraphics[widht=.65\textwidth]{nelder_mead/triangle_contract}
     \caption{Nach der Kontraktion}
 \end{figure}
 
@@ -194,25 +223,26 @@ Wir komprimieren die Punkte $G$ und $W$ in Richtung $B$.
 
 \begin{figure}[H]
     \centering
-    \includegraphics{nelder_mead/triangle_compress}
+    \includegraphics[width=.65\textwidth]{nelder_mead/triangle_compress}
     \caption{Nach der Komprimierung Richtung $B$}
 \end{figure}
 
-Dies entspricht dem Zusammenziehen des Simplex' in den letzten Iterationsschritten
-des Algorithmus'.
-
+Dies entspricht dem Zusammenziehen des Simplex' in Richtung eines im Tal
+liegenden Punktes -- lässt man diesen Schritt weg, schießt der Simplex
+in einigen Fällen über das Tal hinweg und konvergiert gegebenenfalls
+in einem falschen Punkt.
 
 \subsection{Ein Beispiel: die Himmelblau-Funktion}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{nelder_mead/himmelblau}
+    \includegraphics[width=0.65\textwidth]{nelder_mead/himmelblau}
     \caption{Die Himmelblau Funktion auf logarithmischer $z$-Skala}
 \end{figure}
 
 Um unseren Algorithmus exemplarisch vorzuführen, wollen wir die Himmeblau-
 Funktion minimieren. Dazu verwenden wir die beiliegende {\tt C++}-Implementierung, um
-die hier aufgelisteten Graphiken zu generieren.
+die hier aufgelisteten Abbildungen zu generieren.
 
 Die Himmelblau-Funktion ist definiert als
 
@@ -237,8 +267,8 @@ Abbruchbedingung wählen wir
 \]
 
 also dass der Unterschied des besten und schlechtesten Funktionswert kleiner
-gleich $0.1$ ist. Wir wählen diesen so groß, weil wir aus Platzgründen lieber
-schnell konvergieren als ein möglichst genaues Resultat wollen.
+gleich $0.1$ ist. Wir wählen diesen so groß, weil wir lieber schnell
+konvergieren als ein möglichst genaues Resultat wollen.
 
 Unsere Startpunkte sind folgende:
 \begin{eqnarray*}
@@ -255,7 +285,8 @@ wünschenswert, da gegebenenfalls zu Beginn einer Optimierung große Schritte in
 Richtung Minimum gemacht werden müssen, um schnell konvergieren zu können. Ein
 kleiner Simplex benötigt weit mehr Zeit um zu konvergieren -- dieses Problem
 kann man beispielsweise bei Rosenbrock's Banenenfunktion beobachten, die in der
-beiliegenden Implementierung ebenfalls vorhanden ist.
+beiliegenden Implementierung ebenfalls vorhanden ist. Für die Parameter $\alpha$,
+$\beta$, $\gamma$ und $\delta$ wurde die Standardbelegung aus \fullref{funktionsweise}.
 
 \begin{figure}[H]
     \centering
@@ -271,24 +302,26 @@ Der erste Schritt ist das Ordnen der Punkte nach ihrem Funktionswert. Wir berech
     f(P_{3}) & = & 7964
 \end{eqnarray*}
 
-Netterweise sind unsere Punkte also schon geordnet und $P_{1}$, $P_{2}$ und $P_{3}$ entsprechen jeweils
-$B$, $G$, und $W$. Wir fahren fort und berechnen den Mittelpunkt
+Netterweise sind unsere Punkte also schon geordnet und $P_{1}$, $P_{2}$ und
+$P_{3}$ entsprechen jeweils $B$, $G$, und $W$. Wir fahren fort und berechnen
+den Mittelpunkt
 
 \[
-    M = \frac{B + G}{2} = \binom{1}{-6.5}
+    M = \frac{B + G}{2} = \binom{1}{-6.5}.
 \]
 
 Als nächstes berechnen wir den reflektierten Punkt
 
 \[
-    R = 2M - W = \binom{-6}{-21}
+    R = 2M - W = \binom{-6}{-21}.
 \]
 
-Berechnen wir nun $f(R) = 183200$, sehen wir, dass der reflektierte Punkt keine gute Idee ist. Da $R$
-bei weitem schlechter als unser schlechteste Punkt $W$ ist, berechnen wir den inneren kontrahierten Punkt
+Berechnen wir nun $f(R) = 183200$, sehen wir, dass der reflektierte Punkt keine
+gute Idee ist. Da $R$ bei weitem schlechter als unser schlechteste Punkt $W$
+ist, berechnen wir den inneren kontrahierten Punkt
 
 \[
-    C_{2} = M + \frac{W - M}{2} = \binom{4.5}{0.75}
+    C_{2} = M + \frac{W - M}{2} = \binom{4.5}{0.75}.
 \]
 
 Berechnen wir nun $f(C_{2}) = 103.75391$, sehen wir, dass
@@ -309,13 +342,14 @@ $W$ und ordnen unsere Punkte neu.
 
 Nun berechnen wir den neuen Mittelpunkt und reflektierten Punkt
 
-\begin{eqnarray*}
-    M = \frac{B + G}{2} = \binom{1.75}{-2.125}\\
-    R = 2M - W = \binom{0.5}{3.75}
-\end{eqnarray*}
+\begin{alignat*}{2}
+    M &= \;\frac{B + G}{2} &&= \binom{1.75}{-2.125}\\
+    R &= 2M - W &&= \binom{0.5}{3.75}
+\end{alignat*}
 
-Nun berechnen wir $f(R) = 106.19141$ und sehen, dass dies Relation $f(B) \leq f(R) \leq f(W)$ erfüllt ist. Wir akzeptieren also
-den reflektierten Punkt und ordnen unsere Werte neu.
+Nun berechnen wir $f(R) = 106.19141$ und sehen, dass die Relation $f(B) \leq
+f(R) \leq f(W)$ damit erfüllt ist. Wir akzeptieren also den reflektierten Punkt
+und ordnen unsere Werte neu.
 
 \begin{eqnarray*}
     B & = & (4.5, \, 0.75)\\
@@ -372,8 +406,8 @@ Punkte neu.
 Es ist mittlerweile klar, dass wir im Punkt $\binom{3}{2}$ konvergieren werden.
 Das beliegende {\tt C++}-Programm konvergierte mit den angegebenen Parametern
 in 23 Iterationsschritten. Die weiteren Schritte werden hier mit dem Verweis
-auf die Implementierung und die {\tt .gif}-Datei auf der Projektwebseite ausgelassen.
-
+auf die Implementierung und die {\tt .gif}-Datei auf der Projektwebseite
+ausgelassen.
 
 \subsection{Analyse}
 
@@ -394,12 +428,12 @@ zulässt.
     rapide schrumpft und sich somit nur mehr sehr langsam bewegen
 kann.} Weiters ist das Abstiegskriterion mehr zufällig -- es ist nicht mathematisch
 fundiert wie etwa die Verwendung des negativen Gradienten, der mathematisch beweisbar
-immer in die Richtung des steilsten Abstiegs zeigt. \cite{nelder-mead-scholarpedia}
+immer in die Richtung des steilsten Abstiegs zeigt. ~\cite{nelder-mead-scholarpedia}
 
 Nichtsdestotrotz ist der Nelder-Mead-Algorithmus ein guter ableitungsfreier
 Optimierungsalgorithmus, der zumeist zuverlässig korrekte Resultate liefert.
 Tatsächlich gibt es aber eine ganze Familie von Funktionen, für die das Nelder-Mead-Verfahren
-immer zu einem Punkt konvergiert, der nicht das Minimum ist\cite{nelder-mead-convergence}.
+immer zu einem Punkt konvergiert, der nicht das Minimum ist.~\cite{nelder-mead-convergence}
 
 In vielen naturwissenschaftlichen Bereichen sind Funktionswerte fehlerbehaftet und damit
 genaue Lösungen unnötig. In diesen Fällen ist der Nelder-Mead-Algorithmus von großem
@@ -424,7 +458,7 @@ unter anderem auch von der gewählten Methode ab.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{grad/figure0}
+    \includegraphics[width=0.65\textwidth]{grad/figure0}
     \caption[Gradientenvektor Beispiel] {Hier zu sehen ist -$\vec{\nabla}f(-2,-2)$ der Funktion $f(x,y)=x*y^2$}
 \end{figure}
 
@@ -482,7 +516,7 @@ wir $|{\nabla}f(x,y)| \leq 0.3$.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{grad/figure1}
+    \includegraphics[width=0.65\textwidth]{grad/figure1}
     \caption{Beispiel 1. Zusätzlich sind hier die Höhenschichtlinien eingezeichnet.}
     \label{bsp1}
 \end{figure}
@@ -491,7 +525,7 @@ Minimum an.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{grad/figure2}
+    \includegraphics[width=0.65\textwidth]{grad/figure2}
     \caption{Die Höhenschichtlinien genauer gezeigt.}
 \end{figure}
 
@@ -545,7 +579,7 @@ Minimum an.
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.7\textwidth]{grad/figure3}
+        \includegraphics[width=0.65\textwidth]{grad/figure3}
         \caption[Die Armijo-Bedingung] {Hier sieht man die Funktion $\varphi(\alpha)=(1-\alpha)^4+2*(1-\alpha)^2-3*(1-\alpha)*(1-\alpha)+1)$, sie ist sozusagen ein Durchschnitt durch die bei Beispiel 1 gegebene Funktion. Diese Funktion wird erzeugt, wenn man vom Punkt $P^{[1]}=(1,1)$ in Richtung des Gradienten wandert. Die blaue Gerade zeigt die Armijo-Bedingung bei $c=0.1$, die rote bei $c=1$ bzw. ohne c.}
     \end{figure}
 
@@ -615,7 +649,7 @@ man mit einer Anzahl an Iterationen zum Minimum der Funktion.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{coord_desc/Coordinate_descent}
+    \includegraphics[width=0.65\textwidth]{coord_desc/Coordinate_descent}
     \caption{Die Koordinatenabstiegsmethode}
 \end{figure}
 
@@ -678,7 +712,7 @@ und erhalten
 
 Dies minimieren wir wiederum und erhalten die neue $y$-Koordinate
 $\frac{1}{3}$. Damit haben wir den neuen Punkt $(-\frac{1}{2},\:\frac{1}{3}$).
-Dieser Vorgang wird wiederholt, bis sich die errechneten Werte nurnoch
+Dieser Vorgang wird wiedebetalt, bis sich die errechneten Werte nurnoch
 marginal unterscheiden. Danach wird abgebrochen.
 
 
@@ -713,6 +747,5 @@ was bedeutet, dass sich der Punkt nicht weiterbewegt. Wir sitzen auf
 einem lokalen Minimum fest. Führen wir das mit dem anderen Zweig der
 Funktion ebenfalls durch, so sehen wir das gleiche Problem.
 
-\bibliography{ops}
-\bibliographystyle{unsrt}
+\printbibliography[heading=bibintoc]
 \end{document}

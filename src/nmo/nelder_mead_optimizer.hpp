@@ -39,10 +39,10 @@ private:
     point w; // worst
     double eps;
 
-    double alpha_;    // Alpha: Reflexionsfaktor, default: 1
-    double gamma_;    // Gamma: Expansionsfaktor, default: 2
+    double alpha_; // Alpha: Reflexionsfaktor, default: 1
+    double gamma_; // Gamma: Expansionsfaktor, default: 2
     double beta_;  // Rho: Kontrahierungsfaktor, default: .5
-    double delta_;  // Komprimierungsfaktor, default: .5
+    double delta_; // Komprimierungsfaktor, default: .5
 
     bool is_done = false;
 
@@ -109,7 +109,7 @@ public:
 
     double alpha() const { return alpha_; }
     double gamma() const { return gamma_; }
-    double beta() const { return beta_; }
+    double beta() const  { return beta_; }
     double delta() const { return delta_; }
 
     void set_alpha(double alpha) {
