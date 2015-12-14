@@ -63,6 +63,7 @@ public:
 
 std::string read_all_about(std::string const& topic) {
     std::ifstream file("info.txt");
+    if(!file) { return std::string(); }
     std::string result;
     std::string buffer;
     while(getline(file, buffer) && buffer != topic);
@@ -143,7 +144,7 @@ int main(int argc, char const** argv) {
 
     if(argc < 2) {
         std::cerr << "No function specified.\n"
-                  << "Try one of these:\n"
+                  << "Try one of these:\n\n"
                   << "\thimmelblau – minimizes the Himmelblau function\n"
                   << "\tbanana – minimizes Rosenbrock's Banana function\n"
                   << "\tmatyas – minimizes the Matyas function\n"
@@ -152,7 +153,10 @@ int main(int argc, char const** argv) {
                   << "\tbeale – minimizes Beale's function\n"
                   << "\texample1 – minimizes the function 3*x**2 + y**2 - 3*x*y - 3*x\n"
                   << "\texample2 – minimizes the function y**4 + 2*x**2 - 3*x*y + 1\n"
-                  << "\texample3 – minimizes the function 3*x**2 + y + y**2\n";
+                  << "\texample3 – minimizes the function 3*x**2 + y + y**2\n"
+                  << "\n"
+                  << "To specify manual stepping (by user input), add `manual` after the function name.\n"
+                  << "To learn more about any one of these, use `info [function]`.\n";
         return 1;
     }
 
@@ -162,6 +166,11 @@ int main(int argc, char const** argv) {
             return 1;
         }
         std::string info = read_all_about(argv[2]);
+        if(info.empty()) {
+            std::cerr << "I know nothing about this function.\n"
+                      << "Perhaps you mistyped the function name or the database file ('info.txt') is gone?\n";
+            return 1;
+        }
         std::cout << info;
         return 0;
     }
@@ -194,7 +203,7 @@ int main(int argc, char const** argv) {
     nelder_mead_optimizer nmo(*user_choice, {-1, -5}, {8, 8}, {3, -8}, 0.000001);
     int n = 0;
     while(!nmo.done()) {
-        std::cout << "#" << n++ << '\n';
+        std::cout << "\n#" << n++ << '\n';
         auto points = nmo.retrieve_current_simplex();
         std::cout << "B = " << std::get<0>(points).format() << '\n'
                   << "G = " << std::get<1>(points).format() << '\n'
