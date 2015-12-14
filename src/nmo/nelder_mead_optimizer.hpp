@@ -66,7 +66,7 @@ private:
         point m = (b + g) / 2; // Mittelpunkt der besten beiden Punkte
         point r = m + alpha_ * (m - w); // Reflektiere schlechtesten Punkt
 
-        if(f(r.x, r.y) <= f(w.x, w.y)) {
+        if(f(r.x, r.y) < f(w.x, w.y)) {
             if(f(r.x, r.y) < f(b.x, b.y)) {
                 point e = m + gamma_ * (m - w); // r ist bester Punkt bis jetzt. Expandiere weiter
                 w = min(e, r); // Ersetze schlechtesten Punkt durch den besseren der beiden
@@ -76,22 +76,22 @@ private:
             return;
         }
 
-        point c;
-        if(f(r.x, r.y) < f(w.x, w.y)) { // Outside
-            c = m + beta_ * (r - m);
-            if(f(c.x, c.y) <= f(r.x, r.y)) {
+        point c; // Kontrahierter Punkt
+        if(f(r.x, r.y) < f(w.x, w.y)) { // Outside: r ist besser als w, also wollen wir
+            c = m + beta_ * (r - m);    // den kontrahierten Punkt, der näher an r liegt
+            if(f(c.x, c.y) < f(r.x, r.y)) {
                 w = c;
                 return;
             }
-        } else { // Inside
+        } else { // Inside: R ist schlechter als w, also wählen wir den Punkt, der näher an w liegt
             c = m + beta_ * (w - m);
-            if(f(c.x, c.y < f(w.x, w.y))) {
+            if(f(c.x, c.y) < f(w.x, w.y)) {
                 w = c;
                 return;
             }
         }
 
-        // Komprimiere die zwei schlechtesten Punkte in Richtung b – Simplex zieht sich zusammen
+        // Komprimiere die zwei schlechteren Punkte in Richtung b
         g = b + delta_ * (g - b);
         w = b + delta_ * (w - b);
     }
@@ -146,7 +146,7 @@ public:
         return std::make_tuple(b, g, w);
     }
 
-    bool done() { return is_done; }
+    bool done() const { return is_done; }
 
     void step() {
         if(is_done) { return; }
