@@ -142,7 +142,11 @@ public:
         delta_ = delta;
     }
 
-    std::tuple<point, point, point> retrieve_current_simplex() {
+    point get_best_point() const {
+        return std::get<0>(retrieve_current_simplex());
+    }
+
+    std::tuple<point, point, point> retrieve_current_simplex() const {
         return std::make_tuple(b, g, w);
     }
 
