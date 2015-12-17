@@ -104,3 +104,46 @@ while(!nmo.done()) {
     nmo.step();
 }
 ```
+
+### Testprogramm
+
+Das Testprogramm benötigt POSIX-Pipes (i.e. ist nur auf Linux und ggf. auch OS X lauffähig) und
+gnuplot zum darstellen des Optimierungsverlaufes. Folgende Funktionen sind vorimplementiert:
+
+* Himmelblau-Funktion (Befehl: `himmelblau`)
+* Rosenbrocks Bananen-Funktion (Befehl: `banana`)
+* Matyas-Funktion (Befehl: `matyas`)
+* Dreihöcker-Kamelfunktion (Befehl: `camel`)
+* Booth-Funktion (Befehl: `booth`)
+* Beale-Funktion (Befehl: `beale`)
+* Beispielfunktion 1, `3*x**2 + y**2 - 3*x*y - 3*x` (Befehl: `example1`)
+* Beispielfunktion 2, `y**4 + 2*x**2 - 3*x*y + 1` (Befehl: `example2`)
+* Beispielfunktion 3, `3*x**2 + y + y**2` (Befehl: `example3`)
+
+Ein Aufruf sieht folgendermaßen aus: `./nelder_mead [FUNKTIONSNAME]`. Per default schläft
+das Programm zwischen Iterationsschritten, um das betrachten der Ausgabegraphen zu ermöglichen.
+Ist dies nicht genug, kann via `./nelder_mead [FUNKTIONSNAME] manual` erwirkt werden, dass
+auf eine beliebige Usereingabe gewartet wird.
+
+Weiters ist eine kleine Informationsfunktion eingebaut. Mittels `./nelder_mead info [FUNKTIONSNAME]`
+kann diese aufgerufen werden und liefert dann beispielsweise solche Ausgaben:
+
+```
+$ ./nelder_mead info himmelblau
+
+H I M M E L B L A U  function
+The Himmelblau function is commonly used for benchmarking optimization
+algorithms. It is defined as
+                    2          2         2     2
+        f(x, y) = (x  + y - 11)  + (x + y  - 7)
+
+Its minima are at positions
+    f(3.2, 2.0) = 0.0
+    f(-2.805118, 3.131312) = 0.0
+    f(-3.779310, -3.283186) = 0.0
+    f(3.584428, -1.848126) = 0.0
+```
+
+Werden dem Programm keine Parameter übergeben, beschwert es sich dementsprechend und zeigt
+eine kleine Hilfe mit den unterstützten Funktionalitäten an. Überschüssige Argumente werden
+ignoriert.
