@@ -161,5 +161,9 @@ public:
          * erreicht oder unterschreitet Epsilon. */
         if(std::abs(f(b.x, b.y) - f(w.x, w.y)) <= eps) { is_done = true; }
     }
+
+    void optimize() {
+        while(!is_done) { step(); }
+    }
 };
 /* vim: set ts=4 sw=4 tw=0 et :*/
