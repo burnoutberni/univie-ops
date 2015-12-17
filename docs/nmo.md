@@ -26,42 +26,46 @@
 
 #### Methoden
 
-| Methode | Beschreibung |
-| --------------- | -------------------------------- |
-| `- point& min(point&, point&)` | returniert den kleineren (per Funktionswert) der beiden Punkte |
-| `- point& min(point&, point&, point&)` | returniert den kleinsten (per Funktionswert) der drei Punkte |
-| `- void sort_points_by_fvalue()` | sortiert die drei Werte B, G, W sodass `f(B) <= f(G) <= f(W)` |
-| `- void do_step()` | führt einen (!) Optimierungsschritt aus – Herzstück! |
-| `+ double alpha()` | returniert Reflexionsfaktor  |
-| `+ double gamma()` | returniert Expansionsfaktor |
-| `+ double beta()`| returniert Kontraktionsfaktor |
-| `+ double delta()` | returniert Komprimierungsfaktor  |
-| `+ void set_alpha(double)` | setzt Reflexionsfaktor wenn möglich, sonst `invalid_value`-Exception |
-| `+ void set_gamma(double)` | setzt Expansionsfaktor wenn möglich, sonst `invalid_value`-Exception |
-| `+ void set_beta(double)` | setzt Kontraktionsfaktor wenn möglich, sonst `invalid_value`-Exception |
-| `+ void set_delta(double)` | setzt Komprimierungsfaktor wenn möglich, sonst `invalid_value`-Exception |
-| `+ point get_best_point()` | returniert besten Simplexpunkt |
-| `+ std::tuple<point, point, point> retrieve_current_simplex()` | returniert Tupel aller drei Simplexpunkte |
-| `+ bool done()` | returniert Zustandsvariable |
-| `+ void step()` | führt Optimierungsschritt aus, sortiert Punkte und setzt ggf. Zustandsvariable |
+| Methode                                                        | Beschreibung                                                                   |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `- point& min(point&, point&)`                                 | returniert den kleineren (per Funktionswert) der beiden Punkte                 |
+| `- point& min(point&, point&, point&)`                         | returniert den kleinsten (per Funktionswert) der drei Punkte                   |
+| `- void sort_points_by_fvalue()`                               | sortiert die drei Werte B, G, W sodass `f(B) <= f(G) <= f(W)`                  |
+| `- void do_step()`                                             | führt einen Optimierungsschritt aus                                            |
+| `+ double alpha()`                                             | returniert Reflexionsfaktor                                                    |
+| `+ double gamma()`                                             | returniert Expansionsfaktor                                                    |
+| `+ double beta()`                                              | returniert Kontraktionsfaktor                                                  |
+| `+ double delta()`                                             | returniert Komprimierungsfaktor                                                |
+| `+ void set_alpha(double)`                                     | setzt Reflexionsfaktor wenn möglich, wirft sonst `invalid_value`               |
+| `+ void set_gamma(double)`                                     | setzt Expansionsfaktor wenn möglich, wirft sonst `invalid_value`               |
+| `+ void set_beta(double)`                                      | setzt Kontraktionsfaktor wenn möglich, wirft sonst `invalid_value`             |
+| `+ void set_delta(double)`                                     | setzt Komprimierungsfaktor wenn möglich, wirft sonst `invalid_value`           |
+| `+ point get_best_point()`                                     | returniert besten Simplexpunkt                                                 |
+| `+ std::tuple<point, point, point> retrieve_current_simplex()` | returniert Tupel aller drei Simplexpunkte                                      |
+| `+ bool done()`                                                | returniert Zustandsvariable                                                    |
+| `+ void step()`                                                | führt Optimierungsschritt aus, sortiert Punkte und setzt ggf. Zustandsvariable |
 
 ### Algorithmus selbst
 
 Die Implementierung umfasst eine Optimiererklasse `nelder_mead_optimizer`, der bei
 der Instanziierung diverse Parameter übergeben werden müssen:
 
-* Eine von der Klasse `Funktion` abgeleitete Funktionsrepräsentation, die die Methode `value(double, double)` bzw. `operator()(double, double)` implementiert haben muss
+* Eine von der Klasse `Funktion` abgeleitete Funktionsrepräsentation, die die
+  Methode `value(double, double)` bzw. `operator()(double, double)` implementiert
+  haben muss
 * 3 Startpunkte `p1`, `p2`, `p3` der Form (x, y), die den Startsimplex konstruieren
-* Ein Double-Wert `eps`, der den zu verwendenden Epsilon-Wert angibt [optional, defaultmäßig .00001]
+* Ein Double-Wert `eps`, der den zu verwendenden Epsilon-Wert angibt [optional,
+  defaultmäßig .00001]
 * Ein Double-Wert für den Reflexionsfaktor `alpha` [optional, defaultmäßig 1]
 * Ein Double-Wert für den Expansionsfaktor `gamma` [optional, defaultmäßig 2]
 * Ein Double-Wert für den Kontraktionsfaktor `beta` [optional, defaultmäßig .5]
 * Ein Double-Wert für den Komprimierungsfaktor `delta` [optional, defaultmäßig .5]
 
-Alle optionalen Werte können nach der Instanziierung mit dem entsprechenden Getter und Setter
-abgefragt und geändert werden. Die Setter für die Verhaltensfaktoren `alpha`, `beta`, `gamma`
-und `delta` prüfen die Sinnhaftigkeit der übergebenen Werte und werfen eine Exception des Typs
-`invalid_value` mit einer Fehlermeldung sollten diese nicht stimmen.
+Alle optionalen Werte können nachträglich mit dem entsprechenden Getter und
+Setter abgefragt und geändert werden. Die Setter für die Verhaltensfaktoren
+`alpha`, `beta`, `gamma` und `delta` prüfen die Sinnhaftigkeit der übergebenen
+Werte und werfen eine Exception des Typs `invalid_value` mit einer
+Fehlermeldung sollten diese nicht stimmen.
 
 Ein Minimalbeispiel zum Rauskopieren:
 
@@ -73,21 +77,24 @@ point min = nmo.get_best_point();
 std::cout << "The minimum is at " << min.format() << "!\n";
 ```
 
-Vorhergehendes Beispiel instanziiert ein Optimiererobjekt `nmo`, das die Funktion `fn` optimieren
-soll, mit den Startpunkten (-1, -5), (8, 8) und (3, -8). Das Epsilon für die Abbruchbedingung wurde
-als .0005 gewählt. Danach wird die `optimize`-Methode aufgerufen, die die Optimierung bis zum
-erreichend des Konvergenzkriteriums durchführt. Anschließend kann der beste Punkt mittels
-`get_best_point()` abgerufen werden. Die `point`-Klasse liegt der Implementierung bei und umfasst
-die wichtigsten Vektor-Operationen sowie einen extrem coolen Initialisiererlisten-Konstruktor,
-der die kurze Anschreibweise im Konstruktoraufruf ermöglicht. Weiters wichtig sind die `format`-
-und `raw`-Methoden, die den Inhalt des Punktes jeweils in einen String gießen. `format()` ist
-zur schönen Ausgabe gedacht und `raw()` als Zwischenmedium zur Weitergabe des Punktes an externe
-Programme (wie etwa gnuplot).
+Vorhergehendes Beispiel instanziiert ein Optimiererobjekt `nmo`, das die
+Funktion `fn` optimieren soll, mit den Startpunkten (-1, -5), (8, 8) und (3,
+-8). Das Epsilon für die Abbruchbedingung wurde als .0005 gewählt. Danach wird
+die `optimize`-Methode aufgerufen, die die Optimierung bis zum Erreichen des
+Konvergenzkriteriums durchführt. Anschließend kann der beste Punkt mittels
+`get_best_point()` abgerufen werden. Die `point`-Klasse liegt der
+Implementierung bei und umfasst die wichtigsten Vektor-Operationen sowie einen
+extrem coolen Initialisiererlisten-Konstruktor, der die kurze Anschreibweise im
+Konstruktoraufruf ermöglicht. Weiters wichtig sind die `format`- und
+`raw`-Methoden, die den Inhalt des Punktes jeweils in einen String gießen.
+`format()` ist zur schönen Ausgabe gedacht und `raw()` als Zwischenmedium zur
+Weitergabe des Punktes an externe Programme (wie etwa gnuplot).
 
-Um den Algorithmus möglichst flexibel benutzen zu können, kann auch die Methode `step` verwendet
-werden, um den Algorithmus schrittweise verfolgen zu können. Auskunft über den Zustand gibt
-die `done` Methode. Folgendes Beispiel optimiert eine Funktion wie das vorige, gibt bei jedem
-Schritt jedoch auch den derzeitigen Simplex aus.
+Um den Algorithmus möglichst flexibel benutzen zu können, kann auch die Methode
+`step` verwendet werden, um den Algorithmus schrittweise verfolgen zu können.
+Auskunft über den Zustand gibt die `done` Methode. Folgendes Beispiel optimiert
+eine Funktion wie das vorige, gibt bei jedem Schritt jedoch auch den
+derzeitigen Simplex aus.
 
 ```c++
 nelder_mead_optimizer nmo(fn, {-1, -5}, {8, 8}, {3, -8}, .0005);
@@ -107,8 +114,9 @@ while(!nmo.done()) {
 
 ### Testprogramm
 
-Das Testprogramm benötigt POSIX-Pipes (i.e. ist nur auf Linux und ggf. auch OS X lauffähig) und
-gnuplot zum darstellen des Optimierungsverlaufes. Folgende Funktionen sind vorimplementiert:
+Das Testprogramm benötigt POSIX-Pipes (i.e. ist nur auf Linux und ggf. auch OS
+X lauffähig) und gnuplot zum darstellen des Optimierungsverlaufes. Folgende
+Funktionen sind vorimplementiert:
 
 * Himmelblau-Funktion (Befehl: `himmelblau`)
 * Rosenbrocks Bananen-Funktion (Befehl: `banana`)
@@ -120,13 +128,15 @@ gnuplot zum darstellen des Optimierungsverlaufes. Folgende Funktionen sind vorim
 * Beispielfunktion 2, `y**4 + 2*x**2 - 3*x*y + 1` (Befehl: `example2`)
 * Beispielfunktion 3, `3*x**2 + y + y**2` (Befehl: `example3`)
 
-Ein Aufruf sieht folgendermaßen aus: `./nelder_mead [FUNKTIONSNAME]`. Per default schläft
-das Programm zwischen Iterationsschritten, um das betrachten der Ausgabegraphen zu ermöglichen.
-Ist dies nicht genug, kann via `./nelder_mead [FUNKTIONSNAME] manual` erwirkt werden, dass
-auf eine beliebige Usereingabe gewartet wird.
+Ein Aufruf sieht folgendermaßen aus: `./nelder_mead [FUNKTIONSNAME]`. Per
+default schläft das Programm zwischen Iterationsschritten, um das betrachten
+der Ausgabegraphen zu ermöglichen. Ist dies nicht genug, kann via
+`./nelder_mead [FUNKTIONSNAME] manual` erwirkt werden, dass auf eine beliebige
+Usereingabe gewartet wird.
 
-Weiters ist eine kleine Informationsfunktion eingebaut. Mittels `./nelder_mead info [FUNKTIONSNAME]`
-kann diese aufgerufen werden und liefert dann beispielsweise solche Ausgaben:
+Weiters ist eine kleine Informationsfunktion eingebaut. Mittels `./nelder_mead
+info [FUNKTIONSNAME]` kann diese aufgerufen werden und liefert dann
+beispielsweise solche Ausgaben:
 
 ```
 $ ./nelder_mead info himmelblau
@@ -145,6 +155,6 @@ Its minima are at positions
 ```
 Es werden zumindest die Funktionsdefinition sowie die Minima ausgegeben.
 
-Werden dem Programm keine Argumente übergeben, beschwert es sich dementsprechend und zeigt
-eine kleine Hilfe mit den unterstützten Funktionalitäten an. Überschüssige Argumente werden
-ignoriert.
+Werden dem Programm keine Argumente übergeben, beschwert es sich
+dementsprechend und zeigt eine kleine Hilfe mit den unterstützten
+Funktionalitäten an. Überschüssige Argumente werden ignoriert.
