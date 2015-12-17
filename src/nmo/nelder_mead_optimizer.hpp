@@ -112,6 +112,14 @@ public:
     double beta() const  { return beta_; }
     double delta() const { return delta_; }
 
+    point get_best_point() const { return b; }
+
+    bool done() const { return is_done; }
+
+    std::tuple<point, point, point> retrieve_current_simplex() const {
+        return std::make_tuple(b, g, w);
+    }
+
     void set_alpha(double alpha) {
         if(alpha <= 0) {
             throw invalid_value("alpha value violates constraint alpha > 0");
@@ -142,16 +150,6 @@ public:
         delta_ = delta;
     }
 
-    point get_best_point() const {
-        return std::get<0>(retrieve_current_simplex());
-    }
-
-    std::tuple<point, point, point> retrieve_current_simplex() const {
-        return std::make_tuple(b, g, w);
-    }
-
-    bool done() const { return is_done; }
-
     void step() {
         if(is_done) { return; }
         do_step();
@@ -162,8 +160,6 @@ public:
         if(std::abs(f(b.x, b.y) - f(w.x, w.y)) <= eps) { is_done = true; }
     }
 
-    void optimize() {
-        while(!is_done) { step(); }
-    }
+    void optimize() { while(!is_done) { step(); } }
 };
 /* vim: set ts=4 sw=4 tw=0 et :*/
