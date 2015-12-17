@@ -1,4 +1,5 @@
 site_name: "Nichtlineare Optimierung ohne Nebenbedingungen: Mehrdimensionale Verfahren"
 pages:
 - Home: index.md
+- 'Nelder-Mead Verfahren': 'nmo.md'
 theme: readthedocs
