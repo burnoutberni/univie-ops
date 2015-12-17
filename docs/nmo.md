@@ -143,7 +143,8 @@ Its minima are at positions
     f(-3.779310, -3.283186) = 0.0
     f(3.584428, -1.848126) = 0.0
 ```
+Es werden zumindest die Funktionsdefinition sowie die Minima ausgegeben.
 
-Werden dem Programm keine Parameter übergeben, beschwert es sich dementsprechend und zeigt
+Werden dem Programm keine Argumente übergeben, beschwert es sich dementsprechend und zeigt
 eine kleine Hilfe mit den unterstützten Funktionalitäten an. Überschüssige Argumente werden
 ignoriert.
