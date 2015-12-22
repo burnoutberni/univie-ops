@@ -29,9 +29,15 @@ private:
 public:
     pipe(std::string const& cmd) : handle{ popen(cmd.c_str(), "w") } {}
     pipe(pipe&& other) : handle{ std::move(other.handle) } { other.handle = NULL; }
-    ~pipe() { fflush(handle); if(handle) { fclose(handle); } }
-    pipe& flush() { fflush(handle); return *this; }
-    pipe& operator<<(std::string input) {
+    ~pipe() {
+        fflush(handle);
+        if(handle) { fclose(handle); }
+    }
+    pipe& flush() {
+        fflush(handle);
+        return *this;
+    }
+    pipe& operator<<(std::string const& input) {
         fputs(input.c_str(), handle);
         return *this;
     }
@@ -124,6 +130,10 @@ int main(int argc, char const** argv) {
     } beale;
 
     struct : Funktion {
+        double value(double x, double y) { return x*x + y*y; }
+    } sphere;
+
+    struct : Funktion {
         double value(double x, double y) { return 2*x*x - 1.05*x*x*x*x + (x*x*x*x*x*x)/6 + x*y + y*y; }
     } camel;
     // }}}
@@ -138,6 +148,7 @@ int main(int argc, char const** argv) {
         {"matyas", std::make_pair("0.26*(x**2 + y**2) - 0.48*x*y", &matyas)},
         {"booth", std::make_pair("(x + 2*y - 7)**2 + (2*x + y - 5)**2", &booth)},
         {"beale", std::make_pair("(1.5 - x + x*y)**2 + (2.25 - x + x*y**2)**2 + (2.625 - x + x*y**3)**2", &beale)},
+        {"sphere", std::make_pair("x**2 + y**2", &sphere)},
         {"camel", std::make_pair("2*x**2 - 1.05*x**4 + (x**6)/6 + x*y + y**2", &camel)}
     };
     // }}}
@@ -151,16 +162,17 @@ int main(int argc, char const** argv) {
                   << "\tcamel – minimizes the three-hump camel function\n"
                   << "\tbooth – minimizes Booth's function\n"
                   << "\tbeale – minimizes Beale's function\n"
+                  << "\tsphere – minimizes the sphere function\n"
                   << "\texample1 – minimizes the function 3*x**2 + y**2 - 3*x*y - 3*x\n"
                   << "\texample2 – minimizes the function y**4 + 2*x**2 - 3*x*y + 1\n"
                   << "\texample3 – minimizes the function 3*x**2 + y + y**2\n"
                   << "\n"
-                  << "To specify manual stepping (by user input), add `manual` after the function name.\n"
-                  << "To learn more about any one of these, use `info [function]`.\n";
+                  << "To learn more about any one of these, use `info [function]`.\n"
+                  << "To specify manual stepping (by user input), add `manual` after the function name.\n";
         return 1;
     }
 
-    if(std::string("info").compare(argv[1]) == 0) {
+    if(std::string("info") == argv[1]) {
         if(argc < 3) {
             std::cerr << "Please specify the function you want to know more about.\n";
             return 1;
@@ -175,11 +187,11 @@ int main(int argc, char const** argv) {
         return 0;
     }
 
-    bool manual = (argc > 2 && std::string("manual").compare(argv[2]) == 0);
+    bool manual = (argc > 2 && std::string("manual") == argv[2]);
 
     std::cout << "\tN E L D E R - M E A D\n"
               << "\tDEMOTOOL\n"
-              << "\tMinimizes one of 8 given functions.\n"
+              << "\tMinimizes one of 10 given functions.\n"
               << "\tDisplays progress via gnuplot.\n"
               << "\t***********************************\n\n";
 
@@ -194,6 +206,7 @@ int main(int argc, char const** argv) {
     gnuplotter gnu(pipe("gnuplot -p 2> /dev/null"));
     gnu.push_settings(settings);
     gnu.push_settings(std::string("set title '") + argv[1] + "'\n");
+
     std::ostringstream oss;
     oss << "splot [-10.5:10.5] [-10.5:10.5] \\\n" << plot_functions[argv[1]].first
         << " with lines palette notitle nosurface, \\\n"
@@ -201,10 +214,9 @@ int main(int argc, char const** argv) {
     std::string base_cmd = oss.str();
 
     nelder_mead_optimizer nmo(*user_choice, {-1, -5}, {8, 8}, {3, -8}, 0.000001);
-    int n = 0;
     while(!nmo.done()) {
-        std::cout << "\n#" << n++ << '\n';
-        auto points = nmo.retrieve_current_simplex();
+        std::cout << "\n#" << nmo.iteration_count() << '\n';
+        auto points = nmo.current_simplex();
         std::cout << "B = " << std::get<0>(points).format() << '\n'
                   << "G = " << std::get<1>(points).format() << '\n'
                   << "W = " << std::get<2>(points).format() << '\n';
@@ -220,6 +232,7 @@ int main(int argc, char const** argv) {
         gnu.plot_command() = oss.str();
         gnu.replot();
         nmo.step();
+
         if(manual) {
             std::cin.get();
             if(std::cin.eof()) { return 0; }

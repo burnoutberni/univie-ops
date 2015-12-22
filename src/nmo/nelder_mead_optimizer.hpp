@@ -38,6 +38,7 @@ private:
     point g; // good
     point w; // worst
     double eps;
+    size_t iter_c = 0;
 
     double alpha_; // Alpha: Reflexionsfaktor, default: 1
     double gamma_; // Gamma: Expansionsfaktor, default: 2
@@ -63,6 +64,8 @@ private:
     }
 
     void do_step() {
+        ++iter_c;
+
         point m = (b + g) / 2; // Mittelpunkt der besten beiden Punkte
         point r = m + alpha_ * (m - w); // Reflektiere schlechtesten Punkt
 
@@ -112,11 +115,12 @@ public:
     double beta() const  { return beta_; }
     double delta() const { return delta_; }
 
-    point get_best_point() const { return b; }
+    size_t iteration_count() const { return iter_c; }
+    point const& best_point() const { return b; }
 
     bool done() const { return is_done; }
 
-    std::tuple<point, point, point> retrieve_current_simplex() const {
+    std::tuple<point, point, point> current_simplex() const {
         return std::make_tuple(b, g, w);
     }
 
@@ -130,7 +134,7 @@ public:
     void set_gamma(double gamma) {
         if(gamma <= 1) {
             throw invalid_value("gamma value violates constraint gamma > 1");
-        } else if(gamma < alpha_) {
+        } else if(gamma <= alpha_) {
             throw invalid_value("gamma value violates constraint gamma > alpha");
         }
         gamma_ = gamma;

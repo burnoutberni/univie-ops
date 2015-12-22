@@ -72,6 +72,17 @@ Its only minimum is at position
     f(3.0, 0.5) = 0.0
 
 ----
+sphere
+
+S P H E R E  function
+The Sphere function is perhaps the simplest two dimensional function and is defined as
+                   2    2
+        f(x, y) = x  + y
+
+Its only minimum is at position
+    f(0, 0) = 0.0
+
+----
 booth
 
 B O O T H  function
