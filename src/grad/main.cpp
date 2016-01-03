@@ -9,7 +9,7 @@
 
 int main(int argc, char** argv) {
 
-    f f;
+    h f;
     
     //Variablen fuer die Armijo-Bedingung
     int iteration = 1;
@@ -24,6 +24,10 @@ int main(int argc, char** argv) {
     std::cout << "alpha = " << alpha << std::endl << "c = " << c << std::endl << "beta = " << beta << std::endl << "Bedingung: Betrag d. Gradienten muss kleiner als "
             << bedingung << " sein" << std::endl << std::endl;
     point gradient(f.x(currentpoint.x, currentpoint.y), f.y(currentpoint.x, currentpoint.y));
+    
+    armijo standardarm;
+
+    std::cout << "Der aktuelle Punkt: " << currentpoint.format() << std::endl << "Der Betrag des Gradienten " << gradient.format() << " ist " << gradient.betrag() << std::endl << std::endl;
 
 
 
@@ -37,18 +41,18 @@ int main(int argc, char** argv) {
         //Der aktuelle Punkt wird ausgegeben
         std::cout << "Der aktuelle Punkt: " << currentpoint.format() << std::endl;
         
-        armijo standardarm(300000);
         alpha = standardarm.armijoschleife(f, currentpoint, gradient);
         std::cout << standardarm.protokoll;
 
         currentpoint = currentpoint + standardarm.abstiegsrichtung * alpha;
         gradient = point(f.x(currentpoint.x, currentpoint.y), f.y(currentpoint.x, currentpoint.y));
 
-        std::cout << "Es wurde ein passendes alpha (" << alpha << ") gefunden. Der neue Punkt: " << currentpoint.format() << std::endl << "Der Betrag des Gradienten ist " << gradient.format() << std::endl << std::endl;
+        std::cout << "Es wurde ein passendes alpha (" << alpha << ") gefunden. Der neue Punkt: " << currentpoint.format() << std::endl << "Der Betrag des Gradienten " << gradient.format() << " ist " << gradient.betrag() << std::endl << std::endl;
 
+        usleep(3000000);
     }
 
-    std::cout << "Vorgang abgeschlossen! Ergebnisse:" << std::endl << "Optimum: " << currentpoint.format() << "wurde gefunden im " << iteration << " Iterationsschritt"
+    std::cout << "Vorgang abgeschlossen! Ergebnisse:" << std::endl << "Optimum: " << currentpoint.format() << " wurde gefunden im " << iteration << ". Iterationsschritt"
             << std::endl << "Der Betrag des Gradienten " << gradient.format() << " ist " << gradient.betrag() << std::endl;
 
     return 0;

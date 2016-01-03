@@ -40,7 +40,7 @@ struct point {
     }
 
     double betrag() const{
-        return sqrt(pow(x,2) * pow(y,2));
+        return sqrt(pow(x,2) + pow(y,2));
     }
     
     std::string format() const {

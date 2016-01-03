@@ -14,19 +14,16 @@ struct armijo {
     double c = 0.1;
     //Die Staerke der Aenderung von alpha jede iteration
     double beta = 0.9;
-    //Die Zeit, welche zwischen den Iterationsschritten vergehen soll
-    int sleep = 0;
     //Der Iterationszaehler auf welchen man im Nachhinein zugreifen kann
     int iteration = 0;
     //Ein Protokoll auf welches man im Nachhinein zugreifen kann
     std::string protokoll;
     
     armijo() {}
-    armijo(int sleep_) : sleep{ sleep_ } {}
-    armijo(int sleep_, double beta_, double c_) : c{ c_ }, beta{ beta_ }, sleep{ sleep_ } {}
+    armijo(double beta_, double c_) : c{ c_ }, beta{ beta_ } {}
     
     //Es werden eine Funktion und zwei Punkte uebergeben; TODO: Die Funktion ueberarbeiten, aktuell muss eine Variable vom Typ f (ein Struct welcher vom Struct Funktion abgeileitet wird) vorliegen
-    double armijoschleife(f &f, point currentpoint, point gradient) {
+    double armijoschleife(h &f, point currentpoint, point gradient) {
         
         std::ostringstream os;
         //Die Abstiegsrichtung wird berechnet
@@ -53,8 +50,6 @@ struct armijo {
                     << f.value(currentpoint.x + alpha * abstiegsrichtung.x, currentpoint.y + alpha * abstiegsrichtung.y) << std::endl << "Rechte Seite: "
                     << f.value(currentpoint.x, currentpoint.y) + c * alpha * (gradient * abstiegsrichtung) << std::endl << std::endl;
             
-            //Es wird eine Pause gemacht damit der Nutzer den Output lesen kann
-            usleep(sleep);
         }
         
         //Das Protokoll wird gespeichert
