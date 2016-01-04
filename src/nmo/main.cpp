@@ -21,51 +21,7 @@
 
 #include "Funktion.h"
 #include "nelder_mead_optimizer.hpp"
-
-// PIPE {{{
-class pipe {
-private:
-    FILE* handle;
-public:
-    pipe(std::string const& cmd) : handle{ popen(cmd.c_str(), "w") } {}
-    pipe(pipe&& other) : handle{ std::move(other.handle) } { other.handle = NULL; }
-    ~pipe() {
-        fflush(handle);
-        if(handle) { fclose(handle); }
-    }
-    pipe& flush() {
-        fflush(handle);
-        return *this;
-    }
-    pipe& operator<<(std::string const& input) {
-        fputs(input.c_str(), handle);
-        return *this;
-    }
-};
-// }}}
-
-// GNUPLOTTER {{{
-class gnuplotter {
-private:
-    pipe pipehandle;
-    std::string plot_cmd;
-public:
-    gnuplotter(std::string const& plot_cmd = "")
-        : pipehandle{ pipe("gnuplot -p 2> /dev/null") }, plot_cmd{ plot_cmd } {}
-    gnuplotter(pipe&& p) : pipehandle{ std::move(p) } {}
-    gnuplotter& push_settings(std::string settings) {
-        pipehandle << settings;
-        pipehandle.flush();
-        return *this;
-    }
-    std::string& plot_command() { return plot_cmd; }
-    gnuplotter& replot() {
-        pipehandle << plot_cmd;
-        pipehandle.flush();
-        return *this;
-    }
-};
-// }}}
+#include "gnuplotter.hpp"
 
 std::string read_all_about(std::string const& topic) {
     std::ifstream file("info.txt");
