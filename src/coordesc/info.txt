@@ -1,0 +1,130 @@
+himmelblau
+
+H I M M E L B L A U  function
+The Himmelblau function is commonly used for benchmarking optimization
+algorithms. It is defined as
+                    2          2         2     2
+        f(x, y) = (x  + y - 11)  + (x + y  - 7)
+
+Its minima are at positions
+    f(3.2, 2.0) = 0.0
+    f(-2.805118, 3.131312) = 0.0
+    f(-3.779310, -3.283186) = 0.0
+    f(3.584428, -1.848126) = 0.0
+
+----
+banana
+
+R O S E N B R O C K  function
+The Rosenbrock function is, just like the Himmelblau function, commonly
+used for benchmarking optimization algorithms. It is defined as
+                         2          2 2
+        f(x, y) = (a - x)  + b(y - x )
+
+Common values (and also the values we used) for a and b are a = 1
+and b = 100.
+
+Its global minimum is at position
+          2
+    f(a, a ) = 0.0
+
+Optimizing the Rosenbrock function is often difficult, as the banana-shaped
+valley is very flat. Falling into this valley is easy, but finding the
+actual global minimum consists of many, often small, steps. Because of this,
+many algorithms will terminate prematurely if the value of epsilon is too big.
+
+----
+matyas
+
+M A T Y A S  function
+The Matyas function is defined as
+                        2    2
+        f(x, y) = 0.26(x  + y ) - 0.48xy
+
+Its only minimum is at position
+    f(0, 0) = 0.0
+
+----
+camel
+
+T H R E E  H U M P  C A M E L  function
+The three-hump camel function is defined as
+                                  6
+                    2            x          2
+        f(x, y) = 2x  - 1.05x  + -- + xy + x
+                                 6
+
+It has three neighboring local minimas and one global minimum at position
+    f(0, 0) = 0
+
+Its key feature – the three humps – makes it interesting for testing for
+false-positives. The middle hump is the global minimum.
+
+----
+beale
+
+B E A L E  function
+The Beale function is defined as
+                                2                 2                    3 2
+        f(x, y) = (1.5 - x + xy)  + (2.25 - x + xy )  + (2.625 - x + xy )
+
+Its only minimum is at position
+    f(3.0, 0.5) = 0.0
+
+----
+sphere
+
+S P H E R E  function
+The Sphere function is perhaps the simplest two dimensional function and is defined as
+                   2    2
+        f(x, y) = x  + y
+
+Its only minimum is at position
+    f(0, 0) = 0.0
+
+----
+booth
+
+B O O T H  function
+The Booth function is defined as
+                              2               2
+        f(x, y) = (x + 2y - 7)  + (2x + y - 5)
+
+Its only minimum is at position
+    f(1, 3) = 0.0
+
+----
+example1
+
+E X A M P L E  function
+This example function is defined as
+                    2    2
+        f(x, y) = 3x  + y  + 3xy - 3x
+
+Its only minimum is at position
+    f(2, 3) = 0.0
+
+---
+example2
+
+E X A M P L E  function
+This example function is defined as
+                   4     2
+        f(x, y) = y  + 2x  - 3xy + 1
+
+Its minima are at positions
+    f(-0.5625, -0.75) = 0.68359
+    f(0.5625, 0.75) = 0.68359
+
+----
+example3
+
+E X A M P L E  function
+This example function is defined as
+                    2        2
+        f(x, y) = 3x  + y + y
+
+Its minimum is at position
+    f(0, -0.5) = -0.25
+
+----
