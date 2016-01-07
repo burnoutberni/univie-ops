@@ -1,3 +1,18 @@
+/****************************************************************************
+ * Koordinatenabstiegs Optimierungsalgorithmus.                             *
+ * Autor: Sonja Biedermann, a1402891 (Gruppe 4)                             *
+ *                                                                          *
+ * Minimiert eine gegebene Funktion f.                                      *
+ * Zerlegt dabei das eigentliche Problem (Minimierung einer                 *
+ * zweidimensionalen Funktion) in zwei Teilprobleme (Minimierung            *
+ * einer eindimensionalen Funktion), indem es jeweils eine Variable         *
+ * als konstant annimmt, und die andere mittels Golden Section Search       *
+ * minimiert.                                                               *
+ *                                                                          *
+ * Als Referenzen wurde die Praktikumsbeschreibung und folgendes verwendet: *
+ * https://en.wikipedia.org/wiki/Golden_section_search                      *
+ ****************************************************************************/
+
 #pragma once
 #include <iostream>
 
@@ -12,14 +27,14 @@ private:
     double eps;
     double const golden_ratio = (sqrt(5) - 1) / 2;
 
-    bool is_done = false;
-    bool x_last = false;
+    bool is_done = false; // Zustand: fertig optimiert?
+    bool x_last = false;  // Zustand: wurde x als letzte Variable minimiert?
 
     // Goldener Schnitt
     double minimize_with_x_constant(double x) {
-        // Schlechte Annahmen
-        double a = -1000;
-        double b = 1000;
+        // Annahme: implementierte Funktionen haben Minima im y-Bereich [-10, 10]
+        double a = -10;
+        double b = 10;
 
         double c = b - golden_ratio * (b - a);
         double d = a + golden_ratio * (b - a);
@@ -39,7 +54,7 @@ private:
     }
 
     double minimize_with_y_constant(double y) {
-        // Schlechte Annahmen
+        // Annahme: implementierte Funktionen haben Minima im x-Bereich [-10, 10]
         double a = -10;
         double b = 10;
 
@@ -65,8 +80,7 @@ private:
         if(x_last) {
             p.y = minimize_with_x_constant(p.x);
             x_last = false;
-        }
-        else {
+        } else {
             p.x = minimize_with_y_constant(p.y);
             x_last = true;
         }
