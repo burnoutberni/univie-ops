@@ -64,8 +64,6 @@ private:
     }
 
     void do_step() {
-        ++iter_c;
-
         point m = (b + g) / 2; // Mittelpunkt der besten beiden Punkte
         point r = m + alpha_ * (m - w); // Reflektiere schlechtesten Punkt
 
@@ -125,16 +123,16 @@ public:
     }
 
     void set_alpha(double alpha) {
-        if(alpha <= 0) {
+        if(!(alpha > 0)) {
             throw invalid_value("alpha value violates constraint alpha > 0");
         }
         alpha_ = alpha;
     }
 
     void set_gamma(double gamma) {
-        if(gamma <= 1) {
+        if(!(gamma > 1)) {
             throw invalid_value("gamma value violates constraint gamma > 1");
-        } else if(gamma <= alpha_) {
+        } else if(!(gamma > alpha_)) {
             throw invalid_value("gamma value violates constraint gamma > alpha");
         }
         gamma_ = gamma;
@@ -157,6 +155,7 @@ public:
     void step() {
         if(is_done) { return; }
         do_step();
+        ++iter_c;
         sort_points_by_fvalue();
 
         /* Konvergenzkriterium: Differenz zwischen bestem und schlechtetestem Punkt
