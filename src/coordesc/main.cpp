@@ -141,7 +141,7 @@ int main(int argc, char const** argv) {
 
     std::cout << "\tC O O R D I N A T E  D E S C E N T\n"
               << "\tDEMOTOOL\n"
-              << "\tMinimizes one of 9 given functions.\n"
+              << "\tMinimizes one of 11 given functions.\n"
               << "\tDisplays progress via gnuplot.\n"
               << "\t***********************************\n\n";
 
@@ -163,10 +163,9 @@ int main(int argc, char const** argv) {
     std::string base_cmd = oss.str();
 
     coordesc_optimizer cdo(*user_choice, {-0.5, -1}, 0.000001);
-    int n = 0;
     while(!cdo.done()) {
-        std::cout << "\n#" << n++ << '\n';
-        point p = cdo.retrieve_current_point();
+        std::cout << "\n#" << cdo.iteration_count() << '\n';
+        point p = cdo.current_point();
         std::cout << "P = " << p.format() << '\n';
 
         base_cmd += p.raw() + " 1\n";
