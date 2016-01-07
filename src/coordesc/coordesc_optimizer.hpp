@@ -33,7 +33,7 @@ private:
     size_t iter_c = 0;
 
     // Goldener Schnitt
-    double minimize_with_x_constant(double x) {
+    double minimize_with_x_constant(double x) const {
         // Annahme: implementierte Funktionen haben Minima im y-Bereich [-10, 10]
         double a = -10;
         double b = 10;
@@ -55,7 +55,7 @@ private:
         return (b + a) / 2;
     }
 
-    double minimize_with_y_constant(double y) {
+    double minimize_with_y_constant(double y) const {
         // Annahme: implementierte Funktionen haben Minima im x-Bereich [-10, 10]
         double a = -10;
         double b = 10;
