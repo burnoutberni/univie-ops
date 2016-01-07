@@ -78,7 +78,6 @@ private:
     }
 
     void do_halfstep() {
-        ++iter_c;
         q = p;
         if(x_last) { p.y = minimize_with_x_constant(p.x); }
         else { p.x = minimize_with_y_constant(p.y); }
@@ -96,6 +95,7 @@ public:
 
     void step() {
         if(is_done) { return; }
+        ++iter_c;
         do_halfstep();
         if(std::abs(p.x - q.x) <= eps && std::abs(p.y - q.y) <= eps) { is_done = true; }
     }
