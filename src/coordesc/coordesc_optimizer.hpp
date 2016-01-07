@@ -13,6 +13,7 @@ private:
     double const golden_ratio = (sqrt(5) - 1) / 2;
 
     bool is_done = false;
+    bool x_last = false;
 
     // Goldener Schnitt
     double minimize_with_x_constant(double x) {
@@ -59,10 +60,16 @@ private:
         return (b + a) / 2;
     }
 
-    void do_step() {
+    void do_halfstep() {
         q = p;
-        p.x = minimize_with_y_constant(p.y);
-        p.y = minimize_with_x_constant(p.x);
+        if(x_last) {
+            p.y = minimize_with_x_constant(p.x);
+            x_last = false;
+        }
+        else {
+            p.x = minimize_with_y_constant(p.y);
+            x_last = true;
+        }
     }
 
 public:
@@ -75,7 +82,7 @@ public:
 
     void step() {
         if(is_done) { return; }
-        do_step();
+        do_halfstep();
         if(std::abs(p.x - q.x) <= eps && std::abs(p.y - q.y) <= eps) { is_done = true; }
     }
 
