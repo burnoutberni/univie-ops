@@ -15,6 +15,7 @@
 
 #pragma once
 #include <iostream>
+#include <cmath>
 
 #include "Funktion.h"
 #include "point.hpp"
@@ -29,6 +30,7 @@ private:
 
     bool is_done = false; // Zustand: fertig optimiert?
     bool x_last = false;  // Zustand: wurde x als letzte Variable minimiert?
+    size_t iter_c = 0;
 
     // Goldener Schnitt
     double minimize_with_x_constant(double x) {
@@ -76,23 +78,21 @@ private:
     }
 
     void do_halfstep() {
+        ++iter_c;
         q = p;
-        if(x_last) {
-            p.y = minimize_with_x_constant(p.x);
-            x_last = false;
-        } else {
-            p.x = minimize_with_y_constant(p.y);
-            x_last = true;
-        }
+        if(x_last) { p.y = minimize_with_x_constant(p.x); }
+        else { p.x = minimize_with_y_constant(p.y); }
+        x_last = !x_last;
     }
 
 public:
     coordesc_optimizer(Funktion& f, point const& p, double eps = 0.0001)
         : f( f ), p{ p }, eps{ eps } {}
-    point retrieve_current_point() { return p; }
-    point retrieve_last_point() { return q; }
+    point current_point() { return p; }
+    point last_point() { return q; }
 
     bool done() const { return is_done; }
+    size_t iteration_count() const { return iter_c; }
 
     void step() {
         if(is_done) { return; }
