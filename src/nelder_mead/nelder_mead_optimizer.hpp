@@ -1,6 +1,6 @@
 /*********************************************************************************
  * Nelder-Mead Optimierungsalgorithmus.                                          *
- * Autor: Sonja Biedermann, a1402891 (Gruppe 4)                                  *
+ * Autor: Sonja Biedermann, a1402891 (Gruppe 7, Team 4)                          *
  *                                                                               *
  * Minimiert eine gegebene Funktion f.                                           *
  * Wendet dazu den Nelder-Mead Algorithmus an, der einen sich an die Funkions-   *
@@ -12,11 +12,8 @@
  *********************************************************************************/
 
 #pragma once
-#include <cassert>
 #include <cmath>
-#include <iostream>
 #include <tuple>
-#include <sstream>
 #include <exception>
 
 #include "Funktion.h"
