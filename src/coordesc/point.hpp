@@ -11,7 +11,6 @@
 
 #pragma once
 #include <cassert>
-#include <sstream>
 
 struct point {
     double x = 0.0;
@@ -24,7 +23,7 @@ struct point {
     // i.e. take_a_point({ 1.8, 13.9 }) ruft den initlist-konstruktor auf,
     // um die implizite umwandlung durchführen zu können.
     point(std::initializer_list<double> li) {
-        assert(li.size() == 2);
+        assert(li.size() == 2 && "point class only supports two dimensional points!");
         x = li.begin()[0]; y = li.begin()[1];
     }
 
@@ -42,14 +41,6 @@ struct point {
 
     point operator*(double factor) const {
         return {x * factor, y * factor};
-    }
-
-    bool operator==(point const& other) const {
-        return x == other.x && y == other.y;
-    }
-
-    bool operator!=(point const& other) const {
-        return !(*this == other);
     }
 
     std::string format() const {
