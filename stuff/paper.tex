@@ -640,11 +640,11 @@ Minimum an.
 Bei der Koordinatenabstiegsmethode wird bei jedem Schritt eine Koordinate
 i gewählt, nach der man optimiert. Es wird bei einem beliebigen Startpunkt
 begonnen und in jedem Iterationsschritt setzt man alle Koordinaten
-des aktuellen Punktes in die Funktion ein , nur die Koordinate , nach
-der man minimieren will , behält man als Variable bei.
+des aktuellen Punktes in die Funktion ein, nur die Koordinate, nach
+der man minimieren will, behält man als Variable bei.
 
-Es wird immer in Richtung einer Achse minimiert und die Stelle , an
-der das Minimum ist , als neue Koordinate beibehalten und so gelangt
+Es wird immer in Richtung einer Achse minimiert und die Stelle, an
+der das Minimum ist, als neue Koordinate beibehalten und so gelangt
 man mit einer Anzahl an Iterationen zum Minimum der Funktion.
 
 \begin{figure}[h]
@@ -653,7 +653,6 @@ man mit einer Anzahl an Iterationen zum Minimum der Funktion.
     \caption{Die Koordinatenabstiegsmethode}
 \end{figure}
 
-~\\
 Wenn zum Beispiel die Funktion $f(x,y)=2x^{2}+2xy+1.5y^{2}$ und der
 Startpunkt $P=(1,\,1)$ gegeben ist, so muss man, wenn entlang der
 $x$-Achse minimiert werden soll folgendes eingesetzt werden:
@@ -690,7 +689,7 @@ Diese soeben erhaltene Funktion müssen wir nun noch minimieren.
 \begin{eqnarray*}
     f'(d) & = & 4d+6\\
     4d+6 & = & 0\\
-    d & = & \frac{3}{2}
+    d & = & - \frac{3}{2}
 \end{eqnarray*}
 
 
@@ -744,6 +743,25 @@ Bei weiteren Iterationen merken wir, dass $d$ immer 0 beträgt \textendash{}
 was bedeutet, dass sich der Punkt nicht weiterbewegt. Wir sitzen auf
 einem lokalen Minimum fest. Führen wir das mit dem anderen Zweig der
 Funktion ebenfalls durch, so sehen wir das gleiche Problem.
+
+Die Koordinatenabstiegsmethode hat Probleme bei nicht-glatten* Funktionen.  Man
+könnte bei einem Punkt hängen bleiben, der nicht das Minimum ist, wenn die
+Contourlinien nicht glatt\footnote{unendlich oft differenzierbar und stetig
+(Graph hat keine Ecken)} sind. \cite{coordesc-enwiki}
+
+Beispiel:
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.65\textwidth]{coord_desc/problem}
+    \caption{Ein Problemfall}
+\end{figure}
+
+Man stelle sich vor, wir wären am Punkt (-2,-2) angelangt. Die roten Linien
+zeigen, welche Richtungen man einschlagen kann. Würde man nun eine weitere
+Iteration des Verfahrens anwenden, würde man auf dem Punkt (-2,-2) festsitzen,
+da das Wandern entlang der roten Linien den Funktionswert erhöhen würde und
+somit den derzeitigen Punkt als ideal angesehen wird.
 
 \printbibliography[heading=bibintoc]
 \end{document}
