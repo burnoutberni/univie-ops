@@ -124,7 +124,7 @@ verwendeten Punkte ($R$ und $W$ respektive), so werden diese akzeptiert.  Ist
 dem nicht so, müssen wir zum nächsten Schritt, der Komprimierung, fortfahren.
 Bei der Komprimierung werden jediglich die zwei schlechteren Punkte $G$ und $W$
 in Richtung des besten Punktes $B$ gezogen. \cite{nelder-mead-scholarpedia}
-Dieser Schritt wird bei den meisten Funktionen nie feuern -- die Kontraktion
+Dieser Schritt wird bei den meisten Funktionen nie feuern --- die Kontraktion
 liefert zumeist einen Punkt, der akzeptiert werden kann. In seltenen Fällen,
 nämlich wenn sich der Simplex über ein Tal spannt und sich ein Punkt des
 Simplex viel weiter vom Tal entfernt befindet als die anderen zwei besseren,
@@ -191,7 +191,7 @@ ist. Wir expandieren also weiter:
     \caption{Nach der Expansion}
 \end{figure}
 
-Dies entspricht einem {\emph{greedy approach} -- dieser
+Dies entspricht einem {\emph{greedy approach} --- dieser
 Schritt ist nicht notwendig per se, minimiert aber zusätzlich die Anzahl
 der nötigen Iterationen. In schwer zu optimierenden Funktionen, wie etwa
 Rosenbrock's Bananenfunktion, kann der Expansionsfaktor $\gamma$ dazu genutzt werden,
@@ -199,8 +199,8 @@ den Simplex in flachem Gelände schneller wandern zu lassen.
 
 \subsubsection{Kontraktion}
 
-Gehen wir jetzt vom Gegenteil aus -- Punkt $R$ war also
-kein geeigneter Punkt und Punkt $E$ wurde gar nicht berechnet --
+Gehen wir jetzt vom Gegenteil aus --- Punkt $R$ war also
+kein geeigneter Punkt und Punkt $E$ wurde gar nicht berechnet ---
 so müssen wir die beiden Kontraktionspunkte $C_{1}$, $C_{2}$ berechnen.
 
 \begin{eqnarray*}
@@ -229,7 +229,7 @@ Wir komprimieren die Punkte $G$ und $W$ in Richtung $B$.
 \end{figure}
 
 Dies entspricht dem Zusammenziehen des Simplex' in Richtung eines im Tal
-liegenden Punktes -- lässt man diesen Schritt weg, schießt der Simplex
+liegenden Punktes --- lässt man diesen Schritt weg, schießt der Simplex
 in einigen Fällen über das Tal hinweg und konvergiert gegebenenfalls
 in einem falschen Punkt.
 
@@ -284,15 +284,17 @@ sich hierbei auch um einen tatsächlichen Simplex handeln muss (ein
 degenerierter Simplex wäre nutzlos). Weiters ist ein großer Simplex
 wünschenswert, da gegebenenfalls zu Beginn einer Optimierung große Schritte in
 Richtung Minimum gemacht werden müssen, um schnell konvergieren zu können. Ein
-kleiner Simplex benötigt weit mehr Zeit um zu konvergieren -- dieses Problem
+kleiner Simplex benötigt weit mehr Zeit um zu konvergieren --- dieses Problem
 kann man beispielsweise bei Rosenbrock's Banenenfunktion beobachten, die in der
-beiliegenden Implementierung ebenfalls vorhanden ist. Für die Parameter $\alpha$,
-$\beta$, $\gamma$ und $\delta$ wurde die Standardbelegung aus \fullref{funktionsweise}.
+beiliegenden Implementierung ebenfalls vorhanden ist. Für die Parameter
+$\alpha$, $\beta$, $\gamma$ und $\delta$ wurde die Standardbelegung aus
+\fullref{funktionsweise} gewählt. (Abbildung \ref{initial})
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\textwidth]{nelder_mead/1}
     \caption{Unser Anfangssimplex aufgetragen auf einen Contourplot der Himmelblau-Funktion.}
+    \label{initial}
 \end{figure}
 
 Der erste Schritt ist das Ordnen der Punkte nach ihrem Funktionswert. Wir berechnen:
@@ -327,7 +329,7 @@ ist, berechnen wir den inneren kontrahierten Punkt
 
 Berechnen wir nun $f(C_{2}) = 103.75391$, sehen wir, dass
 wir einen guten Fortschritt gemacht haben. Wir ersetzen
-$W$ und ordnen unsere Punkte neu.
+$W$ und ordnen unsere Punkte neu. (Abbildung \ref{first-transformation})
 
 \begin{eqnarray*}
     B & = & (4.5, \, 0.75)\\
@@ -339,6 +341,7 @@ $W$ und ordnen unsere Punkte neu.
     \centering
     \includegraphics[width=0.7\textwidth]{nelder_mead/2}
     \caption{Unser Simplex nach dem ersten Transformationsschritt}
+    \label{first-transformation}
 \end{figure}
 
 Nun berechnen wir den neuen Mittelpunkt und reflektierten Punkt
@@ -350,7 +353,7 @@ Nun berechnen wir den neuen Mittelpunkt und reflektierten Punkt
 
 Nun berechnen wir $f(R) = 106.19141$ und sehen, dass die Relation $f(B) \leq
 f(R) \leq f(W)$ damit erfüllt ist. Wir akzeptieren also den reflektierten Punkt
-und ordnen unsere Werte neu.
+und ordnen unsere Werte neu. (Abbildung \ref{second-transformation})
 
 \begin{eqnarray*}
     B & = & (4.5, \, 0.75)\\
@@ -362,6 +365,7 @@ und ordnen unsere Werte neu.
     \centering
     \includegraphics[width=0.7\textwidth]{nelder_mead/3}
     \caption{Unser Simplex nach dem zweiten Transformationsschritt}
+    \label{second-transformation}
 \end{figure}
 
 Wir berechnen den neuen Mittelpunkt $M = \binom{2.5}{2.25}$ und den neuen
@@ -369,7 +373,7 @@ reflektierten Punkt $R = \binom{6}{9.5}$. $f(R) = 9155.815$, wir erreichen also
 keine Verbesserung. Wir berechnen wiederum den inneren kontrahierten Punkt
 $C_{2} = \binom{0.75}{-1.375}$ und sehen, dass $f(C_{2}) = 158.53931$, also
 eine Verbesserung gegenüber $f(W) = 514$. Wir akzeptieren also $C_{2}$ und
-ordnen unsere Punkte neu.
+ordnen unsere Punkte neu. (Abbildung \ref{third-transformation})
 
 \begin{eqnarray*}
     B & = & (4.5, \, 0.75)\\
@@ -381,6 +385,7 @@ ordnen unsere Punkte neu.
     \centering
     \includegraphics[width=0.7\textwidth]{nelder_mead/4}
     \caption{Nach dem dritten Transformationsschritt}
+    \label{third-transformation}
 \end{figure}
 
 Die beiden besten Punkte haben sich nicht geändert, also bleibt auch der
@@ -422,11 +427,11 @@ Gegebenheiten:
 \item Irgendeine Art eines Abstiegskriteriums wird verwendet.
 \end{itemize}
 
-Beides ist \emph{nicht} gegeben -- der Simplex kann und wird in einigen Fällen
+Beides ist \emph{nicht} gegeben --- der Simplex kann und wird in einigen Fällen
 beinahe degenerieren, sofern die Landschaft der Funktion dies
 zulässt.
 \footnote{Man betrachte Rosenbrock's Bananenfunktion, in deren Tal der Simplex rapide schrumpft und sich somit nur mehr sehr langsam bewegen kann.}
-Weiters ist das Abstiegskriterion mehr zufällig -- es ist nicht mathematisch
+Weiters ist das Abstiegskriterion mehr zufällig --- es ist nicht mathematisch
 fundiert wie etwa die Verwendung des negativen Gradienten, der mathematisch beweisbar
 immer in die Richtung des steilsten Abstiegs zeigt. ~\cite{nelder-mead-scholarpedia}
 
