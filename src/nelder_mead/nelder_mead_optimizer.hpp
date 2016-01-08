@@ -52,10 +52,10 @@ private:
     }
 
     point& min(point& p1, point& p2, point& p3) {
-        double y1 = f(p1.x, p1.y);
-        double y2 = f(p2.x, p2.y);
-        double y3 = f(p3.x, p3.y);
-        return y1 < y2 ? (y1 < y3 ? p1 : p3) : (y2 < y3 ? p2 : p3);
+        double z1 = f(p1.x, p1.y);
+        double z2 = f(p2.x, p2.y);
+        double z3 = f(p3.x, p3.y);
+        return z1 < z2 ? (z1 < z3 ? p1 : p3) : (z2 < z3 ? p2 : p3);
     }
 
     void sort_points_by_fvalue() {
@@ -84,7 +84,7 @@ private:
                 w = c;
                 return;
             }
-        } else { // Inside: R ist schlechter als w, also wählen wir den Punkt, der näher an w liegt
+        } else { // Inside: r ist schlechter als w, also wählen wir den Punkt, der näher an w liegt
             c = m + beta_ * (w - m);
             if(f(c.x, c.y) < f(w.x, w.y)) {
                 w = c;
