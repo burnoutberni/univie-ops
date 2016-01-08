@@ -3,11 +3,8 @@
  * Autor: Sonja Biedermann, a1402891 (Gruppe 4)                                  *
  *                                                                               *
  * Minimiert eine gegebene Funktion f.                                           *
- * Der Kontrollfluss liegt hierbei außerhalb des Optimierers – die               *
- * aufrufende Funktion trägt die Verantwortung, die step() Methode               *
- * aufzurufen, bis ein Minimum approximiert wurde. Das ermöglicht                *
- * das leichte Einsetzen von unterschiedlichen Tools zum Visualisieren des       *
- * Optimierungsvorganges.                                                        *
+ * Wendet dazu den Nelder-Mead Algorithmus an, der einen sich an die Funkions-   *
+ * landschaft anpassenden Simplex zum Minimum wandern lässt.                     *
  *                                                                               *
  * Als Referenzen wurden folgende Quellen verwendet:                             *
  * http://mathfaculty.fullerton.edu/mathews/n2003/neldermead/NelderMeadProof.pdf *
