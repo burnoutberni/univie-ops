@@ -8,7 +8,10 @@
  * und einer Methode format(), die den Punkt ausgabefähig in einen   *
  * std::string formattiert.                                          *
  *********************************************************************/
+
 #pragma once
+#include <cassert>
+
 struct point {
     double x = 0.0;
     double y = 0.0;
@@ -20,7 +23,7 @@ struct point {
     // i.e. take_a_point({ 1.8, 13.9 }) ruft den initlist-konstruktor auf,
     // um die implizite umwandlung durchführen zu können.
     point(std::initializer_list<double> li) {
-        assert(li.size() == 2);
+        assert(li.size() == 2 && "point class only supports two dimensional points!");
         x = li.begin()[0]; y = li.begin()[1];
     }
 
