@@ -1,5 +1,8 @@
 site_name: "Nichtlineare Optimierung ohne Nebenbedingungen: Mehrdimensionale Verfahren"
 pages:
 - Home: index.md
-- 'Nelder-Mead Verfahren': 'nmo.md'
+- 'Nelder-Mead Verfahren': nmo.md
+- 'Abstiegsverfahren': abstieg.md
+- 'Gradientenverfahren': gradienten.md
+- 'Koordinatenabstiegsmethode': koordinatenabstieg.md
 theme: readthedocs
