@@ -4,7 +4,39 @@
     
     <url>
      <loc>None/</loc>
-     <lastmod>2015-11-24</lastmod>
+     <lastmod>2016-01-10</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>None/nmo/</loc>
+     <lastmod>2016-01-10</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>None/abstieg/</loc>
+     <lastmod>2016-01-10</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>None/gradienten/</loc>
+     <lastmod>2016-01-10</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>None/koordinatenabstieg/</loc>
+     <lastmod>2016-01-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
