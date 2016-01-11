@@ -2,8 +2,8 @@
 
 # Beispiele
 
-![Optimierung der Booth-Funktion](img/nmo/booth.gif "Logo Title Text 1")
-![Optimierung der Himmelblau-Funktion](img/nmo/himmelblau.gif "Logo Title Text 1")
+![Optimierung der Booth-Funktion](img/nmo/booth.gif "Booth Funktion")
+![Optimierung der Himmelblau-Funktion](img/nmo/himmelblau.gif "Himmelblau Funktion")
 
 # Implementation
 
@@ -23,6 +23,7 @@
 | `double beta_`  | Kontraktionsfaktor               |
 | `double delta_` | Komprimierungsfaktor             |
 | `bool done`     | Zustandsvariable                 |
+| `size_t iter_c` | Iterationszähler                 |
 
 #### Methoden
 
@@ -40,10 +41,12 @@
 | `+ void set_gamma(double)`                                     | setzt Expansionsfaktor wenn möglich, wirft sonst `invalid_value`               |
 | `+ void set_beta(double)`                                      | setzt Kontraktionsfaktor wenn möglich, wirft sonst `invalid_value`             |
 | `+ void set_delta(double)`                                     | setzt Komprimierungsfaktor wenn möglich, wirft sonst `invalid_value`           |
-| `+ point get_best_point()`                                     | returniert besten Simplexpunkt                                                 |
+| `+ point best_point()`                                         | returniert besten Simplexpunkt                                                 |
 | `+ std::tuple<point, point, point> retrieve_current_simplex()` | returniert Tupel aller drei Simplexpunkte                                      |
 | `+ bool done()`                                                | returniert Zustandsvariable                                                    |
+| `+ size_t iteration_count()`                                   | returniert den Wert des Iterationenzählers                                     |
 | `+ void step()`                                                | führt Optimierungsschritt aus, sortiert Punkte und setzt ggf. Zustandsvariable |
+| `+ optimize()`                                                 | führt die Optimierung die komplette Optimierung durch                          |
 
 ### Algorithmus selbst
 
