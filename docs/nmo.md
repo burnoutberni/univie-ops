@@ -161,3 +161,6 @@ Es werden zumindest die Funktionsdefinition sowie die Minima ausgegeben.
 Werden dem Programm keine Argumente übergeben, beschwert es sich
 dementsprechend und zeigt eine kleine Hilfe mit den unterstützten
 Funktionalitäten an. Überschüssige Argumente werden ignoriert.
+
+### Links
+
