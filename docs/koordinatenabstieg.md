@@ -120,7 +120,7 @@ der Ausgabegraphen zu ermöglichen. Ist dies nicht genug, kann via
 `./coordesc [FUNKTIONSNAME] manual` erwirkt werden, dass auf eine beliebige
 Usereingabe gewartet wird.
 
-Weiters ist eine kleine Informationsfunktion eingebaut. Mittels `./nelder_mead
+Weiters ist eine kleine Informationsfunktion eingebaut. Mittels `./coordesc
 info [FUNKTIONSNAME]` kann diese aufgerufen werden und liefert dann
 beispielsweise solche Ausgaben:
 
