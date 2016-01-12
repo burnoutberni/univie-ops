@@ -65,13 +65,6 @@
           
             <li>
     <li class="toctree-l1 ">
-        <a class="" href="../abstieg/">Abstiegsverfahren</a>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
         <a class="" href="../gradienten/">Gradientenverfahren</a>
         
     </li>
@@ -82,6 +75,23 @@
         <a class="current" href="./">Koordinatenabstiegsmethode</a>
         
             <ul>
+            
+                <li class="toctree-l3"><a href="#einfuhrung">Einführung</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#beispiel">Beispiel</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#implementation">Implementation</a></li>
+                
+                    <li><a class="toctree-l4" href="#klassenubersicht">Klassenübersicht</a></li>
+                
+                    <li><a class="toctree-l4" href="#algorithmus-selbst">Algorithmus selbst</a></li>
+                
+                    <li><a class="toctree-l4" href="#testprogramm">Testprogramm</a></li>
+                
+                    <li><a class="toctree-l4" href="#links">Links</a></li>
+                
             
             </ul>
         
@@ -120,7 +130,245 @@
           <div role="main">
             <div class="section">
               
-                
+                <h1 id="einfuhrung">Einführung</h1>
+<p>Bei der Koordinatenabstiegsmethode wird bei jedem Schritt eine Koordinate <code>i</code> gewählt, nach der man optimiert. Es wird bei einem beliebigen Startpunkt begonnen und in jedem Iterationsschritt setzt man alle Koordinaten des aktuellen Punktes in die Funktion ein, nur die Koordinate, nach der man minimieren will, behält man als Variable bei.</p>
+<p>Es wird immer in Richtung einer Achse minimiert und die Stelle, an der das Minimum ist, als neue Koordinate beibehalten und so gelangt man mit einer Anzahl an Iterationen zum Minimum der Funktion.</p>
+<p>Wenn zum Beispiel die Funktion <code>f(x,y)=2x^{2}+2xy+1.5y^{2}</code> und der Startpunkt <code>P=(1,\,1)</code> gegeben ist, so muss man, wenn entlang der <code>x</code>-Achse minimiert werden soll folgendes eingesetzt werden:</p>
+<pre><code>x = 1+1d
+y = 1+0d
+</code></pre>
+<p>Soll entlang der $y$-Achse optimiert werden, so muss folgendes eingesetzt werden:</p>
+<pre><code>x = 1+0d
+y = 1+1d
+</code></pre>
+<h1 id="beispiel">Beispiel</h1>
+<p>Wir möchten die Funktion <code>f(x,y)=2x^{2}+2xy+1.5y^{2}</code> optimieren und wählen den Startpunkt <code>P_{0}=(1,\,1)</code>. Wir minimieren zuerst entlang der <code>x</code>-Achse und setzen ein</p>
+<pre><code>f(d) = 2(1+d)^{2}+2(1+d)+1.5
+     = 2d^{2}+6d+5.5
+</code></pre>
+<p>Diese soeben erhaltene Funktion müssen wir nun noch minimieren.</p>
+<pre><code>f'(d) = 4d+6
+4d+6 = 0
+d = -3/2
+</code></pre>
+<p>Setzen wir dies in die Gleichung für die <code>x</code>-Koordinate ein und verwenden die alte <code>y</code>-Koordinate erhalten wir den neuen Punkt <code>P_{1}=(-1/2 , 1)</code>. Nun minimieren wir nach <code>y</code>, wir setzen also ein:</p>
+<pre><code>x = -1/2 + 0d
+y = 1+1d
+</code></pre>
+<p>und erhalten</p>
+<pre><code>f(d)=1.5d^{2}-d+6
+</code></pre>
+<p>Dies minimieren wir wiederum und erhalten die neue <code>y</code>-Koordinate <code>1/3</code>. Damit haben wir den neuen Punkt <code>(-1/2 , 1/3)</code>.
+Dieser Vorgang wird wiederholt, bis sich die errechneten Werte nurnoch marginal unterscheiden. Danach wird abgebrochen.</p>
+<h1 id="implementation">Implementation</h1>
+<h3 id="klassenubersicht">Klassenübersicht</h3>
+<h4 id="instanzvariablen">Instanzvariablen</h4>
+<table>
+<thead>
+<tr>
+<th>Variablenname</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Funktion&amp; f</code></td>
+<td>zu optimierendes Funktionsobjekt</td>
+</tr>
+<tr>
+<td><code>point p</code></td>
+<td>derzeitiger Punkt</td>
+</tr>
+<tr>
+<td><code>point q</code></td>
+<td>letzter Punkt</td>
+</tr>
+<tr>
+<td><code>double eps</code></td>
+<td>Epsilon (Kovergenzkriterium)</td>
+</tr>
+<tr>
+<td><code>double golden_ratio</code></td>
+<td>Goldener Schnitt (Minimierungsalgorithmus)</td>
+</tr>
+<tr>
+<td><code>bool is_done</code></td>
+<td>Zustandsvariable</td>
+</tr>
+<tr>
+<td><code>bool x_last</code></td>
+<td>Zustandvariable: wurde x als letztes optimiert?</td>
+</tr>
+<tr>
+<td><code>size_t iter_c</code></td>
+<td>Iterationszähler</td>
+</tr>
+</tbody>
+</table>
+<h4 id="methoden">Methoden</h4>
+<table>
+<thead>
+<tr>
+<th>Methode</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>- double minimize_with_x_constant(double x) const</code></td>
+<td>Minimiert die Funktion mit einem konstanten Wert für x</td>
+</tr>
+<tr>
+<td><code>- double minimize_with_x_constant(double y) const</code></td>
+<td>Minimiert die Funktion mit einem konstanten Wert für y</td>
+</tr>
+<tr>
+<td><code>- void do_halfstep()</code></td>
+<td>Führt einen Optimierungsschritt durch (optimiert eine Variable)</td>
+</tr>
+<tr>
+<td><code>+ point current_point() const</code></td>
+<td>returniert p</td>
+</tr>
+<tr>
+<td><code>+ point last_point() const</code></td>
+<td>returniert q</td>
+</tr>
+<tr>
+<td><code>+ void step()</code></td>
+<td>führt einen Optimierungsschritt durch</td>
+</tr>
+<tr>
+<td><code>+ bool done()</code></td>
+<td>returniert Zustandsvariable</td>
+</tr>
+<tr>
+<td><code>+ size_t iteration_count()</code></td>
+<td>returniert den Wert des Iterationenzählers</td>
+</tr>
+<tr>
+<td><code>+ void step()</code></td>
+<td>führt Optimierungsschritt aus, sortiert Punkte und setzt ggf. Zustandsvariable</td>
+</tr>
+<tr>
+<td><code>+ optimize()</code></td>
+<td>führt die komplette Optimierung durch</td>
+</tr>
+</tbody>
+</table>
+<h3 id="algorithmus-selbst">Algorithmus selbst</h3>
+<p>Die Implementierung umfasst eine Optimiererklasse <code>coordesc_optimizer</code>, der bei
+der Instanziierung diverse Parameter übergeben werden müssen:</p>
+<ul>
+<li>Eine von der Klasse <code>Funktion</code> abgeleitete Funktionsrepräsentation, die die
+  Methode <code>value(double, double)</code> bzw. <code>operator()(double, double)</code> implementiert
+  haben muss</li>
+<li>1 Startpunkt <code>p1</code>, der ruhig zufällig gewählt werden kann</li>
+<li>Ein Double-Wert <code>eps</code>, der den zu verwendenden Epsilon-Wert angibt [optional,
+  defaultmäßig .00001]</li>
+</ul>
+<p>Alle optionalen Werte können nachträglich mit dem entsprechenden Getter und
+Setter abgefragt und geändert werden. Die Setter für die Verhaltensfaktoren
+<code>alpha</code>, <code>beta</code>, <code>gamma</code> und <code>delta</code> prüfen die Sinnhaftigkeit der übergebenen
+Werte und werfen eine Exception des Typs <code>invalid_value</code> mit einer
+Fehlermeldung sollten diese nicht stimmen.</p>
+<p>Ein Minimalbeispiel zum Rauskopieren:</p>
+<pre><code class="c++">coordesc_optimizer cdo(fn, {-1, -5}, .0000001);
+cdo.optimize();
+point min = cdo.current_point();
+
+std::cout &lt;&lt; &quot;The minimum is at &quot; &lt;&lt; min.format() &lt;&lt; &quot;!\nNeeded &quot;
+          &lt;&lt; cdo.iteration_count() &lt;&lt; &quot; iterations.\n&quot;;
+</code></pre>
+
+<p>Vorhergehendes Beispiel instanziiert ein Optimiererobjekt <code>cdo</code>, das die
+Funktion <code>fn</code> optimieren soll, mit dem Startpunkt (-1, -5)
+. Das Epsilon für die Abbruchbedingung wurde als .0005 gewählt. Danach wird
+die <code>optimize</code>-Methode aufgerufen, die die Optimierung bis zum Erreichen des
+Konvergenzkriteriums durchführt. Anschließend kann der gefundene Punkt mittels
+<code>current_point()</code> abgerufen werden. Die <code>point</code>-Klasse liegt der
+Implementierung bei und umfasst die wichtigsten Vektor-Operationen sowie einen
+extrem coolen Initialisiererlisten-Konstruktor, der die kurze Anschreibweise im
+Konstruktoraufruf ermöglicht. Weiters wichtig sind die <code>format</code>- und
+<code>raw</code>-Methoden, die den Inhalt des Punktes jeweils in einen String gießen.
+<code>format()</code> ist zur schönen Ausgabe gedacht und <code>raw()</code> als Zwischenmedium zur
+Weitergabe des Punktes an externe Programme (wie etwa gnuplot).</p>
+<p>Um den Algorithmus möglichst flexibel benutzen zu können, kann auch die Methode
+<code>step</code> verwendet werden, um den Algorithmus schrittweise verfolgen zu können.
+Auskunft über den Zustand gibt die <code>done</code> Methode. Folgendes Beispiel optimiert
+eine Funktion wie das vorige, gibt bei jedem Schritt jedoch auch den
+derzeitigen Simplex aus.</p>
+<pre><code class="c++">coordesc_optimizer cdo(fn, {-1, -5}, .0005);
+
+while(!nmo.done()) {
+    std::cout &lt;&lt; &quot;\nIteration #&quot; &lt;&lt; cdo.iteration_count() &lt;&lt; '\n';
+    point p = cdo.current_point();
+    std::cout &lt;&lt; &quot;P = &quot; &lt;&lt; p.format() &lt;&lt; '\n';
+    cdo.step();
+}
+</code></pre>
+
+<h3 id="testprogramm">Testprogramm</h3>
+<p>Das Testprogramm benötigt POSIX-Pipes (i.e. ist nur auf Linux und ggf. auch OS
+X lauffähig) und gnuplot zum darstellen des Optimierungsverlaufes. Folgende
+Funktionen sind vorimplementiert:</p>
+<ul>
+<li>Himmelblau-Funktion (Befehl: <code>himmelblau</code>)</li>
+<li>Rosenbrocks Bananen-Funktion (Befehl: <code>banana</code>)</li>
+<li>Matyas-Funktion (Befehl: <code>matyas</code>)</li>
+<li>Dreihöcker-Kamelfunktion (Befehl: <code>camel</code>)</li>
+<li>Booth-Funktion (Befehl: <code>booth</code>)</li>
+<li>Beale-Funktion (Befehl: <code>beale</code>)</li>
+<li>Beispielfunktion 1, <code>3*x**2 + y**2 - 3*x*y - 3*x</code> (Befehl: <code>example1</code>)</li>
+<li>Beispielfunktion 2, <code>y**4 + 2*x**2 - 3*x*y + 1</code> (Befehl: <code>example2</code>)</li>
+<li>Beispielfunktion 3, <code>3*x**2 + y + y**2</code> (Befehl: <code>example3</code>)</li>
+<li>Beispielfunktion 4, <code>5*x**2 - 6*x*y + 5*y**2 - 0.0259</code> (Befehl: <code>example4</code>)</li>
+</ul>
+<p>Ein Aufruf sieht folgendermaßen aus: <code>./coordesc [FUNKTIONSNAME]</code>. Per
+default schläft das Programm zwischen Iterationsschritten, um das betrachten
+der Ausgabegraphen zu ermöglichen. Ist dies nicht genug, kann via
+<code>./coordesc [FUNKTIONSNAME] manual</code> erwirkt werden, dass auf eine beliebige
+Usereingabe gewartet wird.</p>
+<p>Weiters ist eine kleine Informationsfunktion eingebaut. Mittels <code>./coordesc
+info [FUNKTIONSNAME]</code> kann diese aufgerufen werden und liefert dann
+beispielsweise solche Ausgaben:</p>
+<pre><code>$ ./nelder_mead info himmelblau
+
+H I M M E L B L A U  function
+The Himmelblau function is commonly used for benchmarking optimization
+algorithms. It is defined as
+                    2          2         2     2
+        f(x, y) = (x  + y - 11)  + (x + y  - 7)
+
+Its minima are at positions
+    f(3.2, 2.0) = 0.0
+    f(-2.805118, 3.131312) = 0.0
+    f(-3.779310, -3.283186) = 0.0
+    f(3.584428, -1.848126) = 0.0
+</code></pre>
+
+<p>Es werden zumindest die Funktionsdefinition sowie die Minima ausgegeben.</p>
+<p>Werden dem Programm keine Argumente übergeben, beschwert es sich
+dementsprechend und zeigt eine kleine Hilfe mit den unterstützten
+Funktionalitäten an. Überschüssige Argumente werden ignoriert.</p>
+<h3 id="links">Links</h3>
+<p><a href="https://github.com/burnoutberni/univie-ops/tree/master/src/coordesc">Files auf GitHub (garantiert aktuell)</a>
+<a href="https://github.com/burnoutberni/univie-ops/blob/master/src/nelder_mead.zip?raw=true">nelder_mead.zip</a></p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>43727c34596d733f7dc1a562ef60c8dcae766411</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
               
             </div>
           </div>

@@ -64,17 +64,18 @@
 <li>
           
             <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../abstieg/">Abstiegsverfahren</a>
-        
-    </li>
-<li>
-          
-            <li>
     <li class="toctree-l1 current">
         <a class="current" href="./">Gradientenverfahren</a>
         
             <ul>
+            
+                <li class="toctree-l3"><a href="#die-idee-und-der-zweck-des-gradientenverfahren">Die Idee und der Zweck des Gradientenverfahren</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#der-ablauf-des-gradientenverfahrens">Der Ablauf des Gradientenverfahrens</a></li>
+                
+                    <li><a class="toctree-l4" href="#die-armijo-bedingung">Die Armijo-Bedingung</a></li>
+                
             
             </ul>
         
@@ -120,7 +121,27 @@
           <div role="main">
             <div class="section">
               
-                
+                <h1 id="die-idee-und-der-zweck-des-gradientenverfahren">Die Idee und der Zweck des Gradientenverfahren</h1>
+<p>Grundsätzlich ist das Gradientenverfahren ein Optimierungsverfahren, welches das Minimum einer mehrdimensionalen Funktion errechnen. Der Gradient <code>∇f(x,y)</code> einer Funktion <code>f(x)</code> zeigt, aus später gezeigten Gründen, immer in die Richtung des steilsten Anstiegs, folglich zeigt <code>-∇f(x,y)</code> in die Richtung des stärksten Abstiegs. Das Gradientenverfahren macht sich dies zunutze und man "wandert" eine gewisse Dauer in diese Richtung, wie "lange" man in die errechnete Richtung "wandert" hängt unter anderem auch von der gewählten Methode ab.</p>
+<h1 id="der-ablauf-des-gradientenverfahrens">Der Ablauf des Gradientenverfahrens</h1>
+<ul>
+<li>Es wird ein beliebiger Startpunkt <code>P=(x,y)</code> ausgewählt.</li>
+<li>Es wird die Ableitung der Funktion <code>f(x,y)</code>, also <code>∇f(x)</code> gebildet. Sollte dieser Gradient bereits den Wert null haben sind wir bereits fertig und haben ein lokales Minimum.</li>
+<li>Der Punkt <code>P</code> wird in den Gradienten eingesetzt und der negative Wert berechnet, also <code>-∇f(x_{P},y_{P})</code>.</li>
+<li>Um eine neuen Punkt <code>P^([n+1])</code> zu finden stellen wir nun folgende Gleichung auf: <code>P^([n+1]) = P^([n]) + α[n] * s^([n])</code>. Nun haben wir die Richtung in die optimiert werden muss gefunden (<code>s^([n])</code> (<code>=-∇f(x_{P},y_{P})</code>)), jetzt muss noch entschieden werden wie weit wir in diese Richtung "wandern" (<code>α[n]</code>, liegt zwischen <code>0</code> und <code>1</code>) (Hinweis: <code>n</code> ist die aktuelle Iteration).</li>
+</ul>
+<p>Das kann man einerseits mit Hilfe eines fixen Werts machen, andererseits auch mit einer Folge (wie z.B <code>1 / sqrt(n)</code>)
+oder einer jedes mal neu errechneten Schrittweite. Zu beachten ist, dass die ausgewählte Folge auf jeden Fall divergent sein muss, da man sonst bis zu einer maximalen Entfernung "wandern"
+kann und die Wahrscheinlichkeit groß ist das Optimum nie zu erreichen. Sollte man jedes mal einen fixen Wert verliert man zwar den Aufwand für die Berechnung der Schrittweite, jedoch ist die Wahrscheinlichkeit hoch, dass man viele Iterationen benötigt oder in einer endlosen Schleife festhängt.</p>
+<p>Es gibt verschieden Arten wie man die Schrittweite berechnen kann, im Folgenden werde ich die Schrittweitenbestimmung nach Armijo erklären. Dieses Verfahren ist eines der sogenannten "line-search" Verfahren, das von mir gezeigte ist jedoch kein exaktes line-search Verfahren sondern lediglich eine einfache Heuristik.</p>
+<h2 id="die-armijo-bedingung">Die Armijo-Bedingung</h2>
+<pre><code>φ(α) ≤ φ(0) + c * α^{[n]} * φ(0)'.
+</code></pre>
+<p>Wobei <code>c</code> eine Konstante zwischen null und eins ist und dazu dient das die Bedingung nicht zu restriktiv ist, <code>φ(α) = f(P^([n]) + α^([n]) * s^([n]))</code> und <code>φ(0)' = ∇f(P^{n}) * s^{[n]}</code></p>
+<ul>
+<li>Für den Anfang wird <code>α=1</code> gewählt und errechnet ob die Armijo-Bedingung erfüllt ist - sollte sie erfüllt sein haben wir ein passende <code>α</code> gefunden, wenn nicht wird <code>α</code> mit einem <code>β</code>, welches ebenfalls zwischen null und eins liegt, multipliziert und wieder geprüft ob die Ungleichung erfüllt ist. (Hinweis: In der Praxis liefern die Werte <code>c = 0.01</code> und <code>β = 0.9</code> häufig gute Ergebnisse. <a href="https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf">1</a> <a href="https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf">2</a></li>
+<li>Wenn man einen neuen Punkt gefunden hat wird bei Punkt 3 fortgesetzt. Da es oft einen großen Rechenaufwand erfordert das genaue Minimum zu finden wird das Verfahren meist beendet wenn der Gradient einen akzeptablen Wert erreicht hat (So kann man als Abbruchbedingung z.B. die stärke des Anstiegs in einem Punkt (also den Betrag des Gradienten) nehmen).</li>
+</ul>
               
             </div>
           </div>
@@ -131,7 +152,7 @@
         <a href="../koordinatenabstieg/" class="btn btn-neutral float-right" title="Koordinatenabstiegsmethode"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../abstieg/" class="btn btn-neutral" title="Abstiegsverfahren"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../nmo/" class="btn btn-neutral" title="Nelder-Mead Verfahren"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -157,7 +178,7 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../abstieg/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../nmo/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../koordinatenabstieg/" style="color: #fcfcfc">Next &raquo;</a></span>

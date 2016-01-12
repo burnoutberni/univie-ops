@@ -76,15 +76,10 @@
                 
                     <li><a class="toctree-l4" href="#testprogramm">Testprogramm</a></li>
                 
+                    <li><a class="toctree-l4" href="#links">Links</a></li>
+                
             
             </ul>
-        
-    </li>
-<li>
-          
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../abstieg/">Abstiegsverfahren</a>
         
     </li>
 <li>
@@ -137,8 +132,8 @@
               
                 <h1 id="einfuhrung">Einführung</h1>
 <h1 id="beispiele">Beispiele</h1>
-<p><img alt="Optimierung der Booth-Funktion" src="../img/nmo/booth.gif" title="Logo Title Text 1" />
-<img alt="Optimierung der Himmelblau-Funktion" src="../img/nmo/himmelblau.gif" title="Logo Title Text 1" /></p>
+<p><img alt="Optimierung der Booth-Funktion" src="../img/nmo/booth.gif" title="Booth Funktion" />
+<img alt="Optimierung der Himmelblau-Funktion" src="../img/nmo/himmelblau.gif" title="Himmelblau Funktion" /></p>
 <h1 id="implementation">Implementation</h1>
 <h3 id="klassenubersicht">Klassenübersicht</h3>
 <h4 id="instanzvariablen">Instanzvariablen</h4>
@@ -189,6 +184,10 @@
 <tr>
 <td><code>bool done</code></td>
 <td>Zustandsvariable</td>
+</tr>
+<tr>
+<td><code>size_t iter_c</code></td>
+<td>Iterationszähler</td>
 </tr>
 </tbody>
 </table>
@@ -250,7 +249,7 @@
 <td>setzt Komprimierungsfaktor wenn möglich, wirft sonst <code>invalid_value</code></td>
 </tr>
 <tr>
-<td><code>+ point get_best_point()</code></td>
+<td><code>+ point best_point()</code></td>
 <td>returniert besten Simplexpunkt</td>
 </tr>
 <tr>
@@ -262,8 +261,16 @@
 <td>returniert Zustandsvariable</td>
 </tr>
 <tr>
+<td><code>+ size_t iteration_count()</code></td>
+<td>returniert den Wert des Iterationenzählers</td>
+</tr>
+<tr>
 <td><code>+ void step()</code></td>
 <td>führt Optimierungsschritt aus, sortiert Punkte und setzt ggf. Zustandsvariable</td>
+</tr>
+<tr>
+<td><code>+ optimize()</code></td>
+<td>führt die Optimierung die komplette Optimierung durch</td>
 </tr>
 </tbody>
 </table>
@@ -369,6 +376,9 @@ Its minima are at positions
 <p>Werden dem Programm keine Argumente übergeben, beschwert es sich
 dementsprechend und zeigt eine kleine Hilfe mit den unterstützten
 Funktionalitäten an. Überschüssige Argumente werden ignoriert.</p>
+<h3 id="links">Links</h3>
+<p><a href="https://github.com/burnoutberni/univie-ops/tree/master/src/nelder_mead">Files auf GitHub (garantiert aktuell)</a>
+<a href="https://github.com/burnoutberni/univie-ops/blob/master/src/nelder_mead.zip?raw=true">nelder_mead.zip</a></p>
               
             </div>
           </div>
@@ -376,7 +386,7 @@ Funktionalitäten an. Überschüssige Argumente werden ignoriert.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../abstieg/" class="btn btn-neutral float-right" title="Abstiegsverfahren"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../gradienten/" class="btn btn-neutral float-right" title="Gradientenverfahren"/>Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -408,7 +418,7 @@ Funktionalitäten an. Überschüssige Argumente werden ignoriert.</p>
         <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../abstieg/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../gradienten/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
