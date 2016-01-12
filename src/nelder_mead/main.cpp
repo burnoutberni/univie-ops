@@ -147,7 +147,7 @@ int main(int argc, char const** argv) {
 
     std::cout << "\tN E L D E R - M E A D\n"
               << "\tDEMOTOOL\n"
-              << "\tMinimizes one of 10 given functions.\n"
+              << "\tMinimizes one of " << plot_functions.size() << " given functions.\n"
               << "\tDisplays progress via gnuplot.\n"
               << "\t***********************************\n\n";
 

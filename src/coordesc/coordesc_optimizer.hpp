@@ -86,9 +86,9 @@ private:
 
 public:
     coordesc_optimizer(Funktion& f, point const& p, double eps = 0.0001)
-        : f( f ), p{ p }, eps{ eps } {}
-    point current_point() { return p; }
-    point last_point() { return q; }
+        : f( f ), p{ p }, q{ p }, eps{ eps } {}
+    point current_point() const { return p; }
+    point last_point() const { return q; }
 
     bool done() const { return is_done; }
     size_t iteration_count() const { return iter_c; }
