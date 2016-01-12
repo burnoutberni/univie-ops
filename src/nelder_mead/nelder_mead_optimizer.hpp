@@ -58,27 +58,26 @@ private:
     }
 
     void do_step() {
-        point m = (b + g) / 2; // Mittelpunkt der besten beiden Punkte
-        point r = m + alpha_ * (m - w); // Reflektiere schlechtesten Punkt
+        point m = (b + g) / 2; // mittelpunkt
+        point r = m + alpha_ * (m - w); // reflektiere schlechtesten punkt
 
         if(f(r.x, r.y) < f(w.x, w.y)) {
-            if(f(r.x, r.y) < f(b.x, b.y)) {
-                point e = m + gamma_ * (m - w); // r ist bester Punkt bis jetzt. Expandiere weiter
-                w = min(e, r); // Ersetze schlechtesten Punkt durch den besseren der beiden
+            if(f(r.x, r.y) < f(b.x, b.y)) { // r besser as b: expandiere weiter
+                point e = m + gamma_ * (m - w);
+                w = min(e, r);
                 return;
             }
             w = r;
             return;
         }
 
-        point c; // Kontrahierter Punkt
-        if(f(r.x, r.y) < f(w.x, w.y)) { // Outside: r ist besser als w, also wollen wir
-            c = m + beta_ * (r - m);    // den kontrahierten Punkt, der näher an r liegt
+        point c;
+        if(f(r.x, r.y) < f(w.x, w.y)) { // outside: näher an r
             if(f(c.x, c.y) < f(r.x, r.y)) {
                 w = c;
                 return;
             }
-        } else { // Inside: r ist schlechter als w, also wählen wir den Punkt, der näher an w liegt
+        } else { // inside: näher an w
             c = m + beta_ * (w - m);
             if(f(c.x, c.y) < f(w.x, w.y)) {
                 w = c;
@@ -86,7 +85,6 @@ private:
             }
         }
 
-        // Komprimiere die zwei schlechteren Punkte in Richtung b
         g = b + delta_ * (g - b);
         w = b + delta_ * (w - b);
     }
