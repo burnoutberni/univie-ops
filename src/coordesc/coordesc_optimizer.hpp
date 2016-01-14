@@ -20,6 +20,12 @@
 #include "Funktion.h"
 #include "point.hpp"
 
+struct invalid_value: public std::exception {
+    char const* err = "invalid value";
+    invalid_value(char const* e) : err{ e } {}
+    char const* what() const noexcept { return err; }
+};
+
 class coordesc_optimizer {
 private:
     Funktion& f;
@@ -28,21 +34,25 @@ private:
     double eps;
     double const golden_ratio = (sqrt(5) - 1) / 2;
 
+    // Spannt den Bereich auf, der bei der Minimierung betrachtet wird.
+    double lo_x = -10;
+    double hi_x = 10;
+    double lo_y = -10;
+    double hi_y = 10;
+
     bool is_done = false; // Zustand: fertig optimiert?
     bool x_last = false;  // Zustand: wurde x als letzte Variable minimiert?
     size_t iter_c = 0;
 
-    // Goldener Schnitt
-    double minimize_with_x_constant(double x) const {
-        // Annahme: implementierte Funktionen haben Minima im y-Bereich [-10, 10]
-        double a = -10;
-        double b = 10;
+    double minimize_with_y_constant(double y) const {
+        double a = lo_x;
+        double b = hi_x;
 
         double c = b - golden_ratio * (b - a);
         double d = a + golden_ratio * (b - a);
 
         while(std::abs(c - d) > 0.000001) {
-            if(f(x, c) < f(x, d)) {
+            if(f(c, y) < f(d, y)) {
                 b = d;
                 d = c;
                 c = b - golden_ratio * (b - a);
@@ -55,16 +65,15 @@ private:
         return (b + a) / 2;
     }
 
-    double minimize_with_y_constant(double y) const {
-        // Annahme: implementierte Funktionen haben Minima im x-Bereich [-10, 10]
-        double a = -10;
-        double b = 10;
+    double minimize_with_x_constant(double x) const {
+        double a = lo_y;
+        double b = hi_y;
 
         double c = b - golden_ratio * (b - a);
         double d = a + golden_ratio * (b - a);
 
         while(std::abs(c - d) > 0.000001) {
-            if(f(c, y) < f(d, y)) {
+            if(f(x, c) < f(x, d)) {
                 b = d;
                 d = c;
                 c = b - golden_ratio * (b - a);
@@ -92,6 +101,43 @@ public:
 
     bool done() const { return is_done; }
     size_t iteration_count() const { return iter_c; }
+
+    double lower_bound_x() const { return lo_x; }
+    double upper_bound_x() const { return hi_x; }
+    double lower_bound_y() const { return lo_y; }
+    double upper_bound_y() const { return hi_y; }
+
+    void set_lower_bound_x(double x) {
+        if(!(x < hi_x)) {
+            throw invalid_value("new lower bound must satisfy lower < upper. "
+                                "set upper bound first.");
+        }
+        lo_x = x;
+    }
+
+    void set_upper_bound_x(double x) {
+        if(!(x > lo_x)) {
+            throw invalid_value("new upper bound must satisfy upper > lower. "
+                                "set lower bound first.");
+        }
+        hi_x = x;
+    }
+
+    void set_lower_bound_y(double y) {
+        if(!(y < hi_y)) {
+            throw invalid_value("new lower bound must satistfy lower < upper. "
+                                "set upper bound first.");
+        }
+        hi_y = y;
+    }
+
+    void set_upper_bound_x(double y) {
+        if(!(y > lo_y)) {
+            throw invalid_value("new upper bound must satisfy upper > lower. "
+                                "set lower bound first.");
+        }
+        hi_y = y;
+    }
 
     void step() {
         if(is_done) { return; }

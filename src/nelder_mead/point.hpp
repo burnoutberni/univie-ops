@@ -11,6 +11,7 @@
 
 #pragma once
 #include <cassert>
+#include <sstream>
 
 struct point {
     double x = 0.0;
