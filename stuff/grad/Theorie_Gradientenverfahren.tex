@@ -1,7 +1,7 @@
 \documentclass[a4paper, 11pt]{article}
 
 \usepackage{tikz}
-\usepackage{Pgfplots}
+\usepackage{pgfplots}
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
@@ -20,7 +20,7 @@
 \newpage
 \section{Die Idee und der Zweck des Gradientenverfahrens}
 
-Grundsätzlich ist das Gradientenverfahren ein Optimierungsverfahren, mit welchem mna das Minimum einer mehrdimensionalen Funktion errechnen kann. Der Gradient (${\nabla}f(x,y)$) einer Funktion \(f(x,y)\) zeigt, aus später gezeigten (HIER VERWEIS EINFÜGEN) Gründen, immer in die Richtung des steilsten Anstiegs, folglich zeigt -${\nabla}f(x,y)$ in die Richtung des stärksten Abstiegs. Das Gradientenverfahren macht sich dies zunutze und man wandert eine gewisse Dauer in diese Richtung, wie lange man in die errechnete Richtung wandert hängt auch davon ab, wie man z.B. die Schrittweite ermittelt, dazu später mehr.
+Grundsätzlich ist das Gradientenverfahren ein Optimierungsverfahren, mit welchem mna das Minimum einer mehrdimensionalen Funktion errechnen kann. Der Gradient (${\nabla}f(x,y)$) einer Funktion \(f(x,y)\) zeigt, aus später gezeigten (siehe 4.2) Gründen, immer in die Richtung des steilsten Anstiegs, folglich zeigt -${\nabla}f(x,y)$ in die Richtung des stärksten Abstiegs. Das Gradientenverfahren macht sich dies zunutze und man wandert eine gewisse Dauer in diese Richtung, wie lange man in die errechnete Richtung wandert hängt auch davon ab, wie man z.B. die Schrittweite ermittelt, dazu später mehr.
 
 In den folgenden Absätzen werde ich versuchen zwei verschiedene Arten des Gradientenverfahrens zu zeigen und zu erklären.
 
@@ -61,72 +61,119 @@ In diesem Abschnitt möchte ich zeigen, wie man relative einfach (zu nicht zu ko
       
       \subsection{Beispiel}
       
-      Zu minimierende Funktion: $f(x,y) = 3x^3+y^2-3xy-3x$, als Abbruchbedingung wählen wir $|{\nabla}f(x,y)| \leq 0.6$
+      Zu minimierende Funktion: $f(x,y) = y^4+2*x^2-3*x*y+1$, als Abbruchbedingung wählen wir $|{\nabla}f(x,y)| \leq 0.6$
       
 \begin{enumerate}
 
 	\item 
-	Startpunkt $P=(1,1)$
+	Startpunkt $P=(1,2)$
 	\item 
 	Ableitung: ${\nabla}f(x,y)=
 	\left( \begin{array}{c}
-	6x-3y-3 \\ 
-	2y-3x 
+	4x-3y \\ 
+	4y^3-3x 
 	\end{array} \right)
 	$($\rightarrow$ Der Gradient)
 	\item
 	$-{\nabla}f(1,1) =
 	\left( \begin{array}{c}
-	6-3-3 \\ 
-	2-3
+	-4+6 \\ 
+	-32+3 
 	\end{array} \right)
 	=
 	\left( \begin{array}{c}
-	0 \\ 
-	-1
+	2 \\ 
+	-29
 	\end{array} \right)
 	$ ($\rightarrow$ Richtung des stärksten Abstiegs)
 	
 	\item
-	Nun haben wir folgende Gleichung: $P^{[1]}=P^{[0]}+\alpha*-{\nabla}f(P^{[0]}_{x},P^{[0]}_{y})$ bzw. $P^{[1]}=\left( \begin{array}{c} 1 \\ 1 \end{array} \right) + \alpha * \left( \begin{array}{c} 0 \\ -1 \end{array} \right)$. Das heißt unser $x=1$ und unser $y=1-\alpha$. Diese Werte werden nun in $f$ eingesetzt, sodass: $f(\alpha)=3+(1-\alpha)^2-3(1-\alpha)-3$ bzw. $f(\alpha)=(1-\alpha)^2-3(1-\alpha)$ und abgeleitet, also: $f'(\alpha)=3-2*(1-\alpha)$. Wenn wir die abgeleitete Funktion gleich null setzen und die daraus resultierende Gleichung lösen bekommen wir das optimale $\alpha = -0.5$. Nun haben wir ein passendes $\alpha$ gefunden und können zum nächsten Punkt wandern.
+	Nun haben wir folgende Gleichung: $P^{[2]}=P^{[1]}+\alpha*-{\nabla}f(P^{[1]}_{x},P^{[1]}_{y})$ bzw. $P^{[2]}=\left( \begin{array}{c} 1 \\ 2 \end{array} \right) + \alpha * \left( \begin{array}{c} 2 \\ 29 \end{array} \right)$. Das heißt unser $x=1-2{\alpha}$ und unser $y=2-29{\alpha}$. Diese Werte werden nun in $f$ eingesetzt, sodass: $f({\alpha})=(2-29{\alpha})^4+2(1-2{\alpha})^2-3(2-29{\alpha})(1-2{\alpha})+1$. Das ergibt abgeleitet: $2829124{\alpha}^3-585336{\alpha}^2+40036{\alpha}-8370$. Wenn wir die abgeleitete Funktion gleich null setzen und die daraus resultierende Gleichung lösen bekommen wir ein passendes Alpha: ${\alpha}=0.039$
+	
+	$P^{[2]}=\left( \begin{array}{c} 1 \\ 2 \end{array} \right) 0.039 * \left( \begin{array}{c} 2 \\ -29 \end{array} \right) = \left( \begin{array}{c} 1.078 \\ 0.869 \end{array} \right)$
+
+Das heißt unser neuer Punkt ist: $P^{[2]}=(1.078,0.869)$
 	
 	\item
-	 $P^{[1]}=\left( \begin{array}{c} 1 \\ 1 \end{array} \right) -0.5 * \left( \begin{array}{c} 0 \\ -1 \end{array} \right) = \left( \begin{array}{c} 1 \\ 1.5 \end{array} \right)$
-	 
-	 \item
-	$-{\nabla}f(1,1.5) = \left( \begin{array}{c} 1.5 \\  0 \end{array} \right)$
+	$-{\nabla}f(1.078,0.869) = \left( \begin{array}{c} -1.705 \\  0.609 \end{array} \right)$
 	
 	\item
-	$P^{[2]}=\left( \begin{array}{c} 1 \\ 1.5 \end{array} \right) + \alpha * \left( \begin{array}{c} 1.5 \\ 0 \end{array} \right)$\\ $\rightarrow$ $x=1+1.5\alpha, y=1.5$\\ $\rightarrow$ $f(\alpha)=3(1+1.5\alpha)^2+1.5^2-4.5(1+1.5\alpha)-3(1+1.5\alpha)$\\ $\rightarrow$ $f'(\alpha)=\frac{54\alpha-9}{4}$\\ $\rightarrow$ $\alpha=\frac{1}{6}$
+	$P^{[3]}=\left( \begin{array}{c} 1.078 \\ 0.869 \end{array} \right) + \alpha * \left( \begin{array}{c} -1.705 \\ 0.609 \end{array} \right)$\\ $\rightarrow$ $x=1.078-1.705{\alpha}, y=0.869+0.609{\alpha}$\\ $\rightarrow$ $f({\alpha})=(0.869+0.609{\alpha})^4+2(1.078-1.705{\alpha})^2-3(0.869+0.609{\alpha})(1.078-1.705{\alpha})+1$\\ $\rightarrow$ $f'(\alpha)=\frac{-819485690419+5304767100523{\alpha}+588834041103{\alpha}^2+137552716161{\alpha}^3}{250000000000}$\\ $\rightarrow$ $\alpha=0.152$	
 	
 	\item
-	$P^{[2]}=\left( \begin{array}{c} 1 \\ 1.5 \end{array} \right) + \frac{1}{6} * \left( \begin{array}{c} 1.5 \\ 0 \end{array} \right) = \left( \begin{array}{c} 1.25 \\ 1.5 \end{array} \right)$
+	$P^{[3]}=\left( \begin{array}{c} 1.078 \\ 0.869 \end{array} \right) 0.152 * \left( \begin{array}{c} -1.705 \\ 0.609 \end{array} \right) = \left( \begin{array}{c} 0.819\\ 0.962 \end{array} \right)$
 	
 	\item
-	$-{\nabla}f(1.25,1.5) = \left( \begin{array}{c} 0 \\  0.75 \end{array} \right)$
+	$-{\nabla}f(0.819,0.962) = \left( \begin{array}{c} -0.389 \\ -1.104 \end{array} \right)$
 	
 	\item
-	$P^{[3]}=\left( \begin{array}{c} 1.25 \\ 1.5 \end{array} \right) + \alpha * \left( \begin{array}{c}  0 \\ 0.75 \end{array} \right)$\\ $\rightarrow$ $x=1.25, y=1.5+0.75\alpha$\\ $\rightarrow$ $f(\alpha)=3*1.25^2+(1.5+0.75\alpha)^2-3.75(1.5+0.75\alpha)-3.75$\\ $\rightarrow$ $f'(\alpha)=\frac{18\alpha-9}{16}$\\ $\rightarrow$ $\alpha=0.5$
+	$P^{[4]}=\left( \begin{array}{c} 0.819 \\ 0.962 \end{array} \right) + \alpha * \left( \begin{array}{c} -0.389 \\ -1.104 \end{array} \right)$\\ $\rightarrow$ $x=0.819-0.389{\alpha}, y=0.962-1.104{\alpha}$\\ $\rightarrow$ $f(\alpha)=(0.962-1.104{\alpha})^4+2(0.819-0.389{\alpha})^2-3(0.962-1.104{\alpha})(0.819-0.389{\alpha})+1$\\ $\rightarrow$ $f'(\alpha)=\frac{46422263808*x^3-121353852672*x^2+90342964466*x-10708170291}{7812500000}$\\ $\rightarrow$ $\alpha=0.145$
 	
 	\item
-	$P^{[3]}=\left( \begin{array}{c} 1.25 \\ 1.5 \end{array} \right) +0.5 * \left( \begin{array}{c} 0 \\ 0.75 \end{array} \right) = \left( \begin{array}{c} 1.25 \\ 1.875 \end{array} \right)$
+	$P^{[4]}=\left( \begin{array}{c} 0.819 \\ 0.962 \end{array} \right) 0.145 * \left( \begin{array}{c} -0.389 \\ -1.104 \end{array} \right) = \left( \begin{array}{c} 0.763 \\ 0.802 \end{array} \right)$
 	
 	\item
-	$-{\nabla}f(1.25,1.875) = \left( \begin{array}{c} 1.125 \\ 0 \end{array} \right)$
+	$-{\nabla}f(0.763,0.802) = \left( \begin{array}{c} -0.646 \\ 0.226 \end{array} \right)$
 	
 	\item
-	$P^{[4]}=\left( \begin{array}{c} 1.25 \\ 1.875 \end{array} \right) + \alpha * \left( \begin{array}{c}  1.125 \\ 0 \end{array} \right)$\\ $\rightarrow$ $x=1.25+1.125\alpha, y=1.875$\\ $\rightarrow$ $f(\alpha)=3*(1.25+1.125\alpha)^2+1.875^2-3*1.875*(1.25+1.125\alpha)-3*(1.25+1.125\alpha)$\\ $\rightarrow$ $f'(\alpha)=\frac{18\alpha-9}{16}$\\ $\rightarrow$ $\alpha=0.5$
+	$P^{[5]}=\left( \begin{array}{c} 0.763 \\ 0.802 \end{array} \right) + \alpha * \left( \begin{array}{c} -0.646 \\ 0.226 \end{array} \right)$\\ $\rightarrow$ $x=0.763-0.646{\alpha}, y=0.802+0.226{\alpha}$\\ $\rightarrow$ $f(\alpha)=(0.802+0.226{\alpha})^4+2(0.763-0.646{\alpha})^2-3(0.802+0.226{\alpha})(0.763-0.646{\alpha})+1$\\ $\rightarrow$ $f'(\alpha)=\frac{(-7317218037+45929178907*x+1735805091*x^2+163047361*x^3)}{15625000000}$\\ $\rightarrow$ $\alpha=0.158$
 	
 	\item
-	$P^{[4]}=\left( \begin{array}{c} 1.25 \\ 1.875 \end{array} \right) +0.5 * \left( \begin{array}{c} 1.125 \\ 0 \end{array} \right) = \left( \begin{array}{c} 1.438 \\ 1.875 \end{array} \right)$
+	$P^{[5]}=\left( \begin{array}{c} 0.763 \\ 0.802 \end{array} \right) 0.158 * \left( \begin{array}{c} -0.646 \\ 0.226 \end{array} \right) = \left( \begin{array}{c} 0.661 \\0.838 \end{array} \right)$
 	
-	\item
-	$-{\nabla}f(1.438,1.875) = \left( \begin{array}{c} 0 \\ 0.563 \end{array} \right)$
 	
-	\item
-	Da $|{\nabla}f(1.438,1.875)| = \sqrt{0^2+0.563^2} = 0.563$ und $0.563 < 0.6$ haben wir einen Punkt gefunden, welcher nahe genug am Optimum liegt. \\
+	
+		
+An dieser Stelle werde ich aufhöhren weitere Iterationen durchzuführen, da man erkennt wie das Verfahren funktioniert und aufgrund des Zick-Zack Kurses noch viele Iterationen nötig wären. An dieser Funktion erkennt man die größte Schwäche des Gradientenverfahrens, es nähert sich anfangs zwar recht schnell, später jedoch nur recht langsam im Zick-Zack Kurs dem Optimum.\\
       
 \end{enumerate}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+	scale=2,
+    3d box,
+    enlargelimits=false,
+    grid=major,
+    samples=21,
+    domain=0.4:2,
+    xmax=1.2,
+    zmax=14,
+    xlabel={$x$},
+    ylabel={$y$}
+]
+\addplot3[surf]
+{y^4+2*x^2-3*x*y+1};
+\addplot3 [contour gnuplot = {number=20, labels={false}, draw color=black},
+        samples=21]
+        {y^4+2*x^2-3*x*y+1};
+\addplot3 [contour gnuplot = {number=20, labels={false}, draw color=black},
+        samples=21,z filter/.code={\def\pgfmathresult{14}}]
+        {y^4+2*x^2-3*x*y+1};
+\node[label={180:{$P^{[1]}$}},circle,fill,inner sep=2pt] at (axis cs:1,2,13) {};
+\node[label={180:{$P^{[2]}$}},circle,fill,inner sep=2pt] at (axis cs:1.078,0.869,1.084090135921) {};
+\node[label={180:{$P^{[3]}$}},circle,fill,inner sep=2pt] at (axis cs:0.819,0.962,0.8343345971359999) {};
+\node[label={180:{$P^{[4]}$}},circle,fill,inner sep=2pt] at (axis cs:0.763,0.802,0.7422713856160001) {};
+\node[label={180:{$P^{[4]}$}},circle,fill,inner sep=2pt] at (axis cs:0.661,0.838,0.7052346355360002) {};
+
+
+\addplot3[->, line width=2pt] coordinates {(1,2,14) (1.078,0.869,14)}; 
+\addplot3[->, line width=2pt] coordinates {(1.078,0.869,14) (0.819,0.962,14)};
+\addplot3[->, line width=2pt] coordinates {(0.819,0.962,14) (0.763,0.802,14)}; 
+\addplot3[->, line width=2pt] coordinates {(0.763,0.802,14) (0.661,0.838,14)};
+
+\node[label={180:{$P^{[1]}$}},circle,fill,inner sep=2pt] at (axis cs:1,2,14) {};
+\node[label={180:{$P^{[2]}$}},circle,fill,inner sep=2pt] at (axis cs:1.078,0.869,14) {};
+\node[label={180:{$P^{[3]}$}},circle,fill,inner sep=2pt] at (axis cs:0.819,0.962,14) {}; 
+\node[label={180:{$P^{[4]}$}},circle,fill,inner sep=2pt] at (axis cs:0.763,0.802,14) {};
+\node[label={180:{$P^{[5]}$}},circle,fill,inner sep=2pt] at (axis cs:0.661,0.838,14) {};
+
+\end{axis}
+
+\end{tikzpicture}
+\caption{Hier zu sehen ist die Zweidimensionale Funktion, die bei der Angabe von Beispiel 1 gegeben ist. Zusätzlich sind hier die Höhenschichtlinien eingezeichnet. Wie man sieht nähert man sich mit jeder Iteration an das Optimum der Funktion an.}
+\end{figure}
 
 \section{Schrittweitenbestimmung mittels der Armijo-Bedingung}
 \subsection{Der Ablauf}
@@ -145,7 +192,7 @@ In diesem Abschnitt möchte ich zeigen, wie man relative einfach (zu nicht zu ko
       \textbf{Die Armijo-Bedingung:} $\varphi(\alpha) \leq \varphi(0) + c * \alpha^{[n]} * \varphi(0)'$. \\\\
       Wobei $c$ eine Konstante zwischen null und eins ist und dazu dient das die Bedingung nicht zu restriktiv ist, $\varphi(\alpha) = f(P^{[n]} + \alpha^{[n]}s^{[n]})$ und $\varphi(0)' = {\nabla}f(P^{n}) * s^{[n]}$
       \item
-      Für den Anfang wird $\alpha=1$ gewählt und errechnet ob die Armijo-Bedingung erfüllt ist - sollte sie erfüllt sein haben wir ein passende $\alpha$ gefunden, wenn nicht wird $\alpha$ mit einem $\beta$, welches ebenfalls zwischen null und eins liegt, multipliziert und wieder geprüft ob die Ungleichung erfüllt ist. (Hinweis: In der Praxis liefern die Werte $c = 0.01$ und $\beta = 0.9$ häufig gute Ergebnisse. (QUELLE: https://www.unibw.de/lrt1/gerdts/lehre/lpnlp/lp-nlp.pdf)
+      Für den Anfang wird $\alpha=1$ gewählt und errechnet ob die Armijo-Bedingung erfüllt ist - sollte sie erfüllt sein haben wir ein passende $\alpha$ gefunden, wenn nicht wird $\alpha$ mit einem $\beta$, welches ebenfalls zwischen null und eins liegt, multipliziert und wieder geprüft ob die Ungleichung erfüllt ist. (Hinweis: In der Praxis liefern die Werte $c = 0.01$ und $\beta = 0.9$ häufig gute Ergebnisse.
       \item
       Wenn man einen neuen Punkt gefunden hat wird bei Punkt 3 fortgesetzt.
       
@@ -194,7 +241,7 @@ Zu minimierende Funktion: $f(x,y)=y^4+2x^2-3xy+1$, als Abbruchbedingung wählen 
 \end{axis}
 \end{tikzpicture}
 \caption[Zweidimensionale Funktion für Beispiel 2]
-{Hier zu sehen ist die Zweidimensionale Funktion, die bei der Angabe von Beispiel 2 gegeben ist. Zusätzlich sind hier die Höhenschichtlinien eingezeichnet. Wie man sieht nähert man sich mit jeder Iteration an das Optimum der Funktion an.}
+{Hier zu sehen ist die Zweidimensionale Funktion, die bei der Angabe von Beispiel 2 gegeben ist. Zusätzlich sind hier die Höhenschichtlinien eingezeichnet. Wie man sieht nähert man sich mit jeder Iteration an das Optimum der Funktion an. Im Vergleich zur Abbildung 2 erkennt man, dass es hier durchaus auch vorkommen kann, dass man über das Ziel hinausschießt und kein optimales $\alpha$ hat.}
 \end{figure}
 
 
@@ -227,7 +274,7 @@ Zu minimierende Funktion: $f(x,y)=y^4+2x^2-3xy+1$, als Abbruchbedingung wählen 
 \end{axis}
 \end{tikzpicture}
 \caption[Höhenlinien der zweidimensionale Funktion für Beispiel 1]
-{Hier zu sehen sind die Höhenlinien der Funktion bei Beispiel 1. Wie man sieht nähert man sich mit jeder Iteration an das Optimum der Funktion an.}
+{Hier zu sehen sind die Höhenlinien der Funktion bei Beispiel 1. Wie man sieht nähert man sich mit jeder Iteration an das Optimum der Funktion an und der Gradient steht immer rechtwinklig auf den Höhenlinien (Aber im Gegensatz zum "normalen" Gradientenverfahren bei Beispiel 1 stehen die Gradienten nicht normal aufeinander).}
 \end{figure}
 
 \begin{enumerate}
@@ -356,8 +403,27 @@ Zu minimierende Funktion: $f(x,y)=y^4+2x^2-3xy+1$, als Abbruchbedingung wählen 
 	$|{\nabla}f(0.455,0.748)| = \sqrt{0.424^2+0.309^2} = 0.275$ \\
 	Die Abbruchbedingung ist erfüllt und somit ist ein Punkt, welcher nahe genug am Optimum liegt gefunden.
 	
-	
 \end{enumerate}
+
+\section{Weitere Theorie}
+\subsection{Die Ungleichung von  Cauchy-Schwarz}
+Die Ungleichung von Chauchy-Schwarz wird uns für die folgenden theoretischen Ausarbeitungen die Basis lierfern.
+
+$|\langle x,y \rangle|^2 \leq \langle x, x\rangle \cdot \langle y,y\rangle$ bzw. $\left|\langle x,y \rangle\right| \leq \|x\| \cdot \| y\|$
+
+Das heißt das der Betrag der des Skalarproduktes der Vektoren $x$ und $y$ immer kleiner gleich dem Produkt der Längen der Vektoren ist.
+\subsection{Der Gradient zeigt immer in die Richtung des stärksten Anstiegs}
+Suchen wir nun eine Richtung ${\overrightarrow{r}}$ in welche der Anstieg von einem fixen Punkt $a$ einer Funktion $f(x,y)$  maximal wird, also das Maximum von $f'(a){\overrightarrow{r}}$ für alle ${\overrightarrow{r}}$ mit $|{\overrightarrow{r}}|=1$. Nun kommt die vorhin erklärte Ungleichung ins Spiel:
+$f'(a){\overrightarrow{r}}={\langle}{\nabla}f(a),r{\rangle} {\leq} |{\langle}{\nabla}f(a),{\overrightarrow{r}}{\rangle}| {\leq} |{\nabla}f(a)|{\cdot}|{\overrightarrow{r}}|=|{\nabla}f(a)|$
+Falls der Gradient nun ungleich null ist und damit Gleichheit herrscht, müssen ${\overrightarrow{r}}$ und der Gradient linear abhängig sein, also: ${\overrightarrow{r}}={\lambda}*{\nabla}f(a)$. Das wiederrum bedeutetet, dass ${\overrightarrow{r}}=\frac{{\nabla}f(a)}{|{\nabla}f(a)|}$, dem ensprechend zeigt ${\overrightarrow{r}}$, bei welchem wir ja definiert haben, dass es in die Richtung des stärksten Anstiegs zeigt, in die gleiche Richtung wie der Gradient.
+
+\subsection{Der Gradient steht im Rechten Winkel auf die Höhenschichtlinien}
+Nun sagen wir es gibt die Richtung ${\overrightarrow{v}}$ in welcher der Anstieg gleich null ist, also die Richtung, in welche die Höhenschichtlinie wandert. Dem entsprechend muss das Skalarprodukt von ${\overrightarrow{v}}$ und ${\nabla}f(a)$ gleich null sein. Da ${\langle}{\nabla}f(a),r{\rangle} = |{\nabla}f(a)| * cos({\phi})$ muss ${\phi}$, also der Winkel zwischen dem Gradienten und der Höhenschichtlinie, damit die Gleichung stimmt gleich $90$ grad sein. Das heißt der Gradient steht immer im rechten Winkel auf die Höhenschichtlinien.
+
+\subsection{Die Gradienten stehen beim normalen Abstiegsverfahren immer normal aufeinander}
+Nun, das ist eine absolut logische Schlussfolgerung auf das bisher gezeigte. Beim normalen Abstiegsverfahren wandert man solange in die Richtung des Gradienten bis die erste Ableitung der eindimensionalen Funktion in welche man wandert gleich null ist. D.h. die Richtungsänderung der Richtung in welche man wandert ist gleich null. Da in die Richtung, in welcher die Steigung gleich null ist die Höhenschichtlinie verläuft und der Gradient immer rechtwinkelig auf der Höhenschichtlinie steht, steht der Gradient von diesem Punkt normal auf der Richtung aus der wir kommen.
+
+
 
 
 \end{document}
