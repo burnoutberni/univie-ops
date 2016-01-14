@@ -199,9 +199,14 @@ den Simplex in flachem Gelände schneller wandern zu lassen.
 
 \subsubsection{Kontraktion}
 
-Gehen wir jetzt vom Gegenteil aus --- Punkt $R$ war also
-kein geeigneter Punkt und Punkt $E$ wurde gar nicht berechnet ---
-so müssen wir die beiden Kontraktionspunkte $C_{1}$, $C_{2}$ berechnen.
+Gehen wir jetzt vom Gegenteil aus --- Punkt $R$ war also kein geeigneter Punkt
+und Punkt $E$ wurde gar nicht berechnet --- so müssen wir die beiden
+Kontraktionspunkte $C_{1}$, $C_{2}$ berechnen.  $C_{1}$ ist hierbei der
+\emph{äußere} Kontraktionspunkt, also derjenige, der näher an $R$ liegt; dieser
+Punkt wird gewählt, wenn der reflektierte Punkt besser als der schlechteste
+Punkt $W$ ist, also eine Verbesserung darstellt. Ist der reflektierte Punkt
+schlechter als der schlechteste Punkt, wird der \emph{innere} Kontraktionspunkt
+gewählt, der näher an $W$ liegt.
 
 \begin{eqnarray*}
     C_{1} & = & M+\frac{R-M}{2}=\binom{2.5}{4.5}+\frac{\binom{-1}{7}-\binom{2.5}{4.5}}{2}=\binom{-1.75}{1.25}\\
@@ -218,8 +223,8 @@ so müssen wir die beiden Kontraktionspunkte $C_{1}$, $C_{2}$ berechnen.
 
 Wir komprimieren die Punkte $G$ und $W$ in Richtung $B$.
 \begin{eqnarray*}
-    G' & = & B+\frac{G-B}{2}=\binom{1}{3}+\binom{1}{1.5}=\binom{2}{4.5}\\
-    W' & = & B+\frac{W-B}{2}=\binom{1}{3}+\binom{2.5}{-0.5}=\binom{3.5}{2.5}
+    G' & = & B+\frac{G-B}{2}=\binom{1}{3}+\frac{\binom{3}{3}}{2}=\binom{2.5}{4.5}\\
+    W' & = & B+\frac{W-B}{2}=\binom{1}{3}+\frac{\binom{5}{-1}}{2}=\binom{3.5}{2.5}
 \end{eqnarray*}
 
 \begin{figure}[h]
