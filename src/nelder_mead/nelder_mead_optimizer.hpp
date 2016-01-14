@@ -73,6 +73,7 @@ private:
 
         point c;
         if(f(r.x, r.y) < f(w.x, w.y)) { // outside: näher an r
+            c = m + beta_ * (r - m);
             if(f(c.x, c.y) < f(r.x, r.y)) {
                 w = c;
                 return;
