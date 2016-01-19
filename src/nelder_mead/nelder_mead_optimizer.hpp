@@ -61,7 +61,7 @@ private:
         point m = (b + g) / 2; // mittelpunkt
         point r = m + alpha_ * (m - w); // reflektiere schlechtesten punkt
 
-        if(f(r.x, r.y) < f(w.x, w.y)) {
+        if(f(r.x, r.y) < f(g.x, g.y)) {
             if(f(r.x, r.y) < f(b.x, b.y)) { // r besser as b: expandiere weiter
                 point e = m + gamma_ * (m - w);
                 w = min(e, r);
