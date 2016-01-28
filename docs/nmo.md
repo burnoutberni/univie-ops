@@ -81,7 +81,7 @@ int main() {
         double value(double x, double y) { return x*x + y*y; }
     } fn;
 
-    nelder_mead_optimizer nmo(fn, {-1, -5}, {8, 8}, {3, -8}, .0000001);
+    nelder_mead_optimizer nmo(fn, {-1, -5}, {8, 8}, {3, -8}, .0005);
     nmo.optimize();
     point min = nmo.best_point();
 

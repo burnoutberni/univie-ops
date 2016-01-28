@@ -105,7 +105,7 @@ Fehlermeldung sollten diese nicht stimmen.
 Ein Minimalbeispiel zum Rauskopieren:
 
 ```c++
-coordesc_optimizer cdo(fn, {-1, -5}, .0000001);
+coordesc_optimizer cdo(fn, {-1, -5}, .0005);
 cdo.optimize();
 point min = cdo.current_point();
 
