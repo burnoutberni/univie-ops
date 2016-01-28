@@ -195,4 +195,4 @@ Funktionalitäten an. Überschüssige Argumente werden ignoriert.
 
 [Files auf GitHub (garantiert aktuell)](https://github.com/burnoutberni/univie-ops/tree/master/src/coordesc)
 
-[nelder_mead.zip](https://github.com/burnoutberni/univie-ops/blob/master/src/nelder_mead.zip?raw=true)
+[coordesc.zip](https://github.com/burnoutberni/univie-ops/blob/master/src/coordesc.zip?raw=true)
