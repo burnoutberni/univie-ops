@@ -130,7 +130,7 @@ Um den Algorithmus möglichst flexibel benutzen zu können, kann auch die Method
 `step` verwendet werden, um den Algorithmus schrittweise verfolgen zu können.
 Auskunft über den Zustand gibt die `done` Methode. Folgendes Beispiel optimiert
 eine Funktion wie das vorige, gibt bei jedem Schritt jedoch auch den
-derzeitigen Simplex aus.
+derzeitigen Punkt aus.
 
 ```c++
 coordesc_optimizer cdo(fn, {-1, -5}, .0005);
@@ -194,5 +194,5 @@ Funktionalitäten an. Überschüssige Argumente werden ignoriert.
 ### Links
 
 [Files auf GitHub (garantiert aktuell)](https://github.com/burnoutberni/univie-ops/tree/master/src/coordesc)
+
 [nelder_mead.zip](https://github.com/burnoutberni/univie-ops/blob/master/src/nelder_mead.zip?raw=true)
->>>>>>> 43727c34596d733f7dc1a562ef60c8dcae766411
