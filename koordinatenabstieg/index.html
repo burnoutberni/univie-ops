@@ -203,6 +203,22 @@ Dieser Vorgang wird wiederholt, bis sich die errechneten Werte nurnoch marginal 
 <td><code>size_t iter_c</code></td>
 <td>Iterationszähler</td>
 </tr>
+<tr>
+<td><code>double lo_x</code></td>
+<td>Untergrenze eindimensionale Optimierung (x)</td>
+</tr>
+<tr>
+<td><code>double hi_x</code></td>
+<td>Obergrenze eindimensionale Optimierung (x)</td>
+</tr>
+<tr>
+<td><code>double lo_y</code></td>
+<td>Untergrenze eindimensionale Optimierung (y)</td>
+</tr>
+<tr>
+<td><code>double hi_y</code></td>
+<td>Obergrenze eindimensionale Optimierung (y)</td>
+</tr>
 </tbody>
 </table>
 <h4 id="methoden">Methoden</h4>
@@ -215,11 +231,11 @@ Dieser Vorgang wird wiederholt, bis sich die errechneten Werte nurnoch marginal 
 </thead>
 <tbody>
 <tr>
-<td><code>- double minimize_with_x_constant(double x) const</code></td>
+<td><code>- double minimize_with_x_constant(double) const</code></td>
 <td>Minimiert die Funktion mit einem konstanten Wert für x</td>
 </tr>
 <tr>
-<td><code>- double minimize_with_x_constant(double y) const</code></td>
+<td><code>- double minimize_with_x_constant(double) const</code></td>
 <td>Minimiert die Funktion mit einem konstanten Wert für y</td>
 </tr>
 <tr>
@@ -253,6 +269,38 @@ Dieser Vorgang wird wiederholt, bis sich die errechneten Werte nurnoch marginal 
 <tr>
 <td><code>+ optimize()</code></td>
 <td>führt die komplette Optimierung durch</td>
+</tr>
+<tr>
+<td><code>+ lower_bound_x()</code></td>
+<td>Returniert die Untergrenze für x</td>
+</tr>
+<tr>
+<td><code>+ upper_bound_x()</code></td>
+<td>Returniert die Obergrenze für x</td>
+</tr>
+<tr>
+<td><code>+ lower_bound_y()</code></td>
+<td>Returniert die Untergrenze für y</td>
+</tr>
+<tr>
+<td><code>+ upper_bound_y()</code></td>
+<td>Returniert die Obergrenze für y</td>
+</tr>
+<tr>
+<td><code>+ set_lower_bound_x(double)</code></td>
+<td>Setzt die neue Untergrenze für x. Invariante: lo_x &lt; hi_x</td>
+</tr>
+<tr>
+<td><code>+ set_upper_bound_x(double)</code></td>
+<td>Setzt die neue Obergrenze für x. Invariante: hi_x &gt; lo_x</td>
+</tr>
+<tr>
+<td><code>+ set_lower_bound_y(double)</code></td>
+<td>Setzt die neue Untergrenze für y. Invariante: lo_y &lt; hi_y</td>
+</tr>
+<tr>
+<td><code>+ set_upper_bound_y(double)</code></td>
+<td>Setzt die neue Obergrenze für y. Invariante: hi_y &gt; lo_y</td>
 </tr>
 </tbody>
 </table>

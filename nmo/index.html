@@ -253,7 +253,7 @@
 <td>returniert besten Simplexpunkt</td>
 </tr>
 <tr>
-<td><code>+ std::tuple&lt;point, point, point&gt; retrieve_current_simplex()</code></td>
+<td><code>+ std::tuple&lt;point, point, point&gt; current_simplex()</code></td>
 <td>returniert Tupel aller drei Simplexpunkte</td>
 </tr>
 <tr>
@@ -294,12 +294,21 @@ Setter abgefragt und geändert werden. Die Setter für die Verhaltensfaktoren
 <code>alpha</code>, <code>beta</code>, <code>gamma</code> und <code>delta</code> prüfen die Sinnhaftigkeit der übergebenen
 Werte und werfen eine Exception des Typs <code>invalid_value</code> mit einer
 Fehlermeldung sollten diese nicht stimmen.</p>
-<p>Ein Minimalbeispiel zum Rauskopieren:</p>
-<pre><code class="c++">nelder_mead_optimizer nmo(fn, {-1, -5}, {8, 8}, {3, -8}, .0005);
-nmo.optimize();
-point min = nmo.get_best_point();
+<p>Ein Minimalbeispiel zum Rauskopieren (unter src/nmo/simple.cpp zu finden):</p>
+<pre><code class="c++">#include &lt;iostream&gt;
+#include &quot;nelder_mead_optimizer.hpp&quot;
 
-std::cout &lt;&lt; &quot;The minimum is at &quot; &lt;&lt; min.format() &lt;&lt; &quot;!\n&quot;;
+int main() {
+    struct : Funktion {
+        double value(double x, double y) { return x*x + y*y; }
+    } fn;
+
+    nelder_mead_optimizer nmo(fn, {-1, -5}, {8, 8}, {3, -8}, .0000001);
+    nmo.optimize();
+    point min = nmo.best_point();
+
+    std::cout &lt;&lt; &quot;The minimum is at &quot; &lt;&lt; min.format() &lt;&lt; &quot;!\nNeeded &quot;
+              &lt;&lt; nmo.iteration_count() &lt;&lt; &quot; iterations.\n&quot;;
 </code></pre>
 
 <p>Vorhergehendes Beispiel instanziiert ein Optimiererobjekt <code>nmo</code>, das die
@@ -321,10 +330,9 @@ eine Funktion wie das vorige, gibt bei jedem Schritt jedoch auch den
 derzeitigen Simplex aus.</p>
 <pre><code class="c++">nelder_mead_optimizer nmo(fn, {-1, -5}, {8, 8}, {3, -8}, .0005);
 
-size_t n = 0;
 while(!nmo.done()) {
-    std::cout &lt;&lt; &quot;\nIteration #&quot; &lt;&lt; n++ &lt;&lt; '\n';
-    auto points = nmo.retrieve_current_simplex();
+    std::cout &lt;&lt; &quot;\nIteration #&quot; &lt;&lt; nmo.iteration_count() &lt;&lt; '\n';
+    auto points = nmo.current_simplex();
 
     std::cout &lt;&lt; &quot;B = &quot; &lt;&lt; std::get&lt;0&gt;(points).format() &lt;&lt; '\n'
               &lt;&lt; &quot;G = &quot; &lt;&lt; std::get&lt;1&gt;(points).format() &lt;&lt; '\n'
@@ -377,8 +385,8 @@ Its minima are at positions
 dementsprechend und zeigt eine kleine Hilfe mit den unterstützten
 Funktionalitäten an. Überschüssige Argumente werden ignoriert.</p>
 <h3 id="links">Links</h3>
-<p><a href="https://github.com/burnoutberni/univie-ops/tree/master/src/nelder_mead">Files auf GitHub (garantiert aktuell)</a>
-<a href="https://github.com/burnoutberni/univie-ops/blob/master/src/nelder_mead.zip?raw=true">nelder_mead.zip</a></p>
+<p><a href="https://github.com/burnoutberni/univie-ops/tree/master/src/nelder_mead">Files auf GitHub (garantiert aktuell)</a></p>
+<p><a href="https://github.com/burnoutberni/univie-ops/blob/master/src/nelder_mead.zip?raw=true">nelder_mead.zip</a></p>
               
             </div>
           </div>
