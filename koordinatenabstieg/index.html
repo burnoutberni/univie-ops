@@ -321,7 +321,7 @@ Setter abgefragt und geändert werden. Die Setter für die Verhaltensfaktoren
 Werte und werfen eine Exception des Typs <code>invalid_value</code> mit einer
 Fehlermeldung sollten diese nicht stimmen.</p>
 <p>Ein Minimalbeispiel zum Rauskopieren:</p>
-<pre><code class="c++">coordesc_optimizer cdo(fn, {-1, -5}, .0000001);
+<pre><code class="c++">coordesc_optimizer cdo(fn, {-1, -5}, .0005);
 cdo.optimize();
 point min = cdo.current_point();
 
