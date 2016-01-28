@@ -27,26 +27,26 @@
 
 #### Methoden
 
-| Methode                                                        | Beschreibung                                                                   |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| `- point& min(point&, point&)`                                 | returniert den kleineren (per Funktionswert) der beiden Punkte                 |
-| `- point& min(point&, point&, point&)`                         | returniert den kleinsten (per Funktionswert) der drei Punkte                   |
-| `- void sort_points_by_fvalue()`                               | sortiert die drei Werte B, G, W sodass `f(B) <= f(G) <= f(W)`                  |
-| `- void do_step()`                                             | führt einen Optimierungsschritt aus                                            |
-| `+ double alpha()`                                             | returniert Reflexionsfaktor                                                    |
-| `+ double gamma()`                                             | returniert Expansionsfaktor                                                    |
-| `+ double beta()`                                              | returniert Kontraktionsfaktor                                                  |
-| `+ double delta()`                                             | returniert Komprimierungsfaktor                                                |
-| `+ void set_alpha(double)`                                     | setzt Reflexionsfaktor wenn möglich, wirft sonst `invalid_value`               |
-| `+ void set_gamma(double)`                                     | setzt Expansionsfaktor wenn möglich, wirft sonst `invalid_value`               |
-| `+ void set_beta(double)`                                      | setzt Kontraktionsfaktor wenn möglich, wirft sonst `invalid_value`             |
-| `+ void set_delta(double)`                                     | setzt Komprimierungsfaktor wenn möglich, wirft sonst `invalid_value`           |
-| `+ point best_point()`                                         | returniert besten Simplexpunkt                                                 |
-| `+ std::tuple<point, point, point> retrieve_current_simplex()` | returniert Tupel aller drei Simplexpunkte                                      |
-| `+ bool done()`                                                | returniert Zustandsvariable                                                    |
-| `+ size_t iteration_count()`                                   | returniert den Wert des Iterationenzählers                                     |
-| `+ void step()`                                                | führt Optimierungsschritt aus, sortiert Punkte und setzt ggf. Zustandsvariable |
-| `+ optimize()`                                                 | führt die Optimierung die komplette Optimierung durch                          |
+| Methode                                               | Beschreibung                                                                   |
+| ------------------------------------------------------| ------------------------------------------------------------------------------ |
+| `- point& min(point&, point&)`                        | returniert den kleineren (per Funktionswert) der beiden Punkte                 |
+| `- point& min(point&, point&, point&)`                | returniert den kleinsten (per Funktionswert) der drei Punkte                   |
+| `- void sort_points_by_fvalue()`                      | sortiert die drei Werte B, G, W sodass `f(B) <= f(G) <= f(W)`                  |
+| `- void do_step()`                                    | führt einen Optimierungsschritt aus                                            |
+| `+ double alpha()`                                    | returniert Reflexionsfaktor                                                    |
+| `+ double gamma()`                                    | returniert Expansionsfaktor                                                    |
+| `+ double beta()`                                     | returniert Kontraktionsfaktor                                                  |
+| `+ double delta()`                                    | returniert Komprimierungsfaktor                                                |
+| `+ void set_alpha(double)`                            | setzt Reflexionsfaktor wenn möglich, wirft sonst `invalid_value`               |
+| `+ void set_gamma(double)`                            | setzt Expansionsfaktor wenn möglich, wirft sonst `invalid_value`               |
+| `+ void set_beta(double)`                             | setzt Kontraktionsfaktor wenn möglich, wirft sonst `invalid_value`             |
+| `+ void set_delta(double)`                            | setzt Komprimierungsfaktor wenn möglich, wirft sonst `invalid_value`           |
+| `+ point best_point()`                                | returniert besten Simplexpunkt                                                 |
+| `+ std::tuple<point, point, point> current_simplex()` | returniert Tupel aller drei Simplexpunkte                                      |
+| `+ bool done()`                                       | returniert Zustandsvariable                                                    |
+| `+ size_t iteration_count()`                          | returniert den Wert des Iterationenzählers                                     |
+| `+ void step()`                                       | führt Optimierungsschritt aus, sortiert Punkte und setzt ggf. Zustandsvariable |
+| `+ optimize()`                                        | führt die Optimierung die komplette Optimierung durch                          |
 
 ### Algorithmus selbst
 
@@ -70,14 +70,23 @@ Setter abgefragt und geändert werden. Die Setter für die Verhaltensfaktoren
 Werte und werfen eine Exception des Typs `invalid_value` mit einer
 Fehlermeldung sollten diese nicht stimmen.
 
-Ein Minimalbeispiel zum Rauskopieren:
+Ein Minimalbeispiel zum Rauskopieren (unter src/nmo/simple.cpp zu finden):
 
 ```c++
-nelder_mead_optimizer nmo(fn, {-1, -5}, {8, 8}, {3, -8}, .0005);
-nmo.optimize();
-point min = nmo.get_best_point();
+#include <iostream>
+#include "nelder_mead_optimizer.hpp"
 
-std::cout << "The minimum is at " << min.format() << "!\n";
+int main() {
+    struct : Funktion {
+        double value(double x, double y) { return x*x + y*y; }
+    } fn;
+
+    nelder_mead_optimizer nmo(fn, {-1, -5}, {8, 8}, {3, -8}, .0000001);
+    nmo.optimize();
+    point min = nmo.best_point();
+
+    std::cout << "The minimum is at " << min.format() << "!\nNeeded "
+              << nmo.iteration_count() << " iterations.\n";
 ```
 
 Vorhergehendes Beispiel instanziiert ein Optimiererobjekt `nmo`, das die
@@ -102,10 +111,9 @@ derzeitigen Simplex aus.
 ```c++
 nelder_mead_optimizer nmo(fn, {-1, -5}, {8, 8}, {3, -8}, .0005);
 
-size_t n = 0;
 while(!nmo.done()) {
-    std::cout << "\nIteration #" << n++ << '\n';
-    auto points = nmo.retrieve_current_simplex();
+    std::cout << "\nIteration #" << nmo.iteration_count() << '\n';
+    auto points = nmo.current_simplex();
 
     std::cout << "B = " << std::get<0>(points).format() << '\n'
               << "G = " << std::get<1>(points).format() << '\n'
@@ -165,4 +173,5 @@ Funktionalitäten an. Überschüssige Argumente werden ignoriert.
 ### Links
 
 [Files auf GitHub (garantiert aktuell)](https://github.com/burnoutberni/univie-ops/tree/master/src/nelder_mead)
+
 [nelder_mead.zip](https://github.com/burnoutberni/univie-ops/blob/master/src/nelder_mead.zip?raw=true)
