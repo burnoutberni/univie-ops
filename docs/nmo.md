@@ -87,6 +87,7 @@ int main() {
 
     std::cout << "The minimum is at " << min.format() << "!\nNeeded "
               << nmo.iteration_count() << " iterations.\n";
+}
 ```
 
 Vorhergehendes Beispiel instanziiert ein Optimiererobjekt `nmo`, das die
