@@ -55,21 +55,34 @@ Dieser Vorgang wird wiederholt, bis sich die errechneten Werte nurnoch marginal 
 | `bool is_done`        | Zustandsvariable                                |
 | `bool x_last`         | Zustandvariable: wurde x als letztes optimiert? |
 | `size_t iter_c`       | Iterationszähler                                |
+| `double lo_x`         | Untergrenze eindimensionale Optimierung (x)     |
+| `double hi_x`         | Obergrenze eindimensionale Optimierung (x)      |
+| `double lo_y`         | Untergrenze eindimensionale Optimierung (y)     |
+| `double hi_y`         | Obergrenze eindimensionale Optimierung (y)      |
+
 
 #### Methoden
 
-| Methode                                             | Beschreibung                                                                   |
-| --------------------------------------------------- | ------------------------------------------------------------------------------ |
-| `- double minimize_with_x_constant(double x) const` | Minimiert die Funktion mit einem konstanten Wert für x                         |
-| `- double minimize_with_x_constant(double y) const` | Minimiert die Funktion mit einem konstanten Wert für y                         |
-| `- void do_halfstep()`                              | Führt einen Optimierungsschritt durch (optimiert eine Variable)                |
-| `+ point current_point() const`                     | returniert p                                                                   |
-| `+ point last_point() const`                        | returniert q                                                                   |
-| `+ void step()`                                     | führt einen Optimierungsschritt durch                                          |
-| `+ bool done()`                                     | returniert Zustandsvariable                                                    |
-| `+ size_t iteration_count()`                        | returniert den Wert des Iterationenzählers                                     |
-| `+ void step()`                                     | führt Optimierungsschritt aus, sortiert Punkte und setzt ggf. Zustandsvariable |
-| `+ optimize()`                                      | führt die komplette Optimierung durch                                          |
+| Methode                                           | Beschreibung                                                                   |
+| ------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `- double minimize_with_x_constant(double) const` | Minimiert die Funktion mit einem konstanten Wert für x                         |
+| `- double minimize_with_x_constant(double) const` | Minimiert die Funktion mit einem konstanten Wert für y                         |
+| `- void do_halfstep()`                            | Führt einen Optimierungsschritt durch (optimiert eine Variable)                |
+| `+ point current_point() const`                   | returniert p                                                                   |
+| `+ point last_point() const`                      | returniert q                                                                   |
+| `+ void step()`                                   | führt einen Optimierungsschritt durch                                          |
+| `+ bool done()`                                   | returniert Zustandsvariable                                                    |
+| `+ size_t iteration_count()`                      | returniert den Wert des Iterationenzählers                                     |
+| `+ void step()`                                   | führt Optimierungsschritt aus, sortiert Punkte und setzt ggf. Zustandsvariable |
+| `+ optimize()`                                    | führt die komplette Optimierung durch                                          |
+| `+ lower_bound_x()`                               | Returniert die Untergrenze für x                                               |
+| `+ upper_bound_x()`                               | Returniert die Obergrenze für x                                                |
+| `+ lower_bound_y()`                               | Returniert die Untergrenze für y                                               |
+| `+ upper_bound_y()`                               | Returniert die Obergrenze für y                                                |
+| `+ set_lower_bound_x(double)`                     | Setzt die neue Untergrenze für x. Invariante: lo_x < hi_x                      |
+| `+ set_upper_bound_x(double)`                     | Setzt die neue Obergrenze für x. Invariante: hi_x > lo_x                       |
+| `+ set_lower_bound_y(double)`                     | Setzt die neue Untergrenze für y. Invariante: lo_y < hi_y                      |
+| `+ set_upper_bound_y(double)`                     | Setzt die neue Obergrenze für y. Invariante: hi_y > lo_y                       |
 
 ### Algorithmus selbst
 
